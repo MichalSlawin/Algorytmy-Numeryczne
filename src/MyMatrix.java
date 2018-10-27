@@ -1,5 +1,11 @@
 @SuppressWarnings("unchecked")
-public class MyMatrix<T> {
+
+interface arithmetics<T extends Number> {
+    T zero(); // Adding zero items
+    T add(T lhs, T rhs); // Adding two items
+}
+
+public class MyMatrix<T extends Number> {
 	private int rows;
 	private int columns;
 	private T matrix[][];
@@ -9,6 +15,15 @@ public class MyMatrix<T> {
 		this.rows = rows;
 		this.columns = columns;
 		matrix = (T[][])new Object[rows][columns];  
+	}
+	
+	public MyMatrix(T[][] matrix) {
+		rows = matrix.length;
+        columns = matrix[0].length;
+        this.matrix = (T[][])new Object[rows][columns];  ;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)
+                    this.matrix[i][j] = matrix[i][j];
 	}
 
 	public int getRows() {
@@ -33,6 +48,33 @@ public class MyMatrix<T> {
 
 	public void setMatrix(T[][] matrix) {
 		this.matrix = matrix;
+	}
+	
+	//transpozycja
+	public MyMatrix transpose() {  
+	        MyMatrix A = new MyMatrix(rows, columns);
+	        for (int i = 0; i < rows; i++)
+	            for (int j = 0; j < columns; j++)
+	                A.matrix[j][i] = this.matrix[i][j];
+	        return A;
+	}
+	
+	//zamiana wierszy
+	public void swapRows(int i, int j) {
+		T[] temp = matrix[i];
+        matrix[i] = matrix[j];
+        matrix[j] = temp;
+	}
+	
+	//dodawanie macierzy
+	public MyMatrix<T> plus(MyMatrix<T> B, arithmetics<T> arithmetics) {
+		MyMatrix<T> A = this;
+        if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
+        MyMatrix<T> W = new MyMatrix<T>(rows, columns);		 //macierz wynikowa
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)   
+                arithmetics.add(A.matrix[i][j], B.matrix[i][j]);  //nie wiem czy do tego sie nie przyczepi, moze trzeba wykombinowac cos innego
+        return W;
 	}
 	
 }
