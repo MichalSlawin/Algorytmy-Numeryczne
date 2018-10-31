@@ -1,12 +1,5 @@
 import java.lang.reflect.Array;
 
-//testowe, interfejs jeszcze nie dziala - na razie castuje wszystko na double
-interface arithmetics<T extends Number> {
-    T zero(); // Adding zero items
-    T add(T lhs, T rhs);
-    T multiply(T lhs, T rhs);
-}
-
 @SuppressWarnings("unchecked")
 public class MyMatrix<T extends Number> {
 	
@@ -15,8 +8,7 @@ public class MyMatrix<T extends Number> {
 	 * moze jakis sposob na pominiecie Class<T> w konstruktorach
 	 * no i cala eliminacja gaussa, testy
 	 */
-	
-	
+
 	//cos takiego wymyslilem na dzialania generyczne, jak ktos ma ladniejszy sposob to zamiencie
 	//trzeba tu dodac reszte typow dalem te ktore pamietalem tylko
 	class Calc{
@@ -31,7 +23,7 @@ public class MyMatrix<T extends Number> {
 				return (T) (Long) ((Long) num1 + (Long) num2);
 			else return null;
 		}
-		
+
 		T sub(T num1, T num2) {
 			if(num1 instanceof Integer && num2 instanceof Integer)
 				return (T) (Integer) ((Integer) num1 - (Integer) num2);
@@ -43,7 +35,7 @@ public class MyMatrix<T extends Number> {
 				return (T) (Long) ((Long) num1 - (Long) num2);
 			else return null;
 		}
-		
+
 		T mul(T num1, T num2) {
 			if(num1 instanceof Integer && num2 instanceof Integer)
 				return (T) (Integer) ((Integer) num1 * (Integer) num2);
@@ -55,7 +47,7 @@ public class MyMatrix<T extends Number> {
 				return (T) (Long) ((Long) num1 * (Long) num2);
 			else return null;
 		}
-		
+
 		T div(T num1, T num2) {
 			if(num1 instanceof Integer && num2 instanceof Integer)
 				return (T) (Integer) ((Integer) num1 / (Integer) num2);
@@ -79,20 +71,20 @@ public class MyMatrix<T extends Number> {
 	public MyMatrix(Class<T> c, int rows, int columns) {
 		this.rows = rows;
 		this.columns = columns;
-        final T[][] matrix = (T[][]) Array.newInstance(c, rows, columns);
-        this.matrix = matrix;
+        this.matrix = (T[][]) Array.newInstance(c, rows, columns);
         this.c = c;
     }
-	
-	//ten konstruktor nie testowany, mozliwe ze nie dziala
+
+	//wydaje mi się, że teraz konstruktor działa, ale głowy nie dam
 	public MyMatrix(Class<T> c, T[][] tab) {
-		rows = matrix.length;
-        columns = matrix[0].length;
-		final T[][] matrix = (T[][]) Array.newInstance(c, rows, columns);
-        this.matrix = matrix;
+		this.rows = tab.length;
+        this.columns = tab[0].length;
+        this.matrix = (T[][]) Array.newInstance(c, rows, columns);
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++)
             	this.matrix[i][j]=tab[i][j];
+
+        this.c = c;
 	}
 
 	public int getRows() {
@@ -182,22 +174,6 @@ public class MyMatrix<T extends Number> {
 			str+="\n";
 		}
 		return str;
-	}
-
-	public static void main(String[] args) {
-		
-		Class TYP = Integer.class;
-		
-		MyMatrix A = new MyMatrix<Integer>(TYP, 3, 3);
-		MyMatrix B = new MyMatrix<Integer>(TYP, 3, 3);
-		
-		for(int i=0; i<3; i++)
-			for(int j=0; j<3; j++) {
-				A.setCell(3, i, j);
-				B.setCell(2, i, j);
-			}
-				
-		System.out.println(A.plus(B));
 	}
 	
 }

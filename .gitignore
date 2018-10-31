@@ -129,3 +129,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+#Others
+.idea
+output
