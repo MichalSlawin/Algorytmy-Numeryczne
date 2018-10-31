@@ -3,18 +3,73 @@ import java.lang.reflect.Array;
 //testowe, interfejs jeszcze nie dziala - na razie castuje wszystko na double
 interface arithmetics<T extends Number> {
     T zero(); // Adding zero items
-    T add(T lhs, T rhs); // Adding two items
+    T add(T lhs, T rhs);
     T multiply(T lhs, T rhs);
 }
 
 @SuppressWarnings("unchecked")
 public class MyMatrix<T extends Number> {
-	/*TODO
-	 * interfejs dodawania typow generycznych
-	 * poprawne dodawanie i mnozenie (w tej chwili wszystko jest castowane na Doulbe) 
+	
+	/*TODO 
+	 * przetestowac poprawnosc mnozenia
 	 * moze jakis sposob na pominiecie Class<T> w konstruktorach
 	 * no i cala eliminacja gaussa, testy
 	 */
+	
+	
+	//cos takiego wymyslilem na dzialania generyczne, jak ktos ma ladniejszy sposob to zamiencie
+	//trzeba tu dodac reszte typow dalem te ktore pamietalem tylko
+	class Calc{
+		T add(T num1, T num2) {
+			if(num1 instanceof Integer && num2 instanceof Integer)
+				return (T) (Integer) ((Integer) num1 + (Integer) num2);
+			else if(num1 instanceof Float && num2 instanceof Float)
+				return (T) (Float) ((Float) num1 + (Float) num2);
+			else if(num1 instanceof Double && num2 instanceof Double)
+				return (T) (Double) ((Double) num1 + (Double) num2);
+			else if(num1 instanceof Long && num2 instanceof Long)
+				return (T) (Long) ((Long) num1 + (Long) num2);
+			else return null;
+		}
+		
+		T sub(T num1, T num2) {
+			if(num1 instanceof Integer && num2 instanceof Integer)
+				return (T) (Integer) ((Integer) num1 - (Integer) num2);
+			else if(num1 instanceof Float && num2 instanceof Float)
+				return (T) (Float) ((Float) num1 - (Float) num2);
+			else if(num1 instanceof Double && num2 instanceof Double)
+				return (T) (Double) ((Double) num1 - (Double) num2);
+			else if(num1 instanceof Long && num2 instanceof Long)
+				return (T) (Long) ((Long) num1 - (Long) num2);
+			else return null;
+		}
+		
+		T mul(T num1, T num2) {
+			if(num1 instanceof Integer && num2 instanceof Integer)
+				return (T) (Integer) ((Integer) num1 * (Integer) num2);
+			else if(num1 instanceof Float && num2 instanceof Float)
+				return (T) (Float) ((Float) num1 * (Float) num2);
+			else if(num1 instanceof Double && num2 instanceof Double)
+				return (T) (Double) ((Double) num1 * (Double) num2);
+			else if(num1 instanceof Long && num2 instanceof Long)
+				return (T) (Long) ((Long) num1 * (Long) num2);
+			else return null;
+		}
+		
+		T div(T num1, T num2) {
+			if(num1 instanceof Integer && num2 instanceof Integer)
+				return (T) (Integer) ((Integer) num1 / (Integer) num2);
+			else if(num1 instanceof Float && num2 instanceof Float)
+				return (T) (Float) ((Float) num1 / (Float) num2);
+			else if(num1 instanceof Double && num2 instanceof Double)
+				return (T) (Double) ((Double) num1 / (Double) num2);
+			else if(num1 instanceof Long && num2 instanceof Long)
+				return (T) (Long) ((Long) num1 / (Long) num2);
+			else return null;
+		}
+	}
+	
+	private Calc calc = new Calc();
 	private Class<T> c;
 	private int rows;
 	private int columns;
@@ -74,11 +129,11 @@ public class MyMatrix<T extends Number> {
 	
 	//transpozycja
 	public MyMatrix<T> transpose() {  
-	        MyMatrix<T> A = new MyMatrix<T>(this.c, rows, columns);
-	        for (int i = 0; i < rows; i++)
-	            for (int j = 0; j < columns; j++)
-	                A.matrix[j][i] = this.matrix[i][j];
-	        return A;
+		MyMatrix<T> A = new MyMatrix<T>(this.c, rows, columns);
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < columns; j++)
+				A.matrix[j][i] = this.matrix[i][j];
+		return A;
 	}
 	
 	//zamiana wierszy
@@ -86,9 +141,6 @@ public class MyMatrix<T extends Number> {
 		T[] temp = matrix[i];
         matrix[i] = matrix[j];
         matrix[j] = temp;
-		/*ArrayList<T> temp = matrix.get(i);
-        matrix.set(i, matrix.get(j));
-        matrix.set(j, temp);*/
 	}
 	
 	//dodawanie macierzy
@@ -98,8 +150,9 @@ public class MyMatrix<T extends Number> {
         MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++)   
-            	W.setCell((T) new Double(A.matrix[i][j].doubleValue() + B.matrix[i][j].doubleValue()), i, j);  //tymczasowo, dopoki nie napiszemy dodawania generycznych
-        return W;
+            	//W.setCell((T) new Double(A.matrix[i][j].doubleValue() + B.matrix[i][j].doubleValue()), i, j);  //tymczasowo, dopoki nie napiszemy dodawania generycznych
+            	W.setCell(calc.add(A.matrix[i][j], B.matrix[i][j]), i, j);
+       return W;
 	}
 	
 	//mnozenie macierzy
@@ -110,7 +163,8 @@ public class MyMatrix<T extends Number> {
         for (int i = 0; i < W.columns; i++)
             for (int j = 0; j < W.rows; j++)
                 for (int k = 0; k < A.rows; k++)
-                	W.setCell((T) new Double(W.matrix[i][j].doubleValue()+(A.matrix[i][k].doubleValue()*B.matrix[k][j].doubleValue())), i, j); //tymczasowo
+                	W.setCell(calc.add(W.matrix[i][j], calc.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
+                	//W.setCell((T) new Double(W.matrix[i][j].doubleValue()+(A.matrix[i][k].doubleValue()*B.matrix[k][j].doubleValue())), i, j); //tymczasowo
         return W;
 	}
 	
@@ -132,13 +186,15 @@ public class MyMatrix<T extends Number> {
 
 	public static void main(String[] args) {
 		
-		MyMatrix<Double> A = new MyMatrix<Double>(Double.class, 3, 3);
-		MyMatrix<Double> B = new MyMatrix<Double>(Double.class, 3, 3);
+		Class TYP = Integer.class;
+		
+		MyMatrix A = new MyMatrix<Integer>(TYP, 3, 3);
+		MyMatrix B = new MyMatrix<Integer>(TYP, 3, 3);
 		
 		for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++) {
-				A.setCell(3.5, i, j);
-				B.setCell(2.5, i, j);
+				A.setCell(3, i, j);
+				B.setCell(2, i, j);
 			}
 				
 		System.out.println(A.plus(B));
