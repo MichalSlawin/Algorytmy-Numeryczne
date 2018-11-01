@@ -1,7 +1,8 @@
 import java.math.BigInteger;
 
+@SuppressWarnings("unchecked")
 public class MainTest {
-    private static final Class TYP = Integer.class;
+	private static final Class TYP = Integer.class;
 
     private static Fraction fraction6_2 = new Fraction(BigInteger.valueOf(6), BigInteger.valueOf(2)); // 6/2
     private static Fraction fraction8_10 = new Fraction(BigInteger.valueOf(8), BigInteger.valueOf(10)); // 8/10
@@ -15,7 +16,7 @@ public class MainTest {
     private static Fraction fraction3_4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4)); // 3/4
 
     public static void main(String[] args) {
-
+    	
         plusConstr1Test();
         timesConstr2Test();
         fractionClassTest();
@@ -29,7 +30,7 @@ public class MainTest {
 
         for(int i=0; i<3; i++) {
             for (int j = 0; j < 3; j++) {
-                A.setCell(3, i, j);
+                A.setCell(4, i, j);
                 B.setCell(2, i, j);
             }
         }
@@ -55,8 +56,8 @@ public class MainTest {
     }
 
     private static void fractionMyMatrixTest() {
-        Fraction tab1[][] = {{fraction1_2, fraction2_3}, {fraction7_5, fraction0_4}, {fraction6_8, fraction1_1}};
-        Fraction tab2[][] = {{fraction1_1, fraction3_4, fraction1_2}, {fraction6_8, fraction0_4, fraction6_2}};
+        Fraction tab1[][] = {{fraction1_2, fraction2_3, fraction1_1}, {fraction7_5, fraction0_4, fraction1_1}, {fraction6_8, fraction1_1, fraction1_1}};
+        Fraction tab2[][] = {{fraction1_1, fraction3_4, fraction1_2}, {fraction6_8, fraction0_4, fraction6_2}, {fraction1_1, fraction3_4, fraction1_2}};
 
         MyMatrix myMatrix1 = new MyMatrix<Fraction>(Fraction.class, tab1);
         MyMatrix myMatrix2 = new MyMatrix<Fraction>(Fraction.class, tab2);

@@ -90,6 +90,10 @@ public class Fraction {
     public static Fraction div(Fraction dividend, Fraction divisor) {
         return mul(dividend, divisor.rotate());
     }
+    
+    public static Fraction Zero() {
+    	return new Fraction(BigInteger.ZERO, BigInteger.ONE);
+    }
 
     @Override
     public String toString() {
