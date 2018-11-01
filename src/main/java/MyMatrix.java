@@ -152,6 +152,15 @@ public class MyMatrix<T extends Number> {
 		MyMatrix<T> A = this;
         if (A.rows != B.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
         MyMatrix<T> W = new MyMatrix<T>(this.c, A.rows, B.columns);
+
+        //zerowanie macierzy W
+        Integer zero = 0;
+        for(int i = 0; i < A.rows; i++) {
+        	for(int j = 0; j < B.columns; j++) {
+        		W.setCell((T)zero,i,j);
+			}
+		}
+
         for (int i = 0; i < W.columns; i++)
             for (int j = 0; j < W.rows; j++)
                 for (int k = 0; k < A.rows; k++)

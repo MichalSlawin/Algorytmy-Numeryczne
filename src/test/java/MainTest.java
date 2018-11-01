@@ -23,10 +23,9 @@ public class MainTest {
     }
 
     //test drugiego konstruktora i mnożenia
-    //BŁĄD: na ten moment zwracana jest macierz z samymi nullami
     private static void timesConstr2Test() {
-        Integer tab1[][] = {{3,3,3},{3,3,3},{3,3,3}};
-        Integer tab2[][] = {{2,2,2},{2,2,2},{2,2,2}};
+        Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
+        Integer tab2[][] = {{2,2,2},{2,4,2},{2,2,2}};
         MyMatrix myMatrix1 = new MyMatrix<Integer>(TYP, tab1);
         MyMatrix myMatrix2 = new MyMatrix<Integer>(TYP, tab2);
 
