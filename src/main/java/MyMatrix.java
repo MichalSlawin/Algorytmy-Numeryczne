@@ -3,8 +3,7 @@ import java.lang.reflect.Array;
 @SuppressWarnings("unchecked")
 public class MyMatrix<T extends Number> {
 	
-	/*TODO 
-	 * przetestowac poprawnosc mnozenia
+	/*TODO
 	 * moze jakis sposob na pominiecie Class<T> w konstruktorach
 	 * no i cala eliminacja gaussa, testy
 	 */
@@ -75,7 +74,6 @@ public class MyMatrix<T extends Number> {
         this.c = c;
     }
 
-	//wydaje mi się, że teraz konstruktor działa, ale głowy nie dam
 	public MyMatrix(Class<T> c, T[][] tab) {
 		this.rows = tab.length;
         this.columns = tab[0].length;
