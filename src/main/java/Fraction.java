@@ -1,6 +1,5 @@
 import java.math.BigInteger;
 
-//TODO: poprawić dzielenie tak aby dzielnik nie zmienial wartosci
 public class Fraction {
     private BigInteger nominator;
     private BigInteger denominator;
@@ -43,11 +42,9 @@ public class Fraction {
         denominator = denominator.divide(gcd);
     }
 
-    // odwrócenie ułamka
-    public void rotate() {
-        BigInteger temp = this.nominator;
-        this.nominator = this.denominator;
-        this.denominator = temp;
+    // zwrócenie odwrócenego ułamka
+    public Fraction rotate() {
+        return new Fraction(this.denominator, this.nominator);
     }
 
     public static void setCommonDenominator(Fraction fraction1, Fraction fraction2) {
@@ -90,11 +87,8 @@ public class Fraction {
         return product;
     }
 
-    // UWAGA: w wyniku działania funkcji divisor staje się swoją odwrotnością
     public static Fraction div(Fraction dividend, Fraction divisor) {
-        divisor.rotate();
-
-        return mul(dividend, divisor);
+        return mul(dividend, divisor.rotate());
     }
 
     @Override

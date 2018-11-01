@@ -1,11 +1,12 @@
 import java.lang.reflect.Array;
 
 @SuppressWarnings("unchecked")
-public class MyMatrix<T extends Number> {
+public class MyMatrix<T> {
 	
 	/*TODO
 	 * moze jakis sposob na pominiecie Class<T> w konstruktorach
 	 * no i cala eliminacja gaussa, testy
+	 * napisać testy dla różnych typów (Integer ,Float, Double, Long, Fraction)
 	 */
 
 	//cos takiego wymyslilem na dzialania generyczne, jak ktos ma ladniejszy sposob to zamiencie
@@ -20,6 +21,8 @@ public class MyMatrix<T extends Number> {
 				return (T) (Double) ((Double) num1 + (Double) num2);
 			else if(num1 instanceof Long && num2 instanceof Long)
 				return (T) (Long) ((Long) num1 + (Long) num2);
+			else if(num1 instanceof Fraction && num2 instanceof Fraction)
+				return (T) Fraction.add((Fraction) num1, (Fraction) num2);
 			else return null;
 		}
 
@@ -32,6 +35,8 @@ public class MyMatrix<T extends Number> {
 				return (T) (Double) ((Double) num1 - (Double) num2);
 			else if(num1 instanceof Long && num2 instanceof Long)
 				return (T) (Long) ((Long) num1 - (Long) num2);
+			else if(num1 instanceof Fraction && num2 instanceof Fraction)
+				return (T) Fraction.sub((Fraction) num1, (Fraction) num2);
 			else return null;
 		}
 
@@ -44,6 +49,8 @@ public class MyMatrix<T extends Number> {
 				return (T) (Double) ((Double) num1 * (Double) num2);
 			else if(num1 instanceof Long && num2 instanceof Long)
 				return (T) (Long) ((Long) num1 * (Long) num2);
+			else if(num1 instanceof Fraction && num2 instanceof Fraction)
+				return (T) Fraction.mul((Fraction) num1, (Fraction) num2);
 			else return null;
 		}
 
@@ -56,6 +63,8 @@ public class MyMatrix<T extends Number> {
 				return (T) (Double) ((Double) num1 / (Double) num2);
 			else if(num1 instanceof Long && num2 instanceof Long)
 				return (T) (Long) ((Long) num1 / (Long) num2);
+			else if(num1 instanceof Fraction && num2 instanceof Fraction)
+				return (T) Fraction.div((Fraction) num1, (Fraction) num2);
 			else return null;
 		}
 	}
@@ -146,6 +155,7 @@ public class MyMatrix<T extends Number> {
 	}
 	
 	//mnozenie macierzy
+	//TODO: zerowanie dla wszystkich typów
 	public MyMatrix<T> times(MyMatrix<T> B){
 		MyMatrix<T> A = this;
         if (A.rows != B.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
@@ -165,6 +175,10 @@ public class MyMatrix<T extends Number> {
                 	W.setCell(calc.add(W.matrix[i][j], calc.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
                 	//W.setCell((T) new Double(W.matrix[i][j].doubleValue()+(A.matrix[i][k].doubleValue()*B.matrix[k][j].doubleValue())), i, j); //tymczasowo
         return W;
+	}
+
+	public void initializeMatrixZero() {
+		//TODO: zerowanie dla wszystkich typów
 	}
 	
 	@Override

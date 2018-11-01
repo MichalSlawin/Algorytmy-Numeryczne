@@ -3,11 +3,23 @@ import java.math.BigInteger;
 public class MainTest {
     private static final Class TYP = Integer.class;
 
+    private static Fraction fraction6_2 = new Fraction(BigInteger.valueOf(6), BigInteger.valueOf(2)); // 6/2
+    private static Fraction fraction8_10 = new Fraction(BigInteger.valueOf(8), BigInteger.valueOf(10)); // 8/10
+    private static Fraction fraction0_4 = new Fraction(BigInteger.valueOf(0), BigInteger.valueOf(4)); // 0/4
+    private static Fraction fraction2_3 = new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(3)); // 2/3
+    private static Fraction fraction5_6 = new Fraction(BigInteger.valueOf(5), BigInteger.valueOf(6)); // 5/6
+    private static Fraction fraction1_2 = new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(2)); // 1/2
+    private static Fraction fraction7_5 = new Fraction(BigInteger.valueOf(7), BigInteger.valueOf(5)); // 7/5
+    private static Fraction fraction6_8 = new Fraction(BigInteger.valueOf(6), BigInteger.valueOf(8)); // 6/8
+    private static Fraction fraction1_1 = new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(1)); // 1/1
+    private static Fraction fraction3_4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4)); // 3/4
+
     public static void main(String[] args) {
 
         plusConstr1Test();
         timesConstr2Test();
-        fractionTest();
+        fractionClassTest();
+        fractionMyMatrixTest();
     }
 
     //test pierwszego konstruktora i dodawania
@@ -34,19 +46,22 @@ public class MainTest {
         System.out.println(myMatrix1.times(myMatrix2));
     }
 
-    private static void fractionTest() {
-        Fraction fraction1 = new Fraction(BigInteger.valueOf(6), BigInteger.valueOf(2)); // 3
-        Fraction fraction2 = new Fraction(BigInteger.valueOf(8), BigInteger.valueOf(10)); // 4/5
-        Fraction fraction3 = new Fraction(BigInteger.valueOf(0), BigInteger.valueOf(4)); // 0
-        //Fraction fraction4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(0)); tak jak powinno wywala exception
-        Fraction fraction5 = new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(3)); // 2/3
-        Fraction fraction6 = new Fraction(BigInteger.valueOf(5), BigInteger.valueOf(6)); // 5/6
+    private static void fractionClassTest() {
+        System.out.println(fraction6_2 + " ; " + fraction8_10 + " ; " + fraction0_4);
+        System.out.println(fraction2_3 + " + " + fraction5_6 + " = " + Fraction.add(fraction2_3, fraction5_6));
+        System.out.println(fraction6_2 + " - " + fraction8_10 + " = " + Fraction.sub(fraction6_2, fraction8_10));
+        System.out.println(fraction8_10 + " * " + fraction2_3 + " = " + Fraction.mul(fraction8_10, fraction2_3));
+        System.out.println(fraction5_6 + " / " + fraction2_3 + " = " + Fraction.div(fraction5_6, fraction2_3));
+    }
 
-        System.out.println(fraction1 + " ; " + fraction2 + " ; " + fraction3);
+    private static void fractionMyMatrixTest() {
+        Fraction tab1[][] = {{fraction1_2, fraction2_3}, {fraction7_5, fraction0_4}, {fraction6_8, fraction1_1}};
+        Fraction tab2[][] = {{fraction1_1, fraction3_4, fraction1_2}, {fraction6_8, fraction0_4, fraction6_2}};
 
-        System.out.println(fraction5 + " + " + fraction6 + " = " + Fraction.add(fraction5, fraction6));
-        System.out.println(fraction1 + " - " + fraction2 + " = " + Fraction.sub(fraction1, fraction2));
-        System.out.println(fraction2 + " * " + fraction5 + " = " + Fraction.mul(fraction2, fraction5));
-        System.out.println(fraction6 + " / " + fraction5 + " = " + Fraction.div(fraction6, fraction5));
+        MyMatrix myMatrix1 = new MyMatrix<Fraction>(Fraction.class, tab1);
+        MyMatrix myMatrix2 = new MyMatrix<Fraction>(Fraction.class, tab2);
+
+        System.out.println(myMatrix1.times(myMatrix2));
+        System.out.println(myMatrix1.plus(myMatrix2));
     }
 }
