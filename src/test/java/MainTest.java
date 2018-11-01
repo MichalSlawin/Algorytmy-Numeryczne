@@ -44,7 +44,9 @@ public class MainTest {
 
         System.out.println(fraction1 + " ; " + fraction2 + " ; " + fraction3);
 
-        Fraction.setCommonDenominator(fraction5, fraction6); // 4/6 i 5/6
-        System.out.println("Common denominator: " + fraction5 + " ; " + fraction6);
+        System.out.println(fraction5 + " + " + fraction6 + " = " + Fraction.add(fraction5, fraction6));
+        System.out.println(fraction1 + " - " + fraction2 + " = " + Fraction.sub(fraction1, fraction2));
+        System.out.println(fraction2 + " * " + fraction5 + " = " + Fraction.mul(fraction2, fraction5));
+        System.out.println(fraction6 + " / " + fraction5 + " = " + Fraction.div(fraction6, fraction5));
     }
 }

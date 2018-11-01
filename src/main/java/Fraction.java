@@ -1,6 +1,6 @@
 import java.math.BigInteger;
 
-//TODO: napisać działania na ułamkach (dodawanie, mnożenie, odejmowanie, dzielenie)
+//TODO: poprawić dzielenie tak aby dzielnik nie zmienial wartosci
 public class Fraction {
     private BigInteger nominator;
     private BigInteger denominator;
@@ -18,7 +18,6 @@ public class Fraction {
             this.denominator = denominator;
             this.reduce();
         }
-
     }
 
     public BigInteger getNominator() {
@@ -37,10 +36,18 @@ public class Fraction {
         this.denominator = denominator;
     }
 
-    private void reduce() {
+    // skrócenie ułamka
+    public void reduce() {
         BigInteger gcd = nominator.gcd(denominator);
         nominator = nominator.divide(gcd);
         denominator = denominator.divide(gcd);
+    }
+
+    // odwrócenie ułamka
+    public void rotate() {
+        BigInteger temp = this.nominator;
+        this.nominator = this.denominator;
+        this.denominator = temp;
     }
 
     public static void setCommonDenominator(Fraction fraction1, Fraction fraction2) {
@@ -59,7 +66,35 @@ public class Fraction {
     }
 
     public static Fraction add(Fraction addend1, Fraction addend2) {
-        return null;
+        setCommonDenominator(addend1, addend2);
+        BigInteger nominatorsSum = (addend1.getNominator()).add(addend2.getNominator());
+
+        return new Fraction(nominatorsSum, addend1.getDenominator());
+    }
+
+    public static Fraction sub(Fraction minuend, Fraction subtrahend) {
+        setCommonDenominator(minuend, subtrahend);
+
+        BigInteger nominatorsDiff = ((minuend.getNominator()).subtract(subtrahend.getNominator()));
+
+        return new Fraction(nominatorsDiff, minuend.getDenominator());
+    }
+
+    public static Fraction mul(Fraction multiplicand, Fraction multiplier) {
+        BigInteger nominator = (multiplier.getNominator()).multiply(multiplicand.getNominator());
+        BigInteger denominator = (multiplier.getDenominator()).multiply(multiplicand.getDenominator());
+
+        Fraction product = new Fraction(nominator, denominator);
+        product.reduce();
+
+        return product;
+    }
+
+    // UWAGA: w wyniku działania funkcji divisor staje się swoją odwrotnością
+    public static Fraction div(Fraction dividend, Fraction divisor) {
+        divisor.rotate();
+
+        return mul(dividend, divisor);
     }
 
     @Override
