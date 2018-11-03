@@ -46,6 +46,12 @@ public class Fraction {
     public Fraction rotate() {
         return new Fraction(this.denominator, this.nominator);
     }
+    
+    public char getSign() {
+    	if((nominator.compareTo(BigInteger.valueOf(0)) == -1 && denominator.compareTo(BigInteger.valueOf(0)) == -1) || (nominator.compareTo(BigInteger.valueOf(0)) == 1 && denominator.compareTo(BigInteger.valueOf(0)) == 1) || nominator.compareTo(BigInteger.valueOf(0)) == 0)
+    		return '+';
+    	else return '-';
+    }
 
     public static void setCommonDenominator(Fraction fraction1, Fraction fraction2) {
         BigInteger nominator1 = fraction1.getNominator();
@@ -91,8 +97,13 @@ public class Fraction {
         return mul(dividend, divisor.rotate());
     }
     
-    public static Fraction Zero() {
+    public static Fraction zero() {
     	return new Fraction(BigInteger.ZERO, BigInteger.ONE);
+    }
+    
+    public static int compare(Fraction num1, Fraction num2) {
+    	setCommonDenominator(num1, num2);
+    	return num1.getNominator().compareTo(num2.getNominator());
     }
 
     @Override

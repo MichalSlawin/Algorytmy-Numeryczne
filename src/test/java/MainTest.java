@@ -1,6 +1,6 @@
 import java.math.BigInteger;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class MainTest {
 	private static final Class TYP = Integer.class;
 
@@ -17,18 +17,19 @@ public class MainTest {
 
     public static void main(String[] args) {
     	
-        plusConstr1Test();
-        timesConstr2Test();
-        fractionClassTest();
-        fractionMyMatrixTest();
+        //plusConstr1Test();
+        //timesConstr2Test();
+        //fractionClassTest();
+        //fractionMyMatrixTest();
+    	absTest();
     }
 
     //test pierwszego konstruktora i dodawania
-    private static void plusConstr1Test() {
+	private static void plusConstr1Test() {
         MyMatrix A = new MyMatrix<Integer>(TYP, 3, 3);
         MyMatrix B = new MyMatrix<Integer>(TYP, 3, 3);
 
-        for(int i=0; i<3; i++) {
+        for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 A.setCell(4, i, j);
                 B.setCell(2, i, j);
@@ -56,13 +57,31 @@ public class MainTest {
     }
 
     private static void fractionMyMatrixTest() {
-        Fraction tab1[][] = {{fraction1_2, fraction2_3, fraction1_1}, {fraction7_5, fraction0_4, fraction1_1}, {fraction6_8, fraction1_1, fraction1_1}};
-        Fraction tab2[][] = {{fraction1_1, fraction3_4, fraction1_2}, {fraction6_8, fraction0_4, fraction6_2}, {fraction1_1, fraction3_4, fraction1_2}};
+        Fraction tab1[][] = {{fraction1_2, fraction2_3, fraction1_1}, 
+        					 {fraction7_5, fraction0_4, fraction1_1}, 
+        					 {fraction6_8, fraction1_1, fraction1_1}};
+        
+        Fraction tab2[][] = {{fraction1_1, fraction3_4, fraction1_2}, 
+        					 {fraction6_8, fraction0_4, fraction6_2}, 
+        					 {fraction1_1, fraction3_4, fraction1_2}};
 
         MyMatrix myMatrix1 = new MyMatrix<Fraction>(Fraction.class, tab1);
         MyMatrix myMatrix2 = new MyMatrix<Fraction>(Fraction.class, tab2);
 
         System.out.println(myMatrix1.times(myMatrix2));
         System.out.println(myMatrix1.plus(myMatrix2));
+    }
+    
+    //test wartosci bezwzglednej
+    private static void absTest() {
+    	Integer i = new Integer(-5);
+    	Float f = new Float(-4.543);
+    	Double d = new Double(-2.342353);
+    	Fraction fr = new Fraction(BigInteger.valueOf(-3), BigInteger.valueOf(5));
+    	
+    	System.out.println(MyMath.abs(i));
+    	System.out.println(MyMath.abs(f));
+    	System.out.println(MyMath.abs(d));
+    	System.out.println(MyMath.abs(fr));
     }
 }

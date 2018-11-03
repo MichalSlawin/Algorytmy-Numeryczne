@@ -75,9 +75,19 @@ public class MyMatrix<T> {
 	
 	//zamiana wierszy
 	public void swapRows(int i, int j) {
-		T[] temp = matrix[i];
+		T[] tmp = matrix[i];
         matrix[i] = matrix[j];
-        matrix[j] = temp;
+        matrix[j] = tmp;
+	}
+	
+	//zamiana kolumn
+	public void swapColumns(int i, int j) {
+		T tmp;
+		for(int k = 0; k < rows; k++) {
+			tmp = matrix[k][i];
+			matrix[k][i] = matrix[k][j];
+			matrix[k][j] = tmp;
+		}
 	}
 	
 	//dodawanie macierzy
@@ -87,10 +97,7 @@ public class MyMatrix<T> {
         MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++)   
-            	//W.setCell((T) new Double(A.matrix[i][j].doubleValue() + B.matrix[i][j].doubleValue()), i, j);  //tymczasowo, dopoki nie napiszemy dodawania generycznych
             	W.setCell(MyMath.add(A.matrix[i][j], B.matrix[i][j]), i, j);
-        
-        //MyMath.add(2.0, 3.0);
        return W;
 	}
 	
@@ -103,10 +110,11 @@ public class MyMatrix<T> {
         
         //zerowanie macierzy W
         T zero;
-        if(B.getCell(0, 0) instanceof Fraction)
-        	zero = (T) Fraction.Zero();
+        if(A.getCell(0, 0) instanceof Fraction)
+        	zero = (T) Fraction.zero();
         else
         	zero = (T) Integer.valueOf(0);
+        
         for(int i = 0; i < A.rows; i++) {
         	for(int j = 0; j < B.columns; j++) {
         		W.setCell(zero ,i ,j);
@@ -127,15 +135,15 @@ public class MyMatrix<T> {
 	@Override
 	public String toString() {
 		String str = new String();
-		for(int i=0; i<rows; i++) {
-			str+="[";
-			for(int j=0; j<columns; j++) {
-				str+=getCell(i, j);
-				if(j==columns-1)
-					str+="]";
-				else str+=" ";
+		for(int i = 0; i < rows; i++) {
+			str += "[";
+			for(int j = 0; j < columns; j++) {
+				str += getCell(i, j);
+				if(j == columns - 1)
+					str += "]";
+				else str += " ";
 			}
-			str+="\n";
+			str += "\n";
 		}
 		return str;
 	}
