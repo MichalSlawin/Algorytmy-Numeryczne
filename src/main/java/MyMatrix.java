@@ -95,7 +95,6 @@ public class MyMatrix<T> {
 	}
 	
 	//mnozenie macierzy
-	//TODO: zerowanie dla wszystkich typów
 	public MyMatrix<T> times(MyMatrix<T> B){
 		MyMatrix<T> A = this;
         if (A.rows != B.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
@@ -118,10 +117,6 @@ public class MyMatrix<T> {
                 for (int k = 0; k < A.rows; k++)
                 	W.setCell(MyMath.add(W.matrix[i][j], MyMath.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
         return W;
-	}
-
-	public void initializeMatrixZero() {
-		//TODO: zerowanie dla wszystkich typów
 	}
 	
 	@Override

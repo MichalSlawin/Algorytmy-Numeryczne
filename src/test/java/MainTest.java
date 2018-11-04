@@ -2,7 +2,7 @@ import java.math.BigInteger;
 
 @SuppressWarnings("unchecked")
 public class MainTest {
-	private static final Class TYP = Integer.class;
+	private static final Class TYP_INTEGER = Integer.class;
 
     private static Fraction fraction6_2 = new Fraction(BigInteger.valueOf(6), BigInteger.valueOf(2)); // 6/2
     private static Fraction fraction8_10 = new Fraction(BigInteger.valueOf(8), BigInteger.valueOf(10)); // 8/10
@@ -25,8 +25,8 @@ public class MainTest {
 
     //test pierwszego konstruktora i dodawania
     private static void plusConstr1Test() {
-        MyMatrix A = new MyMatrix<Integer>(TYP, 3, 3);
-        MyMatrix B = new MyMatrix<Integer>(TYP, 3, 3);
+        MyMatrix A = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
+        MyMatrix B = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
 
         for(int i=0; i<3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -41,8 +41,8 @@ public class MainTest {
     private static void timesConstr2Test() {
         Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
         Integer tab2[][] = {{2,2,2},{2,4,2},{2,2,2}};
-        MyMatrix myMatrix1 = new MyMatrix<Integer>(TYP, tab1);
-        MyMatrix myMatrix2 = new MyMatrix<Integer>(TYP, tab2);
+        MyMatrix myMatrix1 = new MyMatrix<Integer>(TYP_INTEGER, tab1);
+        MyMatrix myMatrix2 = new MyMatrix<Integer>(TYP_INTEGER, tab2);
 
         System.out.println(myMatrix1.times(myMatrix2));
     }
