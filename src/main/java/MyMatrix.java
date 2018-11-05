@@ -32,6 +32,17 @@ public class MyMatrix<T> {
         this.c = c;
 	}
 
+	// konstruktor do tworzenia kopii obiektu
+	public MyMatrix(MyMatrix<T> myMatrix) {
+		this.c = myMatrix.getC();
+		this.rows = myMatrix.getRows();
+		this.columns = myMatrix.getColumns();
+		this.matrix = (T[][]) Array.newInstance(this.c, this.rows, this.columns);
+		for(int i = 0; i < myMatrix.getRows(); i++)
+			for(int j = 0; j < myMatrix.getColumns(); j++)
+				this.matrix[i][j] = myMatrix.matrix[i][j];
+	}
+
 	public int getRows() {
 		return rows;
 	}
@@ -65,6 +76,33 @@ public class MyMatrix<T> {
 	}
 
 	public Class<T> getC() { return c; }
+
+	// na ten moment daje zle wyniki
+	public void gaussianElimination(MyMatrix<T> vector) {
+		int n = this.getRows();
+		MyMatrix<T> resultMyMatrix = new MyMatrix<T>(this);
+		T[][] resultMatrix = resultMyMatrix.getMatrix();
+		MyMatrix<T> vectorCopy = new MyMatrix<T>(vector);
+		T[][] vectorCopyMatrix = vectorCopy.getMatrix();
+
+		for (int i = 0; i<n-1; i++){
+			for (int j = i+1; j<=n-1; j++){
+				for (int k = 0; k<n; k++){
+					resultMatrix[j][k] = MyMath.sub(this.matrix[j][k],
+							(MyMath.mul(this.matrix[i][k], (MyMath.div(this.matrix[j][i], this.matrix[i][i])))));
+				}
+
+				vectorCopyMatrix[0][j]=MyMath.sub(vector.matrix[0][j],(MyMath.mul(vector.matrix[0][i],(MyMath.div(this.matrix[j][i], this.matrix[i][i])))));
+
+				for (int ii = 0; ii<resultMatrix.length; ii++){
+					for (int jj = 0; jj<resultMatrix.length; jj++){
+						this.matrix[ii][jj]=resultMatrix[ii][jj];
+					}
+					vector.matrix[0][ii]=vectorCopyMatrix[0][ii];
+				}
+			}
+		}
+	}
 
 	//transpozycja
 	public MyMatrix<T> transpose() {  

@@ -21,8 +21,19 @@ public class MainTest {
 //        timesConstr2Test();
 //        fractionClassTest();
 //        fractionMyMatrixTest();
-        absTest();
-    	expandMatrixTest();
+//        absTest();
+//    	createExpandedMatrixConstr3Test();
+        gaussianEliminationTest();
+    }
+
+    private static void gaussianEliminationTest() {
+        Integer tab1[][] = {{-1,2,1},{0,-1,-1},{0,5,2}};
+        Integer tab2[][] = {{-1,2,1}};
+        MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
+        MyMatrix vector = new MyMatrix<Integer>(TYP_INTEGER, tab2);
+
+        myMatrix.gaussianElimination(vector);
+        System.out.println(vector);
     }
 
     //test pierwszego konstruktora i dodawania
@@ -86,13 +97,19 @@ public class MainTest {
     	System.out.println(MyMath.abs(fr));
     }
 
-    //test rozszerzenia macierzy
-    private static void expandMatrixTest() {
+    //test rozszerzenia macierzy + test trzeciego konstruktora
+    private static void createExpandedMatrixConstr3Test() {
         Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
         Integer tab2[][] = {{2,2,2}};
         MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
         MyMatrix vector = new MyMatrix<Integer>(TYP_INTEGER, tab2);
 
-        System.out.println(myMatrix.createExpandedMatrix(vector));
+        MyMatrix myMatrix1 = new MyMatrix<Integer>(myMatrix);
+
+        myMatrix1.swapColumns(0,1);
+        System.out.println(myMatrix);
+        System.out.println(myMatrix1);
+
+        System.out.println(myMatrix1.createExpandedMatrix(vector));
     }
 }
