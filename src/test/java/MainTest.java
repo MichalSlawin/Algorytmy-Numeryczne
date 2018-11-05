@@ -17,15 +17,15 @@ public class MainTest {
 
     public static void main(String[] args) {
     	
-        //plusConstr1Test();
-        //timesConstr2Test();
-        //fractionClassTest();
-        //fractionMyMatrixTest();
-    	absTest();
+//        plusConstr1Test();
+//        timesConstr2Test();
+//        fractionClassTest();
+//        fractionMyMatrixTest();
+        absTest();
+    	expandMatrixTest();
     }
 
     //test pierwszego konstruktora i dodawania
-
     private static void plusConstr1Test() {
         MyMatrix A = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
         MyMatrix B = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
@@ -84,5 +84,15 @@ public class MainTest {
     	System.out.println(MyMath.abs(f));
     	System.out.println(MyMath.abs(d));
     	System.out.println(MyMath.abs(fr));
+    }
+
+    //test rozszerzenia macierzy
+    private static void expandMatrixTest() {
+        Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
+        Integer tab2[][] = {{2,2,2}};
+        MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
+        MyMatrix vector = new MyMatrix<Integer>(TYP_INTEGER, tab2);
+
+        System.out.println(myMatrix.createExpandedMatrix(vector));
     }
 }

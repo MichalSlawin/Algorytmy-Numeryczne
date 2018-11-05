@@ -63,7 +63,9 @@ public class MyMatrix<T> {
 	public T getCell(int row, int column) {
 		return matrix[row][column];
 	}
-	
+
+	public Class<T> getC() { return c; }
+
 	//transpozycja
 	public MyMatrix<T> transpose() {  
 		MyMatrix<T> A = new MyMatrix<T>(this.c, rows, columns);
@@ -88,6 +90,23 @@ public class MyMatrix<T> {
 			matrix[k][i] = matrix[k][j];
 			matrix[k][j] = tmp;
 		}
+	}
+
+	//zwrócenie macierzy rozszerzonej o wektor
+	public MyMatrix<T> createExpandedMatrix(MyMatrix<T> vector) {
+		MyMatrix<T> expandedMatrix = new MyMatrix<T>(this.getC(), this.getRows(), this.getColumns()+1);
+
+		for(int i = 0; i < expandedMatrix.getRows(); i++) {
+			for(int j = 0; j < expandedMatrix.getColumns(); j++) {
+				if(j == expandedMatrix.getColumns()-1) {
+					expandedMatrix.setCell(vector.getCell(0, i), i, j);
+				}
+				else {
+					expandedMatrix.setCell(this.getCell(i, j), i, j);
+				}
+			}
+		}
+		return expandedMatrix;
 	}
 	
 	//dodawanie macierzy

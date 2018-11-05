@@ -66,8 +66,9 @@ public class MyMath {
 			else return num1;
 		else if(num1 instanceof Fraction)
 			if(((Fraction) num1).getSign() == '-') {
-				((Fraction) num1).setNominator(((Fraction) num1).getNominator().multiply(BigInteger.valueOf(-1)));
-				return num1;
+				Fraction fraction = new Fraction(((Fraction) num1).getNominator().multiply(BigInteger.valueOf(-1)),
+						((Fraction) num1).getDenominator());
+				return (T) fraction;
 			}
 			else return num1;
 		else return null;
