@@ -1,4 +1,7 @@
+package test.java;
+
 import java.math.BigInteger;
+import main.java.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class MainTest {
@@ -27,13 +30,12 @@ public class MainTest {
     }
 
     private static void gaussianEliminationTest() {
-        Integer tab1[][] = {{-1,2,1},{0,-1,-1},{0,5,2}};
-        Integer tab2[][] = {{-1,2,1}};
-        MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
-        MyMatrix vector = new MyMatrix<Integer>(TYP_INTEGER, tab2);
+        Double tab1[][] = {{-1.0,2.0,1.0},{0.0,-1.0,-1.0},{0.0,5.0,2.0}};
+        Double tab2[][] = {{-1.0,2.0,1.0}};
+        MyMatrix myMatrix = new MyMatrix<Double>(Double.class, tab1);
+        MyMatrix vector = new MyMatrix<Double>(Double.class, tab2);
 
-        myMatrix.gaussianElimination(vector);
-        System.out.println(vector);
+        System.out.println(myMatrix.gaussianElimination(vector));
     }
 
     //test pierwszego konstruktora i dodawania

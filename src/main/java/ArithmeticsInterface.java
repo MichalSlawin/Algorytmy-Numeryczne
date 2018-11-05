@@ -1,3 +1,4 @@
+package main.java;
 
 //testowe, interfejs jeszcze nie dziala - na razie castuje wszystko na double
 //nie usuwam tego z nadzieją, że uda się to później jednak wdrożyć aby uprościć kod
