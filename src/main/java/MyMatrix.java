@@ -83,13 +83,16 @@ public class MyMatrix<T> {
 	public MyMatrix<T> gaussianElimination(MyMatrix<T> vector) {
 		MyMatrix<T> steppedMatrix = new MyMatrix<T>(this);
 		MyMatrix<T> vectorCopy = new MyMatrix<T>(vector);
-		MyMatrix<T> result = new MyMatrix<T>(c, vector.getRows(), vector.getColumns());
+		MyMatrix<T> result = new MyMatrix<T>(vector);
 		
 		for(int i=0; i<result.getColumns(); i++) {
 			if(result.getCell(0, 0) instanceof Fraction)
 				result.setCell((T) Fraction.zero(), 0, i);
 			else result.setCell((T) Double.valueOf(0), 0, i);
 		}
+
+		System.out.println("stepped\n" + steppedMatrix+"\ncopy\n"+vectorCopy+"\nresult\n"+result);
+		
 
 		for (int i = 0; i < this.getRows()-1; i++){
 			for (int j = i+1; j <= this.getRows()-1; j++){
@@ -111,10 +114,11 @@ public class MyMatrix<T> {
 		
 		for(int i = result.getColumns()-1; i >= 0; i--) {
 			T sum = null;
-			if(sum instanceof Fraction)
+			if(result.getCell(0, 0) instanceof Fraction)
 				sum = (T) Fraction.zero();
 			else sum = (T) Double.valueOf(0);
 			
+			System.out.println(sum);
 			for(int j = i + 1; j < result.getColumns(); j++) {
 				sum = MyMath.add(sum, MyMath.mul(steppedMatrix.getCell(i, j), result.getCell(0, j)));
 			}

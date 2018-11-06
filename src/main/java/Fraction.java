@@ -37,22 +37,23 @@ public class Fraction {
         this.denominator = denominator;
     }
 
-    // skrócenie ułamka
+    // skrocenie ulamka
     public void reduce() {
         BigInteger gcd = nominator.gcd(denominator);
         nominator = nominator.divide(gcd);
         denominator = denominator.divide(gcd);
     }
 
-    // zwrócenie odwrócenego ułamka
+    // odwraca ulamek
     public Fraction rotate() {
         return new Fraction(this.denominator, this.nominator);
     }
     
-    public char getSign() {
+    //sprawdza znak ulamka
+    public boolean isPositive() {
     	if((nominator.compareTo(BigInteger.valueOf(0)) == -1 && denominator.compareTo(BigInteger.valueOf(0)) == -1) || (nominator.compareTo(BigInteger.valueOf(0)) == 1 && denominator.compareTo(BigInteger.valueOf(0)) == 1) || nominator.compareTo(BigInteger.valueOf(0)) == 0)
-    		return '+';
-    	else return '-';
+    		return true;
+    	else return false;
     }
 
     public static void setCommonDenominator(Fraction fraction1, Fraction fraction2) {
@@ -111,6 +112,10 @@ public class Fraction {
     @Override
     public String toString() {
         if(denominator.equals(BigInteger.ONE)) return nominator + "";
+        else if(this.isPositive() && nominator.compareTo(BigInteger.valueOf(0))<0)
+        	return nominator.multiply(BigInteger.valueOf(-1)) + "/" + denominator.multiply(BigInteger.valueOf(-1));
+        else if(!this.isPositive() && denominator.compareTo(BigInteger.valueOf(0))<0)
+        	return nominator.multiply(BigInteger.valueOf(-1)) + "/" + denominator.multiply(BigInteger.valueOf(-1));
         else return nominator + "/" + denominator;
     }
 }

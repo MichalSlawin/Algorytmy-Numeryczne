@@ -16,7 +16,7 @@ public class MainTest {
     private static Fraction fraction7_5 = new Fraction(BigInteger.valueOf(7), BigInteger.valueOf(5)); // 7/5
     private static Fraction fraction6_8 = new Fraction(BigInteger.valueOf(6), BigInteger.valueOf(8)); // 6/8
     private static Fraction fraction1_1 = new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(1)); // 1/1
-    private static Fraction fraction3_4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4)); // 3/4
+    private static Fraction fraction3_4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4)); // 3/4  
 
     public static void main(String[] args) {
     	
@@ -30,12 +30,20 @@ public class MainTest {
     }
 
     private static void gaussianEliminationTest() {
-        Double tab1[][] = {{-1.0,2.0,1.0},{0.0,-1.0,-1.0},{0.0,5.0,2.0}};
-        Double tab2[][] = {{-1.0,2.0,1.0}};
-        MyMatrix myMatrix = new MyMatrix<Double>(Double.class, tab1);
-        MyMatrix vector = new MyMatrix<Double>(Double.class, tab2);
+        Double tab1d[][] = {{-1.0,2.0,1.0},{0.0,-1.0,-1.0},{0.0,5.0,2.0}};
+        Double tab2d[][] = {{-1.0,2.0,1.0}};
+        MyMatrix myMatrixD = new MyMatrix<Double>(Double.class, tab1d);
+        MyMatrix vectorD = new MyMatrix<Double>(Double.class, tab2d);
+        
+        Fraction tab1f[][] = {{new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(1))},
+        					  {new Fraction(BigInteger.valueOf(0), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1))},
+        					  {new Fraction(BigInteger.valueOf(0), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(5), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(1))}};
+        Fraction tab2f[][] = {{new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(1))}};
+        MyMatrix myMatrixF = new MyMatrix<Fraction>(Fraction.class, tab1f);
+        MyMatrix vectorF = new MyMatrix<Fraction>(Fraction.class, tab2f);
 
-        System.out.println(myMatrix.gaussianElimination(vector));
+        System.out.println(myMatrixD.gaussianElimination(vectorD));
+        System.out.println(myMatrixF.gaussianElimination(vectorF));
     }
 
     //test pierwszego konstruktora i dodawania

@@ -67,12 +67,12 @@ public class MyMath {
 				return (T) (Double) ((Double) num1*(-1));
 			else return num1;
 		else if(num1 instanceof Fraction)
-			if(((Fraction) num1).getSign() == '-') {
-				Fraction fraction = new Fraction(((Fraction) num1).getNominator().multiply(BigInteger.valueOf(-1)),
+			if(((Fraction) num1).isPositive()) 
+				return num1;
+			else {
+				return (T) new Fraction(((Fraction) num1).getNominator().multiply(BigInteger.valueOf(-1)),
 						((Fraction) num1).getDenominator());
-				return (T) fraction;
 			}
-			else return num1;
 		else return null;
 	}
 }
