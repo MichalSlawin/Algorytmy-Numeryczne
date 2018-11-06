@@ -1,7 +1,7 @@
-package test.java;
+//package test.java;
 
 import java.math.BigInteger;
-import main.java.*;
+//import main.java.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class MainTest {
@@ -25,8 +25,9 @@ public class MainTest {
 //        fractionClassTest();
 //        fractionMatrixTest();
 //        absTest();
-//    	createExpandedMatrixConstr3Test();
-        gaussianEliminationTest();
+//    	  createExpandedMatrixConstr3Test();
+//        gaussianEliminationTest();
+        System.out.println(GaussTest.generateMatrix("Float", 3, 3));
     }
 
     private static void gaussianEliminationTest() {
@@ -42,8 +43,11 @@ public class MainTest {
         MyMatrix myMatrixF = new MyMatrix<Fraction>(Fraction.class, tab1f);
         MyMatrix vectorF = new MyMatrix<Fraction>(Fraction.class, tab2f);
 
-        System.out.println(myMatrixD.gaussFG(vectorD));
+        System.out.println(myMatrixF.createExpandedMatrix(vectorF));
         System.out.println(myMatrixF.gaussianElimination(vectorF));
+
+        System.out.println(myMatrixD.createExpandedMatrix(vectorD));
+        System.out.println(myMatrixD.gaussFG(vectorD));
     }
 
     //test pierwszego konstruktora
