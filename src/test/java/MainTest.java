@@ -20,17 +20,17 @@ public class MainTest {
 
     public static void main(String[] args) {
     	
-//        plusConstr1Test();
-//        timesConstr2Test();
+//        constr1Test();
+//        constr2Test();
 //        fractionClassTest();
-//        fractionMyMatrixTest();
+//        fractionMatrixTest();
 //        absTest();
 //    	createExpandedMatrixConstr3Test();
         gaussianEliminationTest();
     }
 
     private static void gaussianEliminationTest() {
-        Double tab1d[][] = {{-1.0,2.0,1.0},{0.0,-1.0,-1.0},{0.0,5.0,2.0}};
+        Double tab1d[][] = {{-7.0,2.0,100.0},{10.0,-1.0,-4.0},{0.0,50.0,72.0}};
         Double tab2d[][] = {{-1.0,2.0,1.0}};
         MyMatrix myMatrixD = new MyMatrix<Double>(Double.class, tab1d);
         MyMatrix vectorD = new MyMatrix<Double>(Double.class, tab2d);
@@ -42,32 +42,27 @@ public class MainTest {
         MyMatrix myMatrixF = new MyMatrix<Fraction>(Fraction.class, tab1f);
         MyMatrix vectorF = new MyMatrix<Fraction>(Fraction.class, tab2f);
 
-        System.out.println(myMatrixD.gaussPG(vectorD));
+        System.out.println(myMatrixD.gaussFG(vectorD));
         System.out.println(myMatrixF.gaussianElimination(vectorF));
     }
 
-    //test pierwszego konstruktora i dodawania
-    private static void plusConstr1Test() {
+    //test pierwszego konstruktora
+    private static void constr1Test() {
         MyMatrix A = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
-        MyMatrix B = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
 
         for(int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+            for (int j = 0; j < 3; j++)
                 A.setCell(4, i, j);
-                B.setCell(2, i, j);
-            }
         }
-        //System.out.println(A.plus(B));
+        System.out.println(A);
     }
 
-    //test drugiego konstruktora i mnożenia
-    private static void timesConstr2Test() {
+    //test drugiego konstruktora
+    private static void constr2Test() {
         Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
-        Integer tab2[][] = {{2,2,2},{2,4,2},{2,2,2}};
         MyMatrix myMatrix1 = new MyMatrix<Integer>(TYP_INTEGER, tab1);
-        MyMatrix myMatrix2 = new MyMatrix<Integer>(TYP_INTEGER, tab2);
 
-       // System.out.println(myMatrix1.times(myMatrix2));
+        System.out.println(myMatrix1);
     }
 
     private static void fractionClassTest() {
@@ -78,20 +73,14 @@ public class MainTest {
         System.out.println(fraction5_6 + " / " + fraction2_3 + " = " + Fraction.div(fraction5_6, fraction2_3));
     }
 
-    private static void fractionMyMatrixTest() {
+    private static void fractionMatrixTest() {
         Fraction tab1[][] = {{fraction1_2, fraction2_3, fraction1_1}, 
         					 {fraction7_5, fraction0_4, fraction1_1}, 
         					 {fraction6_8, fraction1_1, fraction1_1}};
-        
-        Fraction tab2[][] = {{fraction1_1, fraction3_4, fraction1_2}, 
-        					 {fraction6_8, fraction0_4, fraction6_2}, 
-        					 {fraction1_1, fraction3_4, fraction1_2}};
 
         MyMatrix myMatrix1 = new MyMatrix<Fraction>(Fraction.class, tab1);
-        MyMatrix myMatrix2 = new MyMatrix<Fraction>(Fraction.class, tab2);
 
-        //System.out.println(myMatrix1.times(myMatrix2));
-        //System.out.println(myMatrix1.plus(myMatrix2));
+        System.out.println(myMatrix1);
     }
     
     //test wartosci bezwzglednej
@@ -109,17 +98,9 @@ public class MainTest {
 
     //test rozszerzenia macierzy + test trzeciego konstruktora
     private static void createExpandedMatrixConstr3Test() {
-        Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
-        Integer tab2[][] = {{2,2,2}};
+    	Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
         MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
-        MyMatrix vector = new MyMatrix<Integer>(TYP_INTEGER, tab2);
-
         MyMatrix myMatrix1 = new MyMatrix<Integer>(myMatrix);
-
-        myMatrix1.swapColumns(0,1);
-        System.out.println(myMatrix);
         System.out.println(myMatrix1);
-
-       // System.out.println(myMatrix1.createExpandedMatrix(vector));
     }
 }

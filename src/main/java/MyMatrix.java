@@ -128,17 +128,24 @@ public class MyMatrix<T> {
 		int max = 0;
 		for(int i = 1; i < this.getRows(); i++) {
 			if(MyMath.compare(MyMath.abs(this.getCell(max, 0)), MyMath.abs(this.getCell(i, 0))) < 0) {
-				max=i;
+				max = i;
 			}
 		}
-		System.out.println(this);
-		System.out.println("max: " + max);
 		swapRows(0, max);
-		System.out.println(this);
 	}
 	
-	public void fullPivot() {
-		//tu znalezienie elementu podstawowego
+	public void fullPivot() { 
+		int maxI = 0, maxJ = 0;
+		
+		for(int i = 0; i < this.getRows(); i++)
+			for(int j = 0; j < this.getColumns(); j++) {
+				if(MyMath.compare(MyMath.abs(this.getCell(maxI, maxJ)), MyMath.abs(this.getCell(i, j))) < 0) {
+					maxI = i;
+					maxJ = j;
+				}
+			}
+		this.swapRows(0, maxI);
+		this.swapColumns(0, maxJ);
 	}
 	
 	//bez elementu podstawowego
@@ -199,5 +206,4 @@ public class MyMatrix<T> {
 		}
 		return str;
 	}
-	
 }
