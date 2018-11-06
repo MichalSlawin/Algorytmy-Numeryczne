@@ -42,7 +42,7 @@ public class MainTest {
         MyMatrix myMatrixF = new MyMatrix<Fraction>(Fraction.class, tab1f);
         MyMatrix vectorF = new MyMatrix<Fraction>(Fraction.class, tab2f);
 
-        System.out.println(myMatrixD.gaussianElimination(vectorD));
+        System.out.println(myMatrixD.gaussPG(vectorD));
         System.out.println(myMatrixF.gaussianElimination(vectorF));
     }
 
@@ -57,7 +57,7 @@ public class MainTest {
                 B.setCell(2, i, j);
             }
         }
-        System.out.println(A.plus(B));
+        //System.out.println(A.plus(B));
     }
 
     //test drugiego konstruktora i mnożenia
@@ -67,7 +67,7 @@ public class MainTest {
         MyMatrix myMatrix1 = new MyMatrix<Integer>(TYP_INTEGER, tab1);
         MyMatrix myMatrix2 = new MyMatrix<Integer>(TYP_INTEGER, tab2);
 
-        System.out.println(myMatrix1.times(myMatrix2));
+       // System.out.println(myMatrix1.times(myMatrix2));
     }
 
     private static void fractionClassTest() {
@@ -90,8 +90,8 @@ public class MainTest {
         MyMatrix myMatrix1 = new MyMatrix<Fraction>(Fraction.class, tab1);
         MyMatrix myMatrix2 = new MyMatrix<Fraction>(Fraction.class, tab2);
 
-        System.out.println(myMatrix1.times(myMatrix2));
-        System.out.println(myMatrix1.plus(myMatrix2));
+        //System.out.println(myMatrix1.times(myMatrix2));
+        //System.out.println(myMatrix1.plus(myMatrix2));
     }
     
     //test wartosci bezwzglednej
@@ -120,6 +120,6 @@ public class MainTest {
         System.out.println(myMatrix);
         System.out.println(myMatrix1);
 
-        System.out.println(myMatrix1.createExpandedMatrix(vector));
+       // System.out.println(myMatrix1.createExpandedMatrix(vector));
     }
 }

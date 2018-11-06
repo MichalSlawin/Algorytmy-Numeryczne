@@ -75,4 +75,16 @@ public class MyMath {
 			}
 		else return null;
 	}
+	
+	public static <T> int compare(T num1, T num2) {
+		if(num1 instanceof Integer && num2 instanceof Integer)
+			return Integer.compare((int) num1, (int)  num2);
+		else if(num1 instanceof Float && num2 instanceof Float)
+			return Float.compare((float) num1, (float)  num2);
+		else if(num1 instanceof Double && num2 instanceof Double)
+			return Double.compare((double) num1, (double)  num2);
+		else if(num1 instanceof Fraction && num2 instanceof Fraction)
+			return Fraction.compare((Fraction) num1, (Fraction)  num2);
+		else return 0;
+	}
 }

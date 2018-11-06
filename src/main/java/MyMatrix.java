@@ -91,9 +91,6 @@ public class MyMatrix<T> {
 			else result.setCell((T) Double.valueOf(0), 0, i);
 		}
 
-		System.out.println("stepped\n" + steppedMatrix+"\ncopy\n"+vectorCopy+"\nresult\n"+result);
-		
-
 		for (int i = 0; i < this.getRows()-1; i++){
 			for (int j = i+1; j <= this.getRows()-1; j++){
 				for (int k = 0; k < this.getRows(); k++){
@@ -128,7 +125,16 @@ public class MyMatrix<T> {
 	}
 	
 	public void partialPivot() {
-		//tu znalezienie elementu podstawowego
+		int max = 0;
+		for(int i = 1; i < this.getRows(); i++) {
+			if(MyMath.compare(MyMath.abs(this.getCell(max, 0)), MyMath.abs(this.getCell(i, 0))) < 0) {
+				max=i;
+			}
+		}
+		System.out.println(this);
+		System.out.println("max: " + max);
+		swapRows(0, max);
+		System.out.println(this);
 	}
 	
 	public void fullPivot() {
@@ -176,60 +182,6 @@ public class MyMatrix<T> {
 			matrix[k][i] = matrix[k][j];
 			matrix[k][j] = tmp;
 		}
-	}
-
-	//zwrócenie macierzy rozszerzonej o wektor
-	public MyMatrix<T> createExpandedMatrix(MyMatrix<T> vector) {
-		MyMatrix<T> expandedMatrix = new MyMatrix<T>(this.getC(), this.getRows(), this.getColumns()+1);
-
-		for(int i = 0; i < expandedMatrix.getRows(); i++) {
-			for(int j = 0; j < expandedMatrix.getColumns(); j++) {
-				if(j == expandedMatrix.getColumns()-1) {
-					expandedMatrix.setCell(vector.getCell(0, i), i, j);
-				}
-				else {
-					expandedMatrix.setCell(this.getCell(i, j), i, j);
-				}
-			}
-		}
-		return expandedMatrix;
-	}
-	
-	//dodawanie macierzy
-	public MyMatrix<T> plus(MyMatrix<T> B) {
-		MyMatrix<T> A = this;
-        if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
-        MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < columns; j++)   
-            	W.setCell(MyMath.add(A.matrix[i][j], B.matrix[i][j]), i, j);
-       return W;
-	}
-	
-	//mnozenie macierzy
-	public MyMatrix<T> times(MyMatrix<T> B){
-		MyMatrix<T> A = this;
-        if (A.rows != B.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
-        MyMatrix<T> W = new MyMatrix<T>(this.c, A.rows, B.columns);
-        
-        //zerowanie macierzy W
-        T zero;
-        if(A.getCell(0, 0) instanceof Fraction)
-        	zero = (T) Fraction.zero();
-        else
-        	zero = (T) Integer.valueOf(0);
-        
-        for(int i = 0; i < A.rows; i++) {
-        	for(int j = 0; j < B.columns; j++) {
-        		W.setCell(zero ,i ,j);
-			}
-		}
-
-        for (int i = 0; i < W.columns; i++)
-            for (int j = 0; j < W.rows; j++)
-                for (int k = 0; k < A.rows; k++)
-                	W.setCell(MyMath.add(W.matrix[i][j], MyMath.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
-        return W;
 	}
 	
 	@Override
