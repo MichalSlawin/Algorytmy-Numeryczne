@@ -126,6 +126,31 @@ public class MyMatrix<T> {
 		}
 		return result;
 	}
+	
+	public void partialPivot() {
+		//tu znalezienie elementu podstawowego
+	}
+	
+	public void fullPivot() {
+		//tu znalezienie elementu podstawowego
+	}
+	
+	//bez elementu podstawowego
+	public MyMatrix<T> gaussG(MyMatrix<T> vector){
+		return gaussianElimination(vector);
+	}
+	
+	//z czesciowym wyborem elementu podstawowego
+	public MyMatrix<T> gaussPG(MyMatrix<T> vector){
+		partialPivot();
+		return gaussianElimination(vector);
+	}
+	
+	//z pelnym wyborem elementu podstawowego
+	public MyMatrix<T> gaussFG(MyMatrix<T> vector){
+		fullPivot();
+		return gaussianElimination(vector);
+	}
 
 	//transpozycja
 	public MyMatrix<T> transpose() {  
