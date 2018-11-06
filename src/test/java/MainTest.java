@@ -1,7 +1,4 @@
-//package test.java;
-
 import java.math.BigInteger;
-//import main.java.*;
 
 @SuppressWarnings({"unchecked", "rawtypes", "unused"})
 public class MainTest {
@@ -27,7 +24,7 @@ public class MainTest {
 //        absTest();
 //    	  createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
-        System.out.println(GaussTest.generateMatrix("Float", 3, 3));
+        System.out.println(GaussTest.generateMatrix(Double.class, 3, 3));
     }
 
     private static void gaussianEliminationTest() {

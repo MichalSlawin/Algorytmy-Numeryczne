@@ -1,5 +1,3 @@
-//package main.java;
-
 import java.math.BigInteger;
 
 @SuppressWarnings("unchecked")
