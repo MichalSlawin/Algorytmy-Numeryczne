@@ -20,7 +20,6 @@ public class GaussTest {
     	T[][] tab = (T[][]) Array.newInstance(c, rows, columns);
     	Fraction fraction;
 
-    	
     	for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
             	if(c == Float.class)
@@ -30,13 +29,14 @@ public class GaussTest {
             		tab[i][j] = (T) MyMath.div((MyMath.add(minRandom, MyMath.mul(random.nextDouble(),
                             MyMath.sub(maxRandom, minRandom)))), dividerRandom);
             	else  if(c == Fraction.class) {
-					//TODO: dla ulamkow
-					// UWAGA: wychodza liczby bardzo przekraczajace zakres
+					// niby liczby losowe sie mieszcza w zakresie <-1;1), ale nie wiem czy tak to powinno byc zrobione
 					BigInteger diff = maxBigInt.subtract(minBigInt);
-					int randomInt = random.nextInt();
-					BigInteger product = BigInteger.valueOf(randomInt).multiply(diff);
-
-					BigInteger nominator = minBigInt.add(product);
+					BigInteger randomBigInteger = new BigInteger(maxBigInt.bitLength(), random); // <0;65535>
+					BigInteger nominator = randomBigInteger.multiply(BigInteger.valueOf(2)); // <0;131070>
+					if(nominator.compareTo(maxBigInt) > 0) // nominator > 65535
+						nominator = nominator.subtract(maxBigInt); // -65535
+					else if(nominator.compareTo(maxBigInt) <= 0) // nominator <= 65535
+						nominator = nominator.add(minBigInt); // -65536
 
 					fraction = new Fraction(nominator, BigInteger.valueOf(65536));
 					tab[i][j] = (T) fraction;
