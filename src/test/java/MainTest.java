@@ -22,11 +22,28 @@ public class MainTest {
 //        fractionClassTest();
 //        fractionMatrixTest();
 //        absTest();
-//    	  createExpandedMatrixConstr3Test();
+//        createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
-        System.out.println(GaussTest.generateMatrix(Double.class, 3, 3));
-        System.out.println(GaussTest.generateMatrix(Float.class, 3, 3));
-        System.out.println(GaussTest.generateMatrix(Fraction.class, 3, 3));
+        matrixMulVectorTest();
+    }
+
+    private static void matrixMulVectorTest() {
+        MyMatrix matrixDouble = GaussTest.generateMatrix(Double.class, 3, 3);
+        MyMatrix vectorDouble = GaussTest.generateMatrix(Double.class, 3, 1);
+        System.out.println(matrixDouble);
+        System.out.println(vectorDouble);
+        System.out.println(matrixDouble.times(vectorDouble));
+        MyMatrix matrixFloat = GaussTest.generateMatrix(Float.class, 3, 3);
+        MyMatrix vectorFloat = GaussTest.generateMatrix(Float.class, 3, 1);
+        System.out.println(matrixFloat);
+        System.out.println(vectorFloat);
+        System.out.println(matrixFloat.times(vectorFloat));
+
+        MyMatrix matrixFraction = GaussTest.generateMatrix(Fraction.class, 3, 3);
+        MyMatrix vectorFraction = GaussTest.generateMatrix(Fraction.class, 3, 1);
+        System.out.println(matrixFraction);
+        System.out.println(vectorFraction);
+        System.out.println(matrixFraction.times(vectorFraction));
     }
 
     private static void gaussianEliminationTest() {

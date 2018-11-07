@@ -14,6 +14,7 @@ public class GaussTest {
 	private static final BigInteger maxBigInt = BigInteger.valueOf(65535);
     private static Random random = new Random();
 
+
     @SuppressWarnings("unchecked")
 	public static <T> MyMatrix<T> generateMatrix(Class<T> c, int rows, int columns) {
     	random.setSeed(123456789);
@@ -28,7 +29,7 @@ public class GaussTest {
             	else if(c == Double.class)
             		tab[i][j] = (T) MyMath.div((MyMath.add(minRandom, MyMath.mul(random.nextDouble(),
                             MyMath.sub(maxRandom, minRandom)))), dividerRandom);
-            	else  if(c == Fraction.class) {
+            	else if(c == Fraction.class) {
 					// niby liczby losowe sie mieszcza w zakresie <-1;1), ale nie wiem czy tak to powinno byc zrobione
 					BigInteger diff = maxBigInt.subtract(minBigInt);
 					BigInteger randomBigInteger = new BigInteger(maxBigInt.bitLength(), random); // <0;65535>

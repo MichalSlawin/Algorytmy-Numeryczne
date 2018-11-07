@@ -205,6 +205,47 @@ public class MyMatrix<T> {
 		}
 		return expandedMatrix;
 	}
+
+	//dodawanie macierzy
+	public MyMatrix<T> plus(MyMatrix<T> B) {
+		MyMatrix<T> A = this;
+		if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Niepoprawne wymiary macierzy");
+		MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < columns; j++)
+				W.setCell(MyMath.add(A.matrix[i][j], B.matrix[i][j]), i, j);
+		return W;
+	}
+
+	//mnozenie macierzy
+	public MyMatrix<T> times(MyMatrix<T> B){
+		MyMatrix<T> A = this;
+		if (A.columns != B.rows) throw new RuntimeException("Niepoprawne wymiary macierzy");
+		MyMatrix<T> W = new MyMatrix<T>(this.c, A.rows, B.columns);
+
+		//zerowanie macierzy W
+		T zero;
+		if(A.getCell(0, 0) instanceof Fraction)
+			zero = (T) Fraction.zero();
+		else if(A.getCell(0, 0) instanceof Float)
+			zero = (T) Float.valueOf(0);
+		else if(A.getCell(0, 0) instanceof Double)
+			zero = (T) Double.valueOf(0);
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
+
+		for(int i = 0; i < W.rows; i++) {
+			for(int j = 0; j < W.columns; j++) {
+				W.setCell(zero ,i ,j);
+			}
+		}
+//TODO: umozliwienie dzialania dla dozwolonych macierzy dowolnych rozmiarow
+		for (int i = 0; i < W.rows; i++)
+			for (int j = 0; j < W.columns; j++)
+				for (int k = 0; k < A.columns; k++)
+					W.setCell(MyMath.add(W.matrix[i][j], MyMath.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
+
+		return W;
+}
 	
 	@Override
 	public String toString() {
