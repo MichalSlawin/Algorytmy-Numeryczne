@@ -25,6 +25,8 @@ public class MainTest {
 //    	  createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
         System.out.println(GaussTest.generateMatrix(Double.class, 3, 3));
+        System.out.println(GaussTest.generateMatrix(Float.class, 3, 3));
+        System.out.println(GaussTest.generateMatrix(Fraction.class, 3, 3));
     }
 
     private static void gaussianEliminationTest() {
