@@ -25,10 +25,11 @@ public class MainTest {
 //        createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
 //        matrixMulVectorTest();
+    	matrixGenerationTest();
     }
 
     private static void matrixMulVectorTest() {
-        MyMatrix matrixDouble = GaussTest.generateMatrix(Double.class, 10, 10);
+        /*MyMatrix matrixDouble = GaussTest.generateMatrix(Double.class, 10, 10);
         MyMatrix vectorDouble = GaussTest.generateMatrix(Double.class, 10, 1);
         //matrixDouble.toFile("out_files/matrixDouble.txt");
         System.out.println(matrixDouble);
@@ -44,7 +45,14 @@ public class MainTest {
         MyMatrix vectorFraction = GaussTest.generateMatrix(Fraction.class, 3, 1);
         System.out.println(matrixFraction);
         System.out.println(vectorFraction);
-        System.out.println(matrixFraction.times(vectorFraction));
+        System.out.println(matrixFraction.times(vectorFraction));*/
+    	
+    }
+    
+    private static void matrixGenerationTest() {
+    	MatrixSet set = GaussTest.generateMatrix(5, 5);
+    	
+    	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
 
     private static void gaussianEliminationTest() {
