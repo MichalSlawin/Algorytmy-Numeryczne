@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 
 @SuppressWarnings("unchecked")
@@ -238,7 +241,6 @@ public class MyMatrix<T> {
 				W.setCell(zero ,i ,j);
 			}
 		}
-//TODO: umozliwienie dzialania dla dozwolonych macierzy dowolnych rozmiarow
 		for (int i = 0; i < W.rows; i++)
 			for (int j = 0; j < W.columns; j++)
 				for (int k = 0; k < A.columns; k++)
@@ -261,5 +263,17 @@ public class MyMatrix<T> {
 			str += "\n";
 		}
 		return str;
+	}
+
+	public void toFile(String fileName) {
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(fileName);
+			PrintWriter printWriter = new PrintWriter(fileWriter);
+			printWriter.print(this.toString());
+			printWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

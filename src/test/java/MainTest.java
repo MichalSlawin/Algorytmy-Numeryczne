@@ -24,12 +24,13 @@ public class MainTest {
 //        absTest();
 //        createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
-        matrixMulVectorTest();
+//        matrixMulVectorTest();
     }
 
     private static void matrixMulVectorTest() {
-        MyMatrix matrixDouble = GaussTest.generateMatrix(Double.class, 3, 3);
-        MyMatrix vectorDouble = GaussTest.generateMatrix(Double.class, 3, 1);
+        MyMatrix matrixDouble = GaussTest.generateMatrix(Double.class, 10, 10);
+        MyMatrix vectorDouble = GaussTest.generateMatrix(Double.class, 10, 1);
+        //matrixDouble.toFile("out_files/matrixDouble.txt");
         System.out.println(matrixDouble);
         System.out.println(vectorDouble);
         System.out.println(matrixDouble.times(vectorDouble));
