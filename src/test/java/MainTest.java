@@ -17,6 +17,7 @@ public class MainTest {
 
     public static void main(String[] args) {
     	
+    	
 //        constr1Test();
 //        constr2Test();
 //        fractionClassTest();
@@ -25,7 +26,8 @@ public class MainTest {
 //        createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
 //        matrixMulVectorTest();
-    	matrixGenerationTest(1000,1000);
+//    	  matrixGenerationTest(1000,1000);
+    	gaussianEliminationTimeTest(1000, 1000);
     }
 
     private static void matrixMulVectorTest() {
@@ -46,7 +48,6 @@ public class MainTest {
         System.out.println(matrixFraction);
         System.out.println(vectorFraction);
         System.out.println(matrixFraction.times(vectorFraction));*/
-    	
     }
     
     private static void matrixGenerationTest(int rows, int columns) {
@@ -131,5 +132,33 @@ public class MainTest {
         MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
         MyMatrix myMatrix1 = new MyMatrix<Integer>(myMatrix);
         System.out.println(myMatrix1);
+    }
+    
+    private static void gaussianEliminationTimeTest(int rows, int columns) {
+    	long millisActualTime = System.currentTimeMillis();
+    	MatrixSet randomMatrix = GaussTest.generateMatrix(rows, columns);
+    	MatrixSet randomVector = GaussTest.generateMatrix(1, columns);
+    	
+    	MyMatrix<Double> double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
+    	MyMatrix<Double> vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	System.out.println("Generation done");
+    	System.out.println("GaussG done\n" + double1.gaussG(vector1));
+    	//System.out.println("GaussG done\n" + vector1);
+    	
+    	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
+    	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	System.out.println("GaussPG done\n" + double1.gaussPG(vector1));
+    	//System.out.println("GaussPG done\n" + vector1);
+    	
+    	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
+    	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	//double1.gaussFG(vector1);
+    	System.out.println("GaussFG done\n" + double1.gaussFG(vector1));
+    	//System.out.println("GaussFG done\n" + vector1);
+    	long executionTime = System.currentTimeMillis() - millisActualTime;
+    	
+    	System.out.print(randomVector.getDoubleMatrix());
+    	
+    	System.out.println(executionTime);
     }
 }

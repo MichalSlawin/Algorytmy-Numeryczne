@@ -125,6 +125,54 @@ public class MyMatrix<T> {
 		return result;
 	}
 	
+	public MyMatrix<T> gaussianEliminationOld(MyMatrix<T> vector) {
+		MyMatrix<T> steppedMatrix = new MyMatrix<T>(this);
+		MyMatrix<T> vectorCopy = new MyMatrix<T>(vector);
+		MyMatrix<T> result = new MyMatrix<T>(vector);
+		
+		for(int i=0; i<result.getColumns(); i++) {
+			if(result.getCell(0, 0) instanceof Fraction)
+				result.setCell((T) Fraction.zero(), 0, i);
+			else result.setCell((T) Double.valueOf(0), 0, i);
+		}
+
+		for (int i = 0; i < this.getRows()-1; i++){
+			for (int j = i+1; j <= this.getRows()-1; j++){
+				for (int k = 0; k < this.getRows(); k++){
+					steppedMatrix.setCell(MyMath.sub(this.getCell(j, k), (MyMath.mul(this.getCell(i, k), 
+							(MyMath.div(this.getCell(j, i), this.getCell(i, i)))))), j, k);
+					
+					steppedMatrix.getMatrix()[j][k] = MyMath.sub(this.getMatrix()[j][k], (MyMath.mul(this.getMatrix()[j][k], 
+							(MyMath.div(this.getMatrix()[j][i], this.getMatrix()[i][i])))));
+					
+				}
+				vectorCopy.setCell(MyMath.sub(vector.getCell(0, j),(MyMath.mul(vector.getCell(0, i),
+						(MyMath.div(this.getCell(j, i), this.getCell(i, i)))))), 0, j);
+
+				for (int k = 0; k < steppedMatrix.getRows(); k++){
+					for (int l = 0; l < steppedMatrix.getRows(); l++){
+						this.setCell(steppedMatrix.getCell(k, l), k, l);
+					}
+					vector.setCell(vectorCopy.getCell(0, k), 0, k);
+				}
+			}
+		}
+		
+		for(int i = result.getColumns()-1; i >= 0; i--) {
+			T sum = null;
+			if(result.getCell(0, 0) instanceof Fraction)
+				sum = (T) Fraction.zero();
+			else sum = (T) Double.valueOf(0);
+			
+			//System.out.println(sum);
+			for(int j = i + 1; j < result.getColumns(); j++) {
+				sum = MyMath.add(sum, MyMath.mul(steppedMatrix.getCell(i, j), result.getCell(0, j)));
+			}
+			result.matrix[0][i] = MyMath.div(MyMath.sub(vector.getCell(0, i), sum), steppedMatrix.getCell(i,  i));
+		}
+		return result;
+	}
+	
 	public void partialPivot() {
 		int max = 0;
 		for(int i = 1; i < this.getRows(); i++) {

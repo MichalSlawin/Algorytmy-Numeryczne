@@ -16,7 +16,7 @@ public class GaussTest {
 
     @SuppressWarnings("unchecked")
 	public static MatrixSet generateMatrix(int rows, int columns) {
-    	random.setSeed(123456789);
+    	//random.setSeed(123456789);
     	Fraction[][] fractionTab = new Fraction[rows][columns];
     	Double[][] doubleTab = new Double[rows][columns];
     	Float[][] floatTab = new Float[rows][columns];
