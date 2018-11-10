@@ -4,7 +4,7 @@ import java.util.Random;
 // Do czego porównać błędy: wylosowac wektor X, przemnozyc przez macierz, porownac otrzymany wynik
 // do wynikow z metody eliminacji gaussa
 
-public class GaussTest {
+public class RandomGenerator {
 	private static final BigInteger minBigInt = BigInteger.valueOf(-65536);
 	private static final BigInteger maxBigInt = BigInteger.valueOf(65535);
     private static Random random = new Random();

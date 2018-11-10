@@ -20,15 +20,15 @@ public class MainTest {
     }
     
     private static void matrixGenerationTest(int rows, int columns) {
-    	MatrixSet set = GaussTest.generateMatrix(rows, columns);
+    	MatrixSet set = RandomGenerator.generateMatrix(rows, columns);
     	
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
     
     private static void gaussianEliminationTimeTest(int rows, int columns) {
     	long millisActualTime = System.currentTimeMillis();
-    	MatrixSet randomMatrix = GaussTest.generateMatrix(rows, columns);
-    	MatrixSet randomVector = GaussTest.generateMatrix(rows, 1);
+    	MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, columns);
+    	MatrixSet randomVector = RandomGenerator.generateMatrix(rows, 1);
     	
     	MyMatrix<Double> double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
     	MyMatrix<Double> vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
