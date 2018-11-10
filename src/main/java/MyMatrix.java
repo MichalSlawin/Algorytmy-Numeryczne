@@ -251,18 +251,18 @@ public class MyMatrix<T> {
 	
 	@Override
 	public String toString() {
-		String str = new String();
+		StringBuilder stringBuilder = new StringBuilder();
 		for(int i = 0; i < rows; i++) {
-			str += "[";
+			stringBuilder.append("[");
 			for(int j = 0; j < columns; j++) {
-				str += getCell(i, j);
+				stringBuilder.append(getCell(i, j));
 				if(j == columns - 1)
-					str += "]";
-				else str += " ";
+					stringBuilder.append("]");
+				else stringBuilder.append(" ");
 			}
-			str += "\n";
+			stringBuilder.append("\n");
 		}
-		return str;
+		return stringBuilder.toString();
 	}
 
 	public void toFile(String fileName) {

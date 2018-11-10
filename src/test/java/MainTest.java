@@ -25,7 +25,7 @@ public class MainTest {
 //        createExpandedMatrixConstr3Test();
 //        gaussianEliminationTest();
 //        matrixMulVectorTest();
-    	matrixGenerationTest();
+    	matrixGenerationTest(1000,1000);
     }
 
     private static void matrixMulVectorTest() {
@@ -49,8 +49,8 @@ public class MainTest {
     	
     }
     
-    private static void matrixGenerationTest() {
-    	MatrixSet set = GaussTest.generateMatrix(5, 5);
+    private static void matrixGenerationTest(int rows, int columns) {
+    	MatrixSet set = GaussTest.generateMatrix(rows, columns);
     	
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
