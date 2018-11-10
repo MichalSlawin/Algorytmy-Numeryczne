@@ -1,6 +1,6 @@
 import java.math.BigInteger;
 
-@SuppressWarnings({"unchecked", "rawtypes", "unused"})
+@SuppressWarnings({"rawtypes", "unused"})
 public class MainTest {
 	private static final Class TYP_INTEGER = Integer.class;
 
@@ -16,38 +16,7 @@ public class MainTest {
     private static Fraction fraction3_4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4)); // 3/4  
 
     public static void main(String[] args) {
-    	
-    	
-//        constr1Test();
-//        constr2Test();
-//        fractionClassTest();
-//        fractionMatrixTest();
-//        absTest();
-//        createExpandedMatrixConstr3Test();
-//        gaussianEliminationTest();
-//        matrixMulVectorTest();
-//    	  matrixGenerationTest(1000,1000);
-    	gaussianEliminationTimeTest(1000, 1000);
-    }
-
-    private static void matrixMulVectorTest() {
-        /*MyMatrix matrixDouble = GaussTest.generateMatrix(Double.class, 10, 10);
-        MyMatrix vectorDouble = GaussTest.generateMatrix(Double.class, 10, 1);
-        //matrixDouble.toFile("out_files/matrixDouble.txt");
-        System.out.println(matrixDouble);
-        System.out.println(vectorDouble);
-        System.out.println(matrixDouble.times(vectorDouble));
-        MyMatrix matrixFloat = GaussTest.generateMatrix(Float.class, 3, 3);
-        MyMatrix vectorFloat = GaussTest.generateMatrix(Float.class, 3, 1);
-        System.out.println(matrixFloat);
-        System.out.println(vectorFloat);
-        System.out.println(matrixFloat.times(vectorFloat));
-
-        MyMatrix matrixFraction = GaussTest.generateMatrix(Fraction.class, 3, 3);
-        MyMatrix vectorFraction = GaussTest.generateMatrix(Fraction.class, 3, 1);
-        System.out.println(matrixFraction);
-        System.out.println(vectorFraction);
-        System.out.println(matrixFraction.times(vectorFraction));*/
+    	gaussianEliminationTimeTest(100, 100);
     }
     
     private static void matrixGenerationTest(int rows, int columns) {
@@ -55,115 +24,27 @@ public class MainTest {
     	
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
-
-    private static void gaussianEliminationTest() {
-        Double tab1d[][] = {{-7.0,2.0,100.0},{10.0,-1.0,-4.0},{0.0,50.0,72.0}};
-        Double tab2d[][] = {{-1.0,2.0,1.0}};
-        MyMatrix myMatrixD = new MyMatrix<Double>(Double.class, tab1d);
-        MyMatrix vectorD = new MyMatrix<Double>(Double.class, tab2d);
-        
-        Fraction tab1f[][] = {{new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(1))},
-        					  {new Fraction(BigInteger.valueOf(0), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1))},
-        					  {new Fraction(BigInteger.valueOf(0), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(5), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(1))}};
-        Fraction tab2f[][] = {{new Fraction(BigInteger.valueOf(-1), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(2), BigInteger.valueOf(1)),new Fraction(BigInteger.valueOf(1), BigInteger.valueOf(1))}};
-        MyMatrix myMatrixF = new MyMatrix<Fraction>(Fraction.class, tab1f);
-        MyMatrix vectorF = new MyMatrix<Fraction>(Fraction.class, tab2f);
-
-        System.out.println(myMatrixF.createExpandedMatrix(vectorF));
-        System.out.println(myMatrixF.gaussianElimination(vectorF));
-
-        System.out.println(myMatrixD.createExpandedMatrix(vectorD));
-        System.out.println(myMatrixD.gaussFG(vectorD));
-    }
-
-    //test pierwszego konstruktora
-    private static void constr1Test() {
-        MyMatrix A = new MyMatrix<Integer>(TYP_INTEGER, 3, 3);
-
-        for(int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
-                A.setCell(4, i, j);
-        }
-        System.out.println(A);
-    }
-
-    //test drugiego konstruktora
-    private static void constr2Test() {
-        Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
-        MyMatrix myMatrix1 = new MyMatrix<Integer>(TYP_INTEGER, tab1);
-
-        System.out.println(myMatrix1);
-    }
-
-    private static void fractionClassTest() {
-        System.out.println(fraction6_2 + " ; " + fraction8_10 + " ; " + fraction0_4);
-        System.out.println(fraction2_3 + " + " + fraction5_6 + " = " + Fraction.add(fraction2_3, fraction5_6));
-        System.out.println(fraction6_2 + " - " + fraction8_10 + " = " + Fraction.sub(fraction6_2, fraction8_10));
-        System.out.println(fraction8_10 + " * " + fraction2_3 + " = " + Fraction.mul(fraction8_10, fraction2_3));
-        System.out.println(fraction5_6 + " / " + fraction2_3 + " = " + Fraction.div(fraction5_6, fraction2_3));
-    }
-
-    private static void fractionMatrixTest() {
-        Fraction tab1[][] = {{fraction1_2, fraction2_3, fraction1_1}, 
-        					 {fraction7_5, fraction0_4, fraction1_1}, 
-        					 {fraction6_8, fraction1_1, fraction1_1}};
-
-        MyMatrix myMatrix1 = new MyMatrix<Fraction>(Fraction.class, tab1);
-
-        System.out.println(myMatrix1);
-    }
-    
-    //test wartosci bezwzglednej
-    private static void absTest() {
-    	Integer i = new Integer(-5);
-    	Float f = new Float(-4.543);
-    	Double d = new Double(-2.342353);
-    	Fraction fr = new Fraction(BigInteger.valueOf(-3), BigInteger.valueOf(5));
-    	
-    	System.out.println(MyMath.abs(i));
-    	System.out.println(MyMath.abs(f));
-    	System.out.println(MyMath.abs(d));
-    	System.out.println(MyMath.abs(fr));
-    }
-
-    //test rozszerzenia macierzy + test trzeciego konstruktora
-    private static void createExpandedMatrixConstr3Test() {
-    	Integer tab1[][] = {{3,5,3},{3,3,3},{3,3,3}};
-        MyMatrix myMatrix = new MyMatrix<Integer>(TYP_INTEGER, tab1);
-        MyMatrix myMatrix1 = new MyMatrix<Integer>(myMatrix);
-        System.out.println(myMatrix1);
-    }
     
     private static void gaussianEliminationTimeTest(int rows, int columns) {
     	long millisActualTime = System.currentTimeMillis();
     	MatrixSet randomMatrix = GaussTest.generateMatrix(rows, columns);
-    	MatrixSet randomVector = GaussTest.generateMatrix(1, columns);
+    	MatrixSet randomVector = GaussTest.generateMatrix(rows, 1);
     	
     	MyMatrix<Double> double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
     	MyMatrix<Double> vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
     	
-    	System.out.println(GaussTest.gaussWithoutChoice(double1, vector1));
+    	
+    	System.out.println(double1.gaussWithoutChoice(double1, vector1, new MyMatrix<Double>(double1)).transpose());
+    	
+    	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
+    	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	System.out.println(double1.gaussWithPartialChoice(double1, vector1, new MyMatrix<Double>(double1)).transpose());
+    	
+    	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
+    	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	System.out.println(double1.gaussWithFullChoice(double1, vector1, new MyMatrix<Double>(double1)).transpose());
+    	
     	long executionTime = System.currentTimeMillis() - millisActualTime;
     	System.out.println(executionTime);
-    	/*
-    	System.out.println("Generation done");
-    	System.out.println("GaussG done\n" + double1.gaussG(vector1));
-    	//System.out.println("GaussG done\n" + vector1);
-    	
-    	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
-    	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
-    	System.out.println("GaussPG done\n" + double1.gaussPG(vector1));
-    	//System.out.println("GaussPG done\n" + vector1);
-    	
-    	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
-    	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
-    	//double1.gaussFG(vector1);
-    	System.out.println("GaussFG done\n" + double1.gaussFG(vector1));
-    	//System.out.println("GaussFG done\n" + vector1);
-    	long executionTime = System.currentTimeMillis() - millisActualTime;
-    	
-    	System.out.print(randomVector.getDoubleMatrix());
-    	
-    	System.out.println(executionTime);*/
     }
 }

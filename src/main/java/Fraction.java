@@ -1,7 +1,7 @@
 import java.math.BigInteger;
 
-public class Fraction {
-    private BigInteger nominator;
+public class Fraction extends Number{
+	private BigInteger nominator;
     private BigInteger denominator;
 
     public Fraction(BigInteger nominator, BigInteger denominator) {
@@ -116,4 +116,24 @@ public class Fraction {
         	return nominator.multiply(BigInteger.valueOf(-1)) + "/" + denominator.multiply(BigInteger.valueOf(-1));
         else return nominator + "/" + denominator;
     }
+
+	@Override
+	public int intValue() {
+		return this.nominator.intValue() / this.denominator.intValue();
+	}
+
+	@Override
+	public long longValue() {
+		return this.nominator.longValue() / this.denominator.longValue();
+	}
+
+	@Override
+	public float floatValue() {
+		return this.nominator.floatValue() / this.denominator.floatValue();
+	}
+
+	@Override
+	public double doubleValue() {
+		return this.nominator.doubleValue() / this.denominator.doubleValue();
+	}
 }

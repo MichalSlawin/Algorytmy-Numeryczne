@@ -4,12 +4,13 @@ import java.io.PrintWriter;
 import java.lang.reflect.Array;
 
 @SuppressWarnings("unchecked")
-public class MyMatrix<T> {
+public class MyMatrix<T extends Number> {
 	
-	/*TODO
-	 * moze jakis sposob na pominiecie Class<T> w konstruktorach
-	 * no i cala eliminacja gaussa, testy
-	 * napisać testy dla różnych typów (Integer ,Float, Double, Long, Fraction)
+	/*TODO:
+	 * Implementacja ulamkow w eliminacjach gaussa - na poczatku tylko do wariantu bez elementu podstawowego i zobaczymy jak to dziala
+	 * Refaktoryzacja kodu eliminacji gaussa
+	 * Testy nowych funkcji
+	 * Obliczenie bledow i czasow, wykresy do sprawozdania i samo sprawozdanie
 	 */
 
 	private Class<T> c;
@@ -81,145 +82,10 @@ public class MyMatrix<T> {
 	public Class<T> getC() { 
 		return c; 
 	}
-	
-
-	//naprawione
-	public MyMatrix<T> gaussianElimination(MyMatrix<T> vector) {
-		MyMatrix<T> steppedMatrix = new MyMatrix<T>(this);
-		MyMatrix<T> vectorCopy = new MyMatrix<T>(vector);
-		MyMatrix<T> result = new MyMatrix<T>(vector);
-		
-		for(int i=0; i<result.getColumns(); i++) {
-			if(result.getCell(0, 0) instanceof Fraction)
-				result.setCell((T) Fraction.zero(), 0, i);
-			else result.setCell((T) Double.valueOf(0), 0, i);
-		}
-
-		for (int i = 0; i < this.getRows()-1; i++){
-			for (int j = i+1; j <= this.getRows()-1; j++){
-				for (int k = 0; k < this.getRows(); k++){
-					steppedMatrix.setCell(MyMath.sub(this.getCell(j, k), (MyMath.mul(this.getCell(i, k), 
-							(MyMath.div(this.getCell(j, i), this.getCell(i, i)))))), j, k);
-				}
-				vectorCopy.setCell(MyMath.sub(vector.getCell(0, j),(MyMath.mul(vector.getCell(0, i),
-						(MyMath.div(this.getCell(j, i), this.getCell(i, i)))))), 0, j);
-
-				for (int k = 0; k < steppedMatrix.getRows(); k++){
-					for (int l = 0; l < steppedMatrix.getRows(); l++){
-						this.setCell(steppedMatrix.getCell(k, l), k, l);
-					}
-					vector.setCell(vectorCopy.getCell(0, k), 0, k);
-				}
-			}
-		}
-		
-		for(int i = result.getColumns()-1; i >= 0; i--) {
-			T sum = null;
-			if(result.getCell(0, 0) instanceof Fraction)
-				sum = (T) Fraction.zero();
-			else sum = (T) Double.valueOf(0);
-			
-			//System.out.println(sum);
-			for(int j = i + 1; j < result.getColumns(); j++) {
-				sum = MyMath.add(sum, MyMath.mul(steppedMatrix.getCell(i, j), result.getCell(0, j)));
-			}
-			result.matrix[0][i] = MyMath.div(MyMath.sub(vector.getCell(0, i), sum), steppedMatrix.getCell(i,  i));
-		}
-		return result;
-	}
-	
-	public MyMatrix<T> gaussianEliminationOld(MyMatrix<T> vector) {
-		MyMatrix<T> steppedMatrix = new MyMatrix<T>(this);
-		MyMatrix<T> vectorCopy = new MyMatrix<T>(vector);
-		MyMatrix<T> result = new MyMatrix<T>(vector);
-		
-		for(int i=0; i<result.getColumns(); i++) {
-			if(result.getCell(0, 0) instanceof Fraction)
-				result.setCell((T) Fraction.zero(), 0, i);
-			else result.setCell((T) Double.valueOf(0), 0, i);
-		}
-
-		for (int i = 0; i < this.getRows()-1; i++){
-			for (int j = i+1; j <= this.getRows()-1; j++){
-				for (int k = 0; k < this.getRows(); k++){
-					steppedMatrix.setCell(MyMath.sub(this.getCell(j, k), (MyMath.mul(this.getCell(i, k), 
-							(MyMath.div(this.getCell(j, i), this.getCell(i, i)))))), j, k);
-					
-					steppedMatrix.getMatrix()[j][k] = MyMath.sub(this.getMatrix()[j][k], (MyMath.mul(this.getMatrix()[j][k], 
-							(MyMath.div(this.getMatrix()[j][i], this.getMatrix()[i][i])))));
-					
-				}
-				vectorCopy.setCell(MyMath.sub(vector.getCell(0, j),(MyMath.mul(vector.getCell(0, i),
-						(MyMath.div(this.getCell(j, i), this.getCell(i, i)))))), 0, j);
-
-				for (int k = 0; k < steppedMatrix.getRows(); k++){
-					for (int l = 0; l < steppedMatrix.getRows(); l++){
-						this.setCell(steppedMatrix.getCell(k, l), k, l);
-					}
-					vector.setCell(vectorCopy.getCell(0, k), 0, k);
-				}
-			}
-		}
-		
-		for(int i = result.getColumns()-1; i >= 0; i--) {
-			T sum = null;
-			if(result.getCell(0, 0) instanceof Fraction)
-				sum = (T) Fraction.zero();
-			else sum = (T) Double.valueOf(0);
-			
-			//System.out.println(sum);
-			for(int j = i + 1; j < result.getColumns(); j++) {
-				sum = MyMath.add(sum, MyMath.mul(steppedMatrix.getCell(i, j), result.getCell(0, j)));
-			}
-			result.matrix[0][i] = MyMath.div(MyMath.sub(vector.getCell(0, i), sum), steppedMatrix.getCell(i,  i));
-		}
-		return result;
-	}
-	
-	public void partialPivot() {
-		int max = 0;
-		for(int i = 1; i < this.getRows(); i++) {
-			if(MyMath.compare(MyMath.abs(this.getCell(max, 0)), MyMath.abs(this.getCell(i, 0))) < 0) {
-				max = i;
-			}
-		}
-		swapRows(0, max);
-	}
-	
-	public void fullPivot() { 
-		int maxI = 0, maxJ = 0;
-		
-		for(int i = 0; i < this.getRows(); i++)
-			for(int j = 0; j < this.getColumns(); j++) {
-				if(MyMath.compare(MyMath.abs(this.getCell(maxI, maxJ)), MyMath.abs(this.getCell(i, j))) < 0) {
-					maxI = i;
-					maxJ = j;
-				}
-			}
-		this.swapRows(0, maxI);
-		this.swapColumns(0, maxJ);
-	}
-	
-	//bez elementu podstawowego
-	public MyMatrix<T> gaussG(MyMatrix<T> vector){
-		return gaussianElimination(vector);
-	}
-	
-	//z czesciowym wyborem elementu podstawowego
-	public MyMatrix<T> gaussPG(MyMatrix<T> vector){
-		partialPivot();
-		return gaussianElimination(vector);
-	}
-	
-	//z pelnym wyborem elementu podstawowego
-	public MyMatrix<T> gaussFG(MyMatrix<T> vector){
-		fullPivot();
-		return gaussianElimination(vector);
-	}
 
 	//transpozycja
 	public MyMatrix<T> transpose() {  
-		MyMatrix<T> A = new MyMatrix<T>(this.c, rows, columns);
+		MyMatrix<T> A = new MyMatrix<T>(this.c, columns, rows);
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < columns; j++)
 				A.matrix[j][i] = this.matrix[i][j];
@@ -241,23 +107,6 @@ public class MyMatrix<T> {
 			matrix[k][i] = matrix[k][j];
 			matrix[k][j] = tmp;
 		}
-	}
-
-	// zwrócenie macierzy rozszerzonej o wektor
-	// dodaję to z powrotem, bo przydaje mi się do testów
-	public MyMatrix<T> createExpandedMatrix(MyMatrix<T> vector) {
-		MyMatrix<T> expandedMatrix = new MyMatrix<T>(this.getC(), this.getRows(), this.getColumns()+1);
-		for(int i = 0; i < expandedMatrix.getRows(); i++) {
-			for(int j = 0; j < expandedMatrix.getColumns(); j++) {
-				if(j == expandedMatrix.getColumns()-1) {
-					expandedMatrix.setCell(vector.getCell(0, i), i, j);
-				}
-				else {
-					expandedMatrix.setCell(this.getCell(i, j), i, j);
-				}
-			}
-		}
-		return expandedMatrix;
 	}
 
 	//dodawanie macierzy
@@ -327,4 +176,384 @@ public class MyMatrix<T> {
 			e.printStackTrace();
 		}
 	}
+	
+	public MyMatrix<T> gaussWithoutChoice(MyMatrix<T> matrix, MyMatrix<T> vector, MyMatrix<T> MatrixCopy) {
+        int n = vector.rows;
+        MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
+        MyMatrix<T> VectorCheck = new MyMatrix<T>(c, n, 1);
+
+
+        if (c.equals(Float.class)) {
+            for (int i = 0; i < n; i++) {
+                for (int j = i + 1; j < n; j++) {
+                    float factor = matrix.matrix[j][i].floatValue() / matrix.matrix[i][i].floatValue();
+                    vector.matrix[j][0] = (T) (Float) (vector.matrix[j][0].floatValue() - factor * vector.matrix[i][0].floatValue());
+
+                    for (int k = i; k < n; k++) {
+                        matrix.matrix[j][k] = (T) (Float) (matrix.matrix[j][k].floatValue() - factor * matrix.matrix[i][k].floatValue());
+                    }
+                }
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                float sum = 0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrix.matrix[i][j].floatValue() * resultVector.matrix[j][0].floatValue();
+                }
+                resultVector.matrix[i][0] = (T) (Float) ((vector.matrix[i][0].floatValue() - sum) / matrix.matrix[i][i].floatValue());
+            }
+
+            for (int i = 0; i < n; i++) {
+                float sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += MatrixCopy.matrix[i][j].floatValue() * resultVector.matrix[j][0].floatValue();
+
+                }
+                VectorCheck.matrix[i][0] = (T) (Float) (sum) ;
+            }
+
+//            System.out.println("Wynik bez wyboru: ");
+//            System.out.println(resultVector);
+        }
+
+        if (c.equals(Double.class)) {
+            for (int i = 0; i < n; i++) {
+                for (int j = i + 1; j < n; j++) {
+                    Double factor = ((Double) matrix.matrix[j][i]).doubleValue() / ((Double) matrix.matrix[i][i]).doubleValue();
+                    vector.matrix[j][0] = (T) (Double) (vector.matrix[j][0].doubleValue() - factor * vector.matrix[i][0].doubleValue());
+
+                    for (int k = i; k < n; k++) {
+                        matrix.matrix[j][k] = (T) (Double) (matrix.matrix[j][k].floatValue() - factor * matrix.matrix[i][k].doubleValue());
+                    }
+                }
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                double sum = 0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrix.matrix[i][j].doubleValue() * resultVector.matrix[j][0].doubleValue();
+                }
+                resultVector.matrix[i][0] = (T) (Double) ((vector.matrix[i][0].doubleValue() - sum) / matrix.matrix[i][i].doubleValue());
+            }
+
+
+            for (int i = 0; i < n; i++) {
+                double sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += MatrixCopy.matrix[i][j].doubleValue() * resultVector.matrix[j][0].doubleValue();
+
+                }
+                VectorCheck.matrix[i][0] = (T) (Double) (sum) ;
+            }
+
+//            System.out.println("sprawdzenie wektora "+VectorCheck);
+        }
+
+        return VectorCheck;
+    }
+	
+	public MyMatrix<T> gaussWithPartialChoice(MyMatrix<T> matrix, MyMatrix<T> vector, MyMatrix<T> MatrixCopy) {
+        int n = vector.rows;
+        MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
+        MyMatrix<T> VectorCheck = new MyMatrix<T>(c, n, 1);
+
+        if (c.equals(Float.class)) {
+            for (int i = 0; i < n; i++) {
+                int max = i;
+
+                for (int j = i + 1; j < n; j++) {
+                    if (Math.abs(matrix.matrix[j][i].floatValue()) > Math.abs(matrix.matrix[max][i].floatValue())) {
+                        max = j;
+                    }
+                }
+
+                for (int j = 0; j < matrix.columns; j++) {
+                    T temp = matrix.matrix[i][j];
+                    matrix.matrix[i][j] = matrix.matrix[max][j];
+                    matrix.matrix[max][j] = temp;
+                }
+
+                for (int j = 0; j < vector.columns; j++) {
+                    T temp = vector.matrix[i][j];
+                    vector.matrix[i][j] = vector.matrix[max][j];
+                    vector.matrix[max][j] = temp;
+                }
+
+                for (int j = i + 1; j < n; j++) {
+                    float factor = matrix.matrix[j][i].floatValue() / matrix.matrix[i][i].floatValue();
+                    vector.matrix[j][0] = (T) (Float) (vector.matrix[j][0].floatValue() - factor * vector.matrix[i][0].floatValue());
+
+                    for (int k = i; k < n; k++) {
+                        matrix.matrix[j][k] = (T) (Float) (matrix.matrix[j][k].floatValue() - factor * matrix.matrix[i][k].floatValue());
+                    }
+                }
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                float sum = 0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrix.matrix[i][j].floatValue() * resultVector.matrix[j][0].floatValue();
+                }
+                resultVector.matrix[i][0] = (T) (Float) ((vector.matrix[i][0].floatValue() - sum) / matrix.matrix[i][i].floatValue());
+            }
+
+
+
+            for (int i = 0; i < n; i++) {
+                float sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += MatrixCopy.matrix[i][j].floatValue() * resultVector.matrix[j][0].floatValue();
+
+                }
+                VectorCheck.matrix[i][0] = (T) (Float) (sum) ;
+            }
+
+//            System.out.println("Wynik z czesciowym wyborem: ");
+//            System.out.println(resultVector);
+        }
+
+        if (c.equals(Double.class)) {
+            for (int i = 0; i < n; i++) {
+                int max = i;
+
+                for (int j = i + 1; j < n; j++) {
+                    if (Math.abs(matrix.matrix[j][i].doubleValue()) > Math.abs(matrix.matrix[max][i].doubleValue())) {
+                        max = j;
+                    }
+                }
+
+                for (int j = 0; j < matrix.columns; j++) {
+                    T temp = matrix.matrix[i][j];
+                    matrix.matrix[i][j] = matrix.matrix[max][j];
+                    matrix.matrix[max][j] = temp;
+                }
+
+                for (int j = 0; j < vector.columns; j++) {
+                    T temp = vector.matrix[i][j];
+                    vector.matrix[i][j] = vector.matrix[max][j];
+                    vector.matrix[max][j] = temp;
+                }
+
+                for (int j = i + 1; j < n; j++) {
+                    double factor = matrix.matrix[j][i].doubleValue() / matrix.matrix[i][i].doubleValue();
+                    vector.matrix[j][0] = (T) (Double) (vector.matrix[j][0].doubleValue() - factor * vector.matrix[i][0].doubleValue());
+
+                    for (int k = i; k < n; k++) {
+                        matrix.matrix[j][k] = (T) (Double) (matrix.matrix[j][k].floatValue() - factor * matrix.matrix[i][k].doubleValue());
+                    }
+                }
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                double sum = 0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrix.matrix[i][j].doubleValue() * resultVector.matrix[j][0].doubleValue();
+                }
+                resultVector.matrix[i][0] = (T) (Double) ((vector.matrix[i][0].doubleValue() - sum) / matrix.matrix[i][i].doubleValue());
+            }
+
+
+            for (int i = 0; i < n; i++) {
+                double sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += MatrixCopy.matrix[i][j].doubleValue() * resultVector.matrix[j][0].doubleValue();
+
+                }
+                VectorCheck.matrix[i][0] = (T) (Double) (sum) ;
+            }
+
+//            System.out.println("sprawdzenie wektora "+VectorCheck);
+
+        }
+
+        return VectorCheck;
+    }
+
+    public MyMatrix<T> gaussWithFullChoice(MyMatrix<T> matrix, MyMatrix<T> vector, MyMatrix<T> MatrixCopy) {
+        int n = vector.rows;
+        MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
+        MyMatrix<T> trueResultVector = new MyMatrix<T>(c, n, 1);
+
+        MyMatrix<T> VectorCheck = new MyMatrix<T>(c, n, 1);
+
+
+        int[] truePosition;
+        truePosition= new int[n];
+
+        for (int j = 0; j < n; j++) {
+            truePosition[j]=j;
+        }
+
+        if (c.equals(Float.class)) {
+            for (int i = 0; i < n; i++) {
+                int maxRow = i;
+                int maxColumn = i;
+
+                for (int j = i; j < matrix.rows; j++) {
+                    for (int k = i; k < matrix.columns; k++) {
+                        if (Math.abs(matrix.matrix[j][k].floatValue()) > Math.abs(matrix.matrix[maxRow][maxColumn].floatValue())) {
+                            maxRow = j;
+                            maxColumn = k;
+
+                        }
+                    }
+                }
+
+                    int tempInt = truePosition[i];
+                    truePosition[i] = truePosition[maxColumn];
+
+                    truePosition[maxColumn] = tempInt;
+
+
+                for (int j = 0; j < matrix.rows; j++) {
+                    T temp = matrix.matrix[i][j];
+                    matrix.matrix[i][j] = matrix.matrix[maxRow][j];
+                    matrix.matrix[maxRow][j] = temp;
+                }
+
+                for (int j = 0; j < vector.columns; j++) {
+                    T temp = vector.matrix[i][j];
+                    vector.matrix[i][j] = vector.matrix[maxRow][j];
+                    vector.matrix[maxRow][j] = temp;
+                }
+
+                for (int j = 0; j < matrix.rows; j++) {
+                    T temp = matrix.matrix[j][i];
+                    matrix.matrix[j][i] = matrix.matrix[j][maxColumn];
+                    matrix.matrix[j][maxColumn] = temp;
+                }
+
+
+                for (int j = i + 1; j < n; j++) {
+                    float factor = matrix.matrix[j][i].floatValue() / matrix.matrix[i][i].floatValue();
+                    vector.matrix[j][0] = (T) (Float) (vector.matrix[j][0].floatValue() - factor * vector.matrix[i][0].floatValue());
+
+                    for (int k = i; k < n; k++) {
+                        matrix.matrix[j][k] = (T) (Float) (matrix.matrix[j][k].floatValue() - factor * matrix.matrix[i][k].floatValue());
+                    }
+                }
+            }
+
+            for (int j = 0; j < n; j++) {
+//                System.out.println(truePosition[j]);
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                float sum = 0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrix.matrix[i][j].floatValue() * resultVector.matrix[j][0].floatValue();
+                }
+                resultVector.matrix[i][0] = (T) (Float) ((vector.matrix[i][0].floatValue() - sum) / matrix.matrix[i][i].floatValue());
+            }
+            for (int j = 0; j < n; j++) {
+                trueResultVector.matrix[truePosition[j]][0]= (T) (Float) (resultVector.matrix[j][0].floatValue());
+            }
+
+//            System.out.println("Wynik z pelnym: ");
+//            System.out.println(trueResultVector);
+//            System.out.println("zmienone wyniki do sprawdzania \n" + trueResultVector);
+//
+//
+//            System.out.println("zmienone wyniki do sprawdzania \n" + trueResultVector);
+//            System.out.println("macierz bez zmian"+MatrixCopy);
+
+
+            for (int i = 0; i < n; i++) {
+                float sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += MatrixCopy.matrix[i][j].floatValue() * trueResultVector.matrix[j][0].floatValue();
+
+                }
+                VectorCheck.matrix[i][0] = (T) (Float) (sum) ;
+            }
+
+//            System.out.println("sprawdzenie wektora "+VectorCheck);
+        }
+
+        if (c.equals(Double.class)) {
+
+
+            for (int i = 0; i < n; i++) {
+                int maxRow = i;
+                int maxColumn = i;
+
+                for (int j = i; j < matrix.rows; j++) {
+                    for (int k = i; k < matrix.columns; k++) {
+                        if (Math.abs(matrix.matrix[j][k].doubleValue()) > Math.abs(matrix.matrix[maxRow][maxColumn].doubleValue())) {
+                            maxRow = j;
+                            maxColumn = k;
+
+                        }
+                    }
+                }
+
+                int tempInt = truePosition[i];
+                truePosition[i] = truePosition[maxColumn];
+
+                truePosition[maxColumn] = tempInt;
+
+
+                for (int j = 0; j < matrix.rows; j++) {
+                    T temp = matrix.matrix[i][j];
+                    matrix.matrix[i][j] = matrix.matrix[maxRow][j];
+                    matrix.matrix[maxRow][j] = temp;
+                }
+
+                for (int j = 0; j < vector.columns; j++) {
+                    T temp = vector.matrix[i][j];
+                    vector.matrix[i][j] = vector.matrix[maxRow][j];
+                    vector.matrix[maxRow][j] = temp;
+                }
+
+                for (int j = 0; j < matrix.rows; j++) {
+                    T temp = matrix.matrix[j][i];
+                    matrix.matrix[j][i] = matrix.matrix[j][maxColumn];
+                    matrix.matrix[j][maxColumn] = temp;
+                }
+
+
+                for (int j = i + 1; j < n; j++) {
+                    double factor = matrix.matrix[j][i].doubleValue() / matrix.matrix[i][i].doubleValue();
+                    vector.matrix[j][0] = (T) (Double) (vector.matrix[j][0].doubleValue() - factor * vector.matrix[i][0].doubleValue());
+
+                    for (int k = i; k < n; k++) {
+                        matrix.matrix[j][k] = (T) (Double) (matrix.matrix[j][k].doubleValue() - factor * matrix.matrix[i][k].doubleValue());
+                    }
+                }
+            }
+
+            for (int j = 0; j < n; j++) {
+//                System.out.println(truePosition[j]);
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+                double sum = 0;
+                for (int j = i + 1; j < n; j++) {
+                    sum += matrix.matrix[i][j].doubleValue() * resultVector.matrix[j][0].doubleValue();
+                }
+                resultVector.matrix[i][0] = (T) (Double) ((vector.matrix[i][0].doubleValue() - sum) / matrix.matrix[i][i].doubleValue());
+            }
+            for (int j = 0; j < n; j++) {
+                trueResultVector.matrix[truePosition[j]][0]= (T) (Double) (resultVector.matrix[j][0].doubleValue());
+            }
+
+//            System.out.println("zmienone wyniki do sprawdzania \n" + trueResultVector);
+//            System.out.println("macierz bez zmian"+MatrixCopy);
+
+
+            for (int i = 0; i < n; i++) {
+                double sum = 0;
+                for (int j = 0; j < n; j++) {
+                    sum += MatrixCopy.matrix[i][j].doubleValue() * trueResultVector.matrix[j][0].doubleValue();
+
+                }
+                VectorCheck.matrix[i][0] = (T) (Double) (sum) ;
+            }
+
+//            System.out.println("sprawdzenie wektora "+VectorCheck);
+
+        }
+
+        return VectorCheck;
+    }
 }
