@@ -16,7 +16,8 @@ public class MainTest {
     private static Fraction fraction3_4 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4)); // 3/4  
 
     public static void main(String[] args) {
-    	gaussianEliminationTimeTest(100, 100);
+    	gaussianDoubleTest(100, 100);
+    	//gaussianFractionTest(50, 50);
     }
     
     private static void matrixGenerationTest(int rows, int columns) {
@@ -25,26 +26,44 @@ public class MainTest {
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
     
-    private static void gaussianEliminationTimeTest(int rows, int columns) {
+    private static void gaussianDoubleTest(int rows, int columns) {
     	long millisActualTime = System.currentTimeMillis();
     	MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, columns);
     	MatrixSet randomVector = RandomGenerator.generateMatrix(rows, 1);
     	
+    	
     	MyMatrix<Double> double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
     	MyMatrix<Double> vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	System.out.println(double1.gaussG(vector1).transpose());
     	
-    	
-    	System.out.println(double1.gaussWithoutChoice(double1, vector1, new MyMatrix<Double>(double1)).transpose());
     	
     	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
     	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
-    	System.out.println(double1.gaussWithPartialChoice(double1, vector1, new MyMatrix<Double>(double1)).transpose());
+    	System.out.println(double1.gaussPG(vector1).transpose());
+    	
     	
     	double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
     	vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
-    	System.out.println(double1.gaussWithFullChoice(double1, vector1, new MyMatrix<Double>(double1)).transpose());
+    	System.out.println(double1.gaussFG(vector1).transpose());
+    	
     	
     	long executionTime = System.currentTimeMillis() - millisActualTime;
     	System.out.println(executionTime);
     }
+    
+    public static void gaussianFractionTest(int rows, int columns) {
+	   long millisActualTime = System.currentTimeMillis();
+   		MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, columns);
+   		MatrixSet randomVector = RandomGenerator.generateMatrix(rows, 1);
+   	
+   		MyMatrix<Fraction> double1= new MyMatrix<Fraction>(randomMatrix.getFractionMatrix());
+   		MyMatrix<Fraction> vector1 = new MyMatrix<Fraction>(randomVector.getFractionMatrix());
+   	
+   	
+   		System.out.println(double1.gaussG(vector1).transpose());
+   		long executionTime = System.currentTimeMillis() - millisActualTime;
+   		System.out.println(executionTime);
+   }
+    
+    
 }

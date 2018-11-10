@@ -98,8 +98,8 @@ public class Fraction extends Number{
         return mul(dividend, divisor.rotate());
     }
     
-    public static Fraction zero() {
-    	return new Fraction(BigInteger.ZERO, BigInteger.ONE);
+    public static Fraction valueOf(int value) {
+    	return new Fraction(BigInteger.valueOf(value), BigInteger.ONE);
     }
     
     public static int compare(Fraction num1, Fraction num2) {

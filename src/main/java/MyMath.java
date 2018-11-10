@@ -12,7 +12,7 @@ public class MyMath {
 			return (T) (Double) ((Double) num1 + (Double) num2);
 		else if(num1 instanceof Fraction && num2 instanceof Fraction)
 			return (T) Fraction.add((Fraction) num1, (Fraction) num2);
-		else return null;
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 
 	public static <T> T sub(T num1, T num2) {
@@ -24,7 +24,7 @@ public class MyMath {
 			return (T) (Double) ((Double) num1 - (Double) num2);
 		else if(num1 instanceof Fraction && num2 instanceof Fraction)
 			return (T) Fraction.sub((Fraction) num1, (Fraction) num2);
-		else return null;
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 
 	public static <T> T mul(T num1, T num2) {
@@ -36,7 +36,7 @@ public class MyMath {
 			return (T) (Double) ((Double) num1 * (Double) num2);
 		else if(num1 instanceof Fraction && num2 instanceof Fraction)
 			return (T) Fraction.mul((Fraction) num1, (Fraction) num2);
-		else return null;
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 
 	public static <T> T div(T num1, T num2) {
@@ -48,7 +48,7 @@ public class MyMath {
 			return (T) (Double) ((Double) num1 / (Double) num2);
 		else if(num1 instanceof Fraction && num2 instanceof Fraction)
 			return (T) Fraction.div((Fraction) num1, (Fraction) num2);
-		else return null;
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 	
 	public static <T> T abs(T num1) {
@@ -71,7 +71,7 @@ public class MyMath {
 				return (T) new Fraction(((Fraction) num1).getNominator().multiply(BigInteger.valueOf(-1)),
 						((Fraction) num1).getDenominator());
 			}
-		else return null;
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 	
 	public static <T> int compare(T num1, T num2) {
@@ -83,6 +83,6 @@ public class MyMath {
 			return Double.compare((Double) num1, (Double)  num2);
 		else if(num1 instanceof Fraction && num2 instanceof Fraction)
 			return Fraction.compare((Fraction) num1, (Fraction)  num2);
-		else return 0;
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 }
