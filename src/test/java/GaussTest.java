@@ -46,4 +46,54 @@ public class GaussTest {
 							 new MyMatrix<Double>(Double.class, doubleTab), 
 							 new MyMatrix<Fraction>(Fraction.class, fractionTab));
     }
+    
+    public static <T> MyMatrix<T> gaussWithoutChoice(MyMatrix<T> matrix, MyMatrix<T> vector) {
+        int n = vector.getRows();
+        MyMatrix<T> resultVector = new MyMatrix<T>(vector.getC(), vector.getRows(), vector.getColumns());
+        MyMatrix<T> VectorCheck = new MyMatrix<T>(vector.getC(), vector.getRows(), vector.getColumns());
+        MyMatrix<T> MatrixCopy = new MyMatrix<T>(matrix);
+
+            for (int i = 0; i < n; i++) {
+                for (int j = i + 1; j < n; j++) {
+                    T factor =MyMath.sub(matrix.getMatrix()[j][i], matrix.getMatrix()[i][i]);
+                    vector.getMatrix()[j][0] = MyMath.sub(vector.getMatrix()[j][0], MyMath.mul(factor, vector.getMatrix()[i][0]));
+
+                    for (int k = i; k < n; k++) {
+                        matrix.getMatrix()[j][k] = MyMath.sub(matrix.getMatrix()[j][k], MyMath.mul(factor, matrix.getMatrix()[i][k]));
+                    }
+                }
+            }
+
+            for (int i = n - 1; i >= 0; i--) {
+            		T sum;
+            		if(matrix.getCell(0, 0) instanceof Fraction)
+            			sum = (T) Fraction.zero();
+            		else sum = (T) Float.valueOf(0);
+            	
+                for (int j = i + 1; j < n; j++) {
+                    sum = MyMath.add(sum, MyMath.mul(matrix.getMatrix()[i][j], matrix.getMatrix()[i][j]));
+                    
+                }
+                resultVector.getMatrix()[i][0] = MyMath.div(MyMath.sub(vector.getMatrix()[i][0], sum), matrix.getMatrix()[i][i]);
+            }
+
+            for (int i = 0; i < n; i++) {
+            	T sum;
+        		if(matrix.getCell(0, 0) instanceof Fraction)
+        			sum = (T) Fraction.zero();
+        		else sum = (T) Float.valueOf(0);
+                for (int j = 0; j < n; j++) {
+                    sum = MyMath.add(sum, MyMath.mul(MatrixCopy.getMatrix()[i][j], MatrixCopy.getMatrix()[i][j]));
+
+                }
+                VectorCheck.getMatrix()[i][0] = (T) (Float) (sum) ;
+            }
+
+//            System.out.println("Wynik bez wyboru: ");
+//            System.out.println(resultVector);
+
+        return VectorCheck;
+    }
+    
+    
 }

@@ -78,7 +78,10 @@ public class MyMatrix<T> {
 		return matrix[row][column];
 	}
 
-	public Class<T> getC() { return c; }
+	public Class<T> getC() { 
+		return c; 
+	}
+	
 
 	//naprawione
 	public MyMatrix<T> gaussianElimination(MyMatrix<T> vector) {

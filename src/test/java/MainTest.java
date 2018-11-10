@@ -141,6 +141,11 @@ public class MainTest {
     	
     	MyMatrix<Double> double1 = new MyMatrix<Double>(randomMatrix.getDoubleMatrix());
     	MyMatrix<Double> vector1 = new MyMatrix<Double>(randomVector.getDoubleMatrix());
+    	
+    	System.out.println(GaussTest.gaussWithoutChoice(double1, vector1));
+    	long executionTime = System.currentTimeMillis() - millisActualTime;
+    	System.out.println(executionTime);
+    	/*
     	System.out.println("Generation done");
     	System.out.println("GaussG done\n" + double1.gaussG(vector1));
     	//System.out.println("GaussG done\n" + vector1);
@@ -159,6 +164,6 @@ public class MainTest {
     	
     	System.out.print(randomVector.getDoubleMatrix());
     	
-    	System.out.println(executionTime);
+    	System.out.println(executionTime);*/
     }
 }
