@@ -119,10 +119,20 @@ public class MyMatrix<T extends Number> {
 			matrix[k][j] = tmp;
 		}
 	}
+	
 	public void absVector() {  
 		for (int i = 0; i < this.getRows(); i++) {
 			this.setCell(MyMath.abs(this.getCell(i, 0)), i, 0);
 		}
+	}
+	
+	public T vectorAvg() {
+		T sum = zeroValue();
+		for(int i = 0; i < this.rows; i++)
+			for(int j = 0; j< this.columns; j++) {
+				sum = MyMath.add(sum, this.getCell(i, j));
+			}
+		return (T) MyMath.div(sum, valueOf(this.rows * this.columns));
 	}
 	
 	public MyMatrix<T> plus(MyMatrix<T> B) {
@@ -204,13 +214,24 @@ public class MyMatrix<T extends Number> {
 	}
 	
 	public T zeroValue() {
+		T zero = null;
+    	if(c == Float.class)
+    		zero = (T) Float.valueOf(0);
+    	else if(c == Double.class)
+    		zero = (T) Double.valueOf(0);
+    	else if(c == Fraction.class)
+    		zero = (T) Fraction.valueOf(0);
+    	return zero;
+	}
+	
+	public T valueOf(int value) {
 		T sum = null;
     	if(c == Float.class)
-    		sum = (T) Float.valueOf(0);
+    		sum = (T) Float.valueOf(value);
     	else if(c == Double.class)
-    		sum = (T) Double.valueOf(0);
+    		sum = (T) Double.valueOf(value);
     	else if(c == Fraction.class)
-    		sum = (T) Fraction.valueOf(0);
+    		sum = (T) Fraction.valueOf(value);
     	return sum;
 	}
 	

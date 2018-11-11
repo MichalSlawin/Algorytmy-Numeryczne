@@ -1,6 +1,6 @@
 @SuppressWarnings({"rawtypes", "unused"})
 public class MainTest {
-	private final static int rows = 10;
+	private final static int rows = 100;
 	
     public static void main(String[] args) {
 		MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, rows);
@@ -56,8 +56,9 @@ public class MainTest {
 		//--------------------------------------------------------------------------------b³¹d
 		error = randomVector.minus(timesMatrix);	
 		error.absVector();
-		System.out.println("Blad");
-		System.out.println(error.transpose()); 
+		System.out.println("Sredni blad: " + error.vectorAvg());
+		/*System.out.println("Blad");
+		System.out.println(error.transpose()); */
 		
 		System.out.println("Czas wykonania: " + executionTime);
 
@@ -75,8 +76,9 @@ public class MainTest {
 		System.out.print(timesMatrix.transpose());
 		error = randomVector.minus(timesMatrix);	
 		error.absVector();
-		System.out.println("Blad");
-		System.out.println(error.transpose()); 
+		System.out.println("Sredni blad: " + error.vectorAvg());
+		/*System.out.println("Blad");
+		System.out.println(error.transpose()); */
 		System.out.println("Czas wykonania: " + executionTime);
 
 		testMatrix = new MyMatrix<T>(randomMatrix);
@@ -93,8 +95,9 @@ public class MainTest {
 		System.out.print(timesMatrix.transpose());
 		error = randomVector.minus(timesMatrix);	
 		error.absVector();
-		System.out.println("Blad");
-		System.out.println(error.transpose()); 
+		System.out.println("Sredni blad: " + error.vectorAvg());
+		/*System.out.println("Blad");
+		System.out.println(error.transpose()); */
 		System.out.println("Czas wykonania: " + executionTime);
 
 	}
