@@ -213,8 +213,6 @@ public class MyMatrix<T extends Number> {
 		int n = vector.rows;
 		MyMatrix<T> matrix = new MyMatrix<T>(this);
         MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> vectorCheck = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> matrixCopy = new MyMatrix<T>(matrix);
 
         for (int i = 0; i < n; i++) {
         	for (int j = i + 1; j < n; j++) {
@@ -236,23 +234,13 @@ public class MyMatrix<T extends Number> {
         	}
         	resultVector.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
         }
-
-        for (int i = 0; i < n; i++) {
-        	T sum = zeroValue();
-        	for (int j = 0; j < n; j++) {
-        		sum = MyMath.add(sum, MyMath.mul(matrixCopy.matrix[i][j], resultVector.matrix[j][0]));
-        	}
-        	vectorCheck.matrix[i][0] = sum ;
-        }
-        return vectorCheck;
+        return resultVector;
     }
 	
 	public MyMatrix<T> gaussPG(MyMatrix<T> vector) {
 		int n = vector.rows;
         MyMatrix<T> matrix = new MyMatrix<T>(this);
         MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> vectorCheck = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> matrixCopy = new MyMatrix<T>(matrix);
 
         for (int i = 0; i < n; i++) {
         	int max = i;
@@ -284,15 +272,7 @@ public class MyMatrix<T extends Number> {
         	}
         	resultVector.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
         }
-
-        for (int i = 0; i < n; i++) {
-        	T sum = zeroValue();
-        	for (int j = 0; j < n; j++) {
-        		sum = MyMath.add(sum, MyMath.mul(matrixCopy.matrix[i][j], resultVector.matrix[j][0]));
-        	}
-        	vectorCheck.matrix[i][0] = sum ;
-        }
-        return vectorCheck;
+        return resultVector;
     }
 
     public MyMatrix<T> gaussFG( MyMatrix<T> vector) {
@@ -300,8 +280,6 @@ public class MyMatrix<T extends Number> {
         MyMatrix<T> matrix = new MyMatrix<T>(this);
         MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
         MyMatrix<T> trueResultVector = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> vectorCheck = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> matrixCopy = new MyMatrix<T>(matrix);
 
         int[] truePosition;
         truePosition= new int[n];
@@ -342,10 +320,6 @@ public class MyMatrix<T extends Number> {
             }
         }
 
-        for (int j = 0; j < n; j++) {
-// 	        System.out.println(truePosition[j]);
-        }
-
         for (int i = n - 1; i >= 0; i--) {
         	T sum = zeroValue();
         	for (int j = i + 1; j < n; j++) {
@@ -356,25 +330,6 @@ public class MyMatrix<T extends Number> {
         for (int j = 0; j < n; j++) {
         	trueResultVector.matrix[truePosition[j]][0]= resultVector.matrix[j][0];
         }
-
-//            System.out.println("Wynik z pelnym: ");
-//            System.out.println(trueResultVector);
-//            System.out.println("zmienone wyniki do sprawdzania \n" + trueResultVector);
-//
-//
-//            System.out.println("zmienone wyniki do sprawdzania \n" + trueResultVector);
-//            System.out.println("macierz bez zmian"+MatrixCopy);
-
-
-        for (int i = 0; i < n; i++) {
-        	T sum = zeroValue();
-        	for (int j = 0; j < n; j++) {
-        		sum = MyMath.add(sum, MyMath.mul(matrixCopy.matrix[i][j], trueResultVector.matrix[j][0]));
-        	}
-        	vectorCheck.matrix[i][0] = sum;
-        }
-
-        return vectorCheck;
-//            System.out.println("sprawdzenie wektora "+VectorCheck);
+        return trueResultVector;
     }
 }

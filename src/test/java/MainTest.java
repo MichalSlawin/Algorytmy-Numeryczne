@@ -36,7 +36,8 @@ public class MainTest {
 
 		System.out.println("Podstawowy");
 		millisActualTime = System.currentTimeMillis();
-		System.out.print(testMatrix.gaussG(testVector).transpose());
+		//System.out.print(testMatrix.gaussG(testVector).transpose());
+		System.out.print(testMatrix.times(testMatrix.gaussG(testVector)).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas wykonania: " + executionTime);
 
@@ -45,7 +46,7 @@ public class MainTest {
 
 		System.out.println("Z czesciowym wyborem");
 		millisActualTime = System.currentTimeMillis();
-		System.out.print(testMatrix.gaussPG(testVector).transpose());
+		System.out.print(testMatrix.times(testMatrix.gaussPG(testVector)).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas wykonania: " + executionTime);
 
@@ -54,7 +55,7 @@ public class MainTest {
 
 		System.out.println("Z pelnym wyborem");
 		millisActualTime = System.currentTimeMillis();
-		System.out.print(testMatrix.gaussFG(testVector).transpose());
+		System.out.print(testMatrix.times(testMatrix.gaussFG(testVector)).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas wykonania: " + executionTime);
 
