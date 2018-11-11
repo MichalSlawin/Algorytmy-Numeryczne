@@ -119,11 +119,10 @@ public class MyMatrix<T extends Number> {
 			matrix[k][j] = tmp;
 		}
 	}
-	public MyMatrix<T> absVector() {  
-		MyMatrix<T> B = this;
-		for (int i = 0; i < B.getRows(); i++) 
-			{B.setCell(MyMath.abs(B.getCell(i,0)),i,0);}
-		return B;
+	public void absVector() {  
+		for (int i = 0; i < this.getRows(); i++) {
+			this.setCell(MyMath.abs(this.getCell(i, 0)), i, 0);
+		}
 	}
 	
 	public MyMatrix<T> plus(MyMatrix<T> B) {

@@ -31,11 +31,7 @@ public class MainTest {
 		long executionTime;
 		MyMatrix<T> gaussMatrix;
 		MyMatrix<T> timesMatrix;
-		
-
-		
-		
-		
+		MyMatrix<T> error;
 		
 		System.out.println("Wynik dokladny");
 		System.out.println(randomVector.transpose());
@@ -46,6 +42,7 @@ public class MainTest {
 		int rows = testMatrix.getRows();
 		int columns = testMatrix.getColumns();
 
+		System.out.println("------------------------------------------------");
 		System.out.println("Podstawowy");
 		millisActualTime = System.currentTimeMillis();
 		//System.out.print(testMatrix.gaussG(testVector).transpose());
@@ -57,15 +54,18 @@ public class MainTest {
 		System.out.print(timesMatrix.transpose());
 		
 		//--------------------------------------------------------------------------------b³¹d
-		MyMatrix<T> Error = randomVector.minus(testMatrix.times(gaussMatrix));		
-		System.out.print(Error.absVector().transpose()); 
-
+		error = randomVector.minus(timesMatrix);	
+		error.absVector();
+		System.out.println("Blad");
+		System.out.println(error.transpose()); 
 		
 		System.out.println("Czas wykonania: " + executionTime);
 
+		
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
-
+		
+		System.out.println("\n------------------------------------------------");
 		System.out.println("Z czesciowym wyborem");
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussPG(testVector);
@@ -73,11 +73,17 @@ public class MainTest {
 
 		timesMatrix = testMatrix.times(gaussMatrix);
 		System.out.print(timesMatrix.transpose());
+		error = randomVector.minus(timesMatrix);	
+		error.absVector();
+		System.out.println("Blad");
+		System.out.println(error.transpose()); 
 		System.out.println("Czas wykonania: " + executionTime);
 
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
+		
 
+		System.out.println("\n------------------------------------------------");
 		System.out.println("Z pelnym wyborem");
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussFG(testVector);
@@ -85,6 +91,10 @@ public class MainTest {
 
 		timesMatrix = testMatrix.times(gaussMatrix);
 		System.out.print(timesMatrix.transpose());
+		error = randomVector.minus(timesMatrix);	
+		error.absVector();
+		System.out.println("Blad");
+		System.out.println(error.transpose()); 
 		System.out.println("Czas wykonania: " + executionTime);
 
 	}
