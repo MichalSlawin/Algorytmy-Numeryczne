@@ -7,7 +7,6 @@ import java.lang.reflect.Array;
 public class MyMatrix<T extends Number> {
 	
 	/*TODO:
-	 * Implementacja ulamkow w eliminacjach gaussa - na poczatku tylko do wariantu bez elementu podstawowego i zobaczymy jak to dziala
 	 * Refaktoryzacja kodu eliminacji gaussa
 	 * Testy nowych funkcji
 	 * Obliczenie bledow i czasow, wykresy do sprawozdania i samo sprawozdanie
