@@ -21,12 +21,12 @@ public class MainTest {
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
 
-	private static void gaussianTest(MyMatrix randomMatrix, MyMatrix randomVector) {
+	private static <T extends Number> void gaussianTest(MyMatrix randomMatrix, MyMatrix randomVector) {
 		long millisActualTime;
 		long executionTime;
 
-		MyMatrix<Float> floatMatrix = new MyMatrix(randomMatrix);
-		MyMatrix<Float> floatVector = new MyMatrix(randomVector);
+		MyMatrix<T> floatMatrix = new MyMatrix<T>(randomMatrix);
+		MyMatrix<T> floatVector = new MyMatrix<T>(randomVector);
 
 		int rows = floatMatrix.getRows();
 		int columns = floatMatrix.getColumns();
@@ -40,16 +40,16 @@ public class MainTest {
 		floatMatrix = new MyMatrix(randomMatrix);
 		floatVector = new MyMatrix(randomVector);
 
-		System.out.println("Z częściowym wyborem");
+		System.out.println("Z czesciowym wyborem");
 		millisActualTime = System.currentTimeMillis();
 		System.out.print(floatMatrix.gaussPG(floatVector).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas wykonania: " + executionTime);
 
-		floatMatrix = new MyMatrix<Float>(randomMatrix);
-		floatVector = new MyMatrix<Float>(randomVector);
+		floatMatrix = new MyMatrix<T>(randomMatrix);
+		floatVector = new MyMatrix<T>(randomVector);
 
-		System.out.println("Z pełnym wyborem");
+		System.out.println("Z pelnym wyborem");
 		millisActualTime = System.currentTimeMillis();
 		System.out.print(floatMatrix.gaussFG(floatVector).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
