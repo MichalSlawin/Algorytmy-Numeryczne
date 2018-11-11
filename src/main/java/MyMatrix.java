@@ -145,15 +145,15 @@ public class MyMatrix<T extends Number> {
 		return W;
 	}
 	
-		public MyMatrix<T> minus(MyMatrix<T> B) {
-			MyMatrix<T> A = this;
-			if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Wrong matrix dimensions");
-			MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
-			for (int i = 0; i < rows; i++)
-				for (int j = 0; j < columns; j++)
-					W.setCell(MyMath.sub(A.matrix[i][j], B.matrix[i][j]), i, j);
-			return W;
-		}
+	public MyMatrix<T> minus(MyMatrix<T> B) {
+		MyMatrix<T> A = this;
+		if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Wrong matrix dimensions");
+		MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
+		for (int i = 0; i < rows; i++)
+			for (int j = 0; j < columns; j++)
+				W.setCell(MyMath.sub(A.matrix[i][j], B.matrix[i][j]), i, j);
+		return W;
+	}
 
 	//mnozenie macierzy
 	public MyMatrix<T> times(MyMatrix<T> B){

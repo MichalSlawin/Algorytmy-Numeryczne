@@ -1,21 +1,23 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 @SuppressWarnings({"rawtypes", "unused"})
 public class MainTest {
-	private final static int rows = 100;
 	
     public static void main(String[] args) {
-		MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, rows);
-		MatrixSet randomVector = RandomGenerator.generateMatrix(rows, 1);
 
-		System.out.println("Float test " + rows);
-		gaussianTest(randomMatrix.getFloatMatrix(), randomVector.getFloatMatrix());
-		System.out.println("\nDouble test " + rows);
-    	gaussianTest(randomMatrix.getDoubleMatrix(), randomVector.getDoubleMatrix());
-		System.out.println("\nFraction test " + rows);
-    	gaussianTest(randomMatrix.getFractionMatrix(),randomVector.getFractionMatrix());
-    	
-    	//gaussianTest(randomMatrix.getFloatMatrix(), randomVector.getFloatMatrix());
-    	
-    	//blêdy dla generyków
+    	for(int rows = 10; rows <= 50; rows += 10) {
+			MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, rows);
+			MatrixSet randomVector = RandomGenerator.generateMatrix(rows, 1);
+
+			gaussianTest(randomMatrix.getFloatMatrix(), randomVector.getFloatMatrix(), "out_files/float");
+
+			gaussianTest(randomMatrix.getDoubleMatrix(), randomVector.getDoubleMatrix(), "out_files/double");
+
+			gaussianTest(randomMatrix.getFractionMatrix(),randomVector.getFractionMatrix(), "out_files/fraction");
+		}
 
     	
     }
@@ -26,80 +28,83 @@ public class MainTest {
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
 
-	private static <T extends Number> void gaussianTest(MyMatrix<T> randomMatrix, MyMatrix<T> randomVector) {
+	private static <T extends Number> void gaussianTest(MyMatrix<T> randomMatrix, MyMatrix<T> randomVector, String fileName) {
 		long millisActualTime;
 		long executionTime;
 		MyMatrix<T> gaussMatrix;
 		MyMatrix<T> timesMatrix;
 		MyMatrix<T> error;
-		
-		System.out.println("Wynik dokladny");
-		System.out.println(randomVector.transpose());
-		
+
 		MyMatrix<T> testMatrix = new MyMatrix<T>(randomMatrix);	//test macierz A 
 		MyMatrix<T> testVector = new MyMatrix<T>(randomVector); // test wektor X 
 
 		int rows = testMatrix.getRows();
 		int columns = testMatrix.getColumns();
-
-		System.out.println("------------------------------------------------");
-		System.out.println("Podstawowy");
+		// gauss podstawowy
 		millisActualTime = System.currentTimeMillis();
-		//System.out.print(testMatrix.gaussG(testVector).transpose());
+
 		gaussMatrix = testMatrix.gaussG(testVector);	//A1 = rozwiazanie A i X 
 		
 		executionTime = System.currentTimeMillis() - millisActualTime;
 
 		timesMatrix = testMatrix.times(gaussMatrix);	// A * A1
-		System.out.print(timesMatrix.transpose());
-		
-		//--------------------------------------------------------------------------------b³¹d
+
+		// obliczenie bledu
 		error = randomVector.minus(timesMatrix);	
 		error.absVector();
-		System.out.println("Sredni blad: " + error.vectorAvg());
-		/*System.out.println("Blad");
-		System.out.println(error.transpose()); */
-		
-		System.out.println("Czas wykonania: " + executionTime);
+
+		toFile((fileName + "TimeGaussG" + ".csv"), (randomMatrix.getRows() + "," + executionTime));
+		toFile((fileName + "ErrorGaussG" + ".csv"), (randomMatrix.getRows() + "," + error.vectorAvg()));
+
 
 		
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
 		
-		System.out.println("\n------------------------------------------------");
-		System.out.println("Z czesciowym wyborem");
+		// z czesciowym wyborem
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussPG(testVector);
 		executionTime = System.currentTimeMillis() - millisActualTime;
 
 		timesMatrix = testMatrix.times(gaussMatrix);
-		System.out.print(timesMatrix.transpose());
+
+		// obliczenie bledu
 		error = randomVector.minus(timesMatrix);	
 		error.absVector();
-		System.out.println("Sredni blad: " + error.vectorAvg());
-		/*System.out.println("Blad");
-		System.out.println(error.transpose()); */
-		System.out.println("Czas wykonania: " + executionTime);
+
+		toFile((fileName + "TimeGaussPG" + ".csv"), (randomMatrix.getRows() + "," + executionTime));
+		toFile((fileName + "ErrorGaussPG" + ".csv"), (randomMatrix.getRows() + "," + error.vectorAvg()));
+
+
 
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
 		
-
-		System.out.println("\n------------------------------------------------");
-		System.out.println("Z pelnym wyborem");
+		// z pelnym wyborem
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussFG(testVector);
 		executionTime = System.currentTimeMillis() - millisActualTime;
 
 		timesMatrix = testMatrix.times(gaussMatrix);
-		System.out.print(timesMatrix.transpose());
+
+		// obliczenie bledu
 		error = randomVector.minus(timesMatrix);	
 		error.absVector();
-		System.out.println("Sredni blad: " + error.vectorAvg());
-		/*System.out.println("Blad");
-		System.out.println(error.transpose()); */
-		System.out.println("Czas wykonania: " + executionTime);
 
+		toFile((fileName + "TimeGaussFG" + ".csv"), (randomMatrix.getRows() + "," + executionTime));
+		toFile((fileName + "ErrorGaussFG" + ".csv"), (randomMatrix.getRows() + "," + error.vectorAvg()));
+
+	}
+
+	private static void toFile(String fileName, String content) {
+		try(FileWriter fw = new FileWriter(fileName, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter out = new PrintWriter(bw))
+		{
+			out.println(content);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
     
 }
