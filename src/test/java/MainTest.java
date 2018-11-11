@@ -12,6 +12,12 @@ public class MainTest {
     	gaussianTest(randomMatrix.getDoubleMatrix(), randomVector.getDoubleMatrix());
 		System.out.println("\nFraction test " + rows);
     	gaussianTest(randomMatrix.getFractionMatrix(),randomVector.getFractionMatrix());
+    	
+    	//gaussianTest(randomMatrix.getFloatMatrix(), randomVector.getFloatMatrix());
+    	
+    	//blêdy dla generyków
+
+    	
     }
     
     private static void matrixGenerationTest(int rows, int columns) {
@@ -25,12 +31,17 @@ public class MainTest {
 		long executionTime;
 		MyMatrix<T> gaussMatrix;
 		MyMatrix<T> timesMatrix;
+		
 
+		
+		
+		
+		
 		System.out.println("Wynik dokladny");
 		System.out.println(randomVector.transpose());
 		
-		MyMatrix<T> testMatrix = new MyMatrix<T>(randomMatrix);
-		MyMatrix<T> testVector = new MyMatrix<T>(randomVector);
+		MyMatrix<T> testMatrix = new MyMatrix<T>(randomMatrix);	//test macierz A 
+		MyMatrix<T> testVector = new MyMatrix<T>(randomVector); // test wektor X 
 
 		int rows = testMatrix.getRows();
 		int columns = testMatrix.getColumns();
@@ -38,11 +49,18 @@ public class MainTest {
 		System.out.println("Podstawowy");
 		millisActualTime = System.currentTimeMillis();
 		//System.out.print(testMatrix.gaussG(testVector).transpose());
-		gaussMatrix = testMatrix.gaussG(testVector);
+		gaussMatrix = testMatrix.gaussG(testVector);	//A1 = rozwiazanie A i X 
+		
 		executionTime = System.currentTimeMillis() - millisActualTime;
 
-		timesMatrix = testMatrix.times(gaussMatrix);
+		timesMatrix = testMatrix.times(gaussMatrix);	// A * A1
 		System.out.print(timesMatrix.transpose());
+		
+		//--------------------------------------------------------------------------------b³¹d
+		MyMatrix<T> Error = randomVector.minus(testMatrix.times(gaussMatrix));		
+		System.out.print(Error.absVector().transpose()); 
+
+		
 		System.out.println("Czas wykonania: " + executionTime);
 
 		testMatrix = new MyMatrix<T>(randomMatrix);

@@ -119,7 +119,13 @@ public class MyMatrix<T extends Number> {
 			matrix[k][j] = tmp;
 		}
 	}
-
+	public MyMatrix<T> absVector() {  
+		MyMatrix<T> B = this;
+		for (int i = 0; i < B.getRows(); i++) 
+			{B.setCell(MyMath.abs(B.getCell(i,0)),i,0);}
+		return B;
+	}
+	
 	public MyMatrix<T> plus(MyMatrix<T> B) {
 		MyMatrix<T> A = this;
 		if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Wrong matrix dimensions");
