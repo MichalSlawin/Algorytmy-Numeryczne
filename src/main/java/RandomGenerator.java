@@ -1,7 +1,7 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-// Do czego porównać błędy: wylosowac wektor X, przemnozyc przez macierz, porownac otrzymany wynik
+// Do czego porownac bledy: wylosowac wektor X, przemnozyc przez macierz, porownac otrzymany wynik
 // do wynikow z metody eliminacji gaussa
 
 public class RandomGenerator {

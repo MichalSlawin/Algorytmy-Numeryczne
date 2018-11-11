@@ -147,7 +147,7 @@ public class MyMatrix<T extends Number> {
 		MyMatrix<T> W = new MyMatrix<T>(this.c, A.rows, B.columns);
 
 		//zerowanie macierzy W
-		/*T zero;
+		T zero;
 		if(A.getCell(0, 0) instanceof Fraction)
 			zero = (T) Fraction.valueOf(0);
 		else if(A.getCell(0, 0) instanceof Float)
@@ -160,7 +160,7 @@ public class MyMatrix<T extends Number> {
 			for(int j = 0; j < W.columns; j++) {
 				W.setCell(zero ,i ,j);
 			}
-		}*/
+		}
 		
 		for (int i = 0; i < W.rows; i++)
 			for (int j = 0; j < W.columns; j++)
