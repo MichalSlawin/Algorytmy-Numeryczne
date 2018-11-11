@@ -72,16 +72,18 @@ public class Fraction extends Number{
     public static Fraction add(Fraction addend1, Fraction addend2) {
         setCommonDenominator(addend1, addend2);
         BigInteger nominatorsSum = (addend1.getNominator()).add(addend2.getNominator());
-
-        return new Fraction(nominatorsSum, addend1.getDenominator());
+        Fraction result = new Fraction(nominatorsSum, addend1.getDenominator());
+       // result.reduce();
+        return result;
     }
 
     public static Fraction sub(Fraction minuend, Fraction subtrahend) {
         setCommonDenominator(minuend, subtrahend);
 
         BigInteger nominatorsDiff = ((minuend.getNominator()).subtract(subtrahend.getNominator()));
-
-        return new Fraction(nominatorsDiff, minuend.getDenominator());
+        Fraction result = new Fraction(nominatorsDiff, minuend.getDenominator());
+       // result.reduce();
+        return result;
     }
 
     public static Fraction mul(Fraction multiplicand, Fraction multiplier) {

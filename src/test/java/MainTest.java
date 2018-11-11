@@ -7,16 +7,18 @@ import java.io.PrintWriter;
 public class MainTest {
 	
     public static void main(String[] args) {
+    	
+    	int[] rows = {100, 200, 500, 1000, 2500};
 
-    	for(int rows = 10; rows <= 50; rows += 10) {
-			MatrixSet randomMatrix = RandomGenerator.generateMatrix(rows, rows);
-			MatrixSet randomVector = RandomGenerator.generateMatrix(rows, 1);
+    	for(int row : rows) {
+			MatrixSet randomMatrix = RandomGenerator.generateMatrix(row, row);
+			MatrixSet randomVector = RandomGenerator.generateMatrix(row, 1);
 
 			gaussianTest(randomMatrix.getFloatMatrix(), randomVector.getFloatMatrix(), "out_files/float");
 
 			gaussianTest(randomMatrix.getDoubleMatrix(), randomVector.getDoubleMatrix(), "out_files/double");
-
-			gaussianTest(randomMatrix.getFractionMatrix(),randomVector.getFractionMatrix(), "out_files/fraction");
+			if(row <= 200)
+				gaussianTest(randomMatrix.getFractionMatrix(),randomVector.getFractionMatrix(), "out_files/fraction");
 		}
 
     	
@@ -60,7 +62,7 @@ public class MainTest {
 		
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
-		
+		System.out.println(fileName + " 2 " + rows + ": " + executionTime);
 		// z czesciowym wyborem
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussPG(testVector);
@@ -79,7 +81,7 @@ public class MainTest {
 
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
-		
+		System.out.println(fileName + " 2 " + rows + ": " + executionTime);
 		// z pelnym wyborem
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussFG(testVector);
@@ -93,7 +95,7 @@ public class MainTest {
 
 		toFile((fileName + "TimeGaussFG" + ".csv"), (randomMatrix.getRows() + "," + executionTime));
 		toFile((fileName + "ErrorGaussFG" + ".csv"), (randomMatrix.getRows() + "," + error.vectorAvg()));
-
+		System.out.println(fileName + " 2 " + rows + ": " + executionTime);
 	}
 
 	private static void toFile(String fileName, String content) {
