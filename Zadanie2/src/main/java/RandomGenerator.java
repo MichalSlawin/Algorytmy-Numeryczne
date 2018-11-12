@@ -1,14 +1,12 @@
 import java.math.BigInteger;
 import java.util.Random;
 
-// Do czego porownac bledy: wylosowac wektor X, przemnozyc przez macierz, porownac otrzymany wynik
-// do wynikow z metody eliminacji gaussa
-
 public class RandomGenerator {
 	private static final BigInteger minBigInt = BigInteger.valueOf(-65536);
 	private static final BigInteger maxBigInt = BigInteger.valueOf(65535);
     private static Random random = new Random();
 
+    // generuje zestaw losowych macierzy typow Float, Double i Fraction
     public static MatrixSet generateMatrix(int rows, int columns) {
     	Fraction[][] fractionTab = new Fraction[rows][columns];
     	Double[][] doubleTab = new Double[rows][columns];

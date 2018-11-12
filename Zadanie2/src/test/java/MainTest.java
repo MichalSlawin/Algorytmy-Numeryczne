@@ -20,13 +20,10 @@ public class MainTest {
 			if(row <= 200)
 				gaussianTest(randomMatrix.getFractionMatrix(),randomVector.getFractionMatrix(), "out_files/fraction");
 		}
-
-    	
     }
     
     private static void matrixGenerationTest(int rows, int columns) {
     	MatrixSet set = RandomGenerator.generateMatrix(rows, columns);
-    	
     	System.out.println("Float matrix:\n" + set.getFloatMatrix() + "\n\nDouble matrix:\n" + set.getDoubleMatrix() + "\n\nFraction matrix:\n" + set.getFractionMatrix());
     }
 
@@ -42,13 +39,11 @@ public class MainTest {
 
 		int rows = testMatrix.getRows();
 		int columns = testMatrix.getColumns();
+		
 		// gauss podstawowy
 		millisActualTime = System.currentTimeMillis();
-
-		gaussMatrix = testMatrix.gaussG(testVector);	//A1 = rozwiazanie A i X 
-		
+		gaussMatrix = testMatrix.gaussG(testVector);	//A1 = rozwiazanie A i X
 		executionTime = System.currentTimeMillis() - millisActualTime;
-
 		timesMatrix = testMatrix.times(gaussMatrix);	// A * A1
 
 		// obliczenie bledu
@@ -57,17 +52,15 @@ public class MainTest {
 
 		toFile((fileName + "TimeGaussG" + ".csv"), (randomMatrix.getRows() + "," + executionTime));
 		toFile((fileName + "ErrorGaussG" + ".csv"), (randomMatrix.getRows() + "," + error.vectorAvg()));
-
-
 		
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
 		System.out.println(fileName + " 2 " + rows + ": " + executionTime);
+		
 		// z czesciowym wyborem
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussPG(testVector);
 		executionTime = System.currentTimeMillis() - millisActualTime;
-
 		timesMatrix = testMatrix.times(gaussMatrix);
 
 		// obliczenie bledu
@@ -77,16 +70,14 @@ public class MainTest {
 		toFile((fileName + "TimeGaussPG" + ".csv"), (randomMatrix.getRows() + "," + executionTime));
 		toFile((fileName + "ErrorGaussPG" + ".csv"), (randomMatrix.getRows() + "," + error.vectorAvg()));
 
-
-
 		testMatrix = new MyMatrix<T>(randomMatrix);
 		testVector = new MyMatrix<T>(randomVector);
 		System.out.println(fileName + " 2 " + rows + ": " + executionTime);
+		
 		// z pelnym wyborem
 		millisActualTime = System.currentTimeMillis();
 		gaussMatrix = testMatrix.gaussFG(testVector);
 		executionTime = System.currentTimeMillis() - millisActualTime;
-
 		timesMatrix = testMatrix.times(gaussMatrix);
 
 		// obliczenie bledu

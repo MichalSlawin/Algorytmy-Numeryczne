@@ -47,13 +47,14 @@ public class Fraction extends Number{
         return new Fraction(this.denominator, this.nominator);
     }
     
-    //sprawdza znak ulamka
+    // sprawdza znak ulamka
     public boolean isPositive() {
     	if((nominator.compareTo(BigInteger.valueOf(0)) == -1 && denominator.compareTo(BigInteger.valueOf(0)) == -1) || (nominator.compareTo(BigInteger.valueOf(0)) == 1 && denominator.compareTo(BigInteger.valueOf(0)) == 1) || nominator.compareTo(BigInteger.valueOf(0)) == 0)
     		return true;
     	else return false;
     }
 
+    // ustawia wspolny mianownik
     public static void setCommonDenominator(Fraction fraction1, Fraction fraction2) {
         BigInteger nominator1 = fraction1.getNominator();
         BigInteger nominator2 = fraction2.getNominator();
@@ -69,14 +70,15 @@ public class Fraction extends Number{
         fraction2.setDenominator(commonDenominator);
     }
 
+    // dodawanie ulamkow
     public static Fraction add(Fraction addend1, Fraction addend2) {
         setCommonDenominator(addend1, addend2);
         BigInteger nominatorsSum = (addend1.getNominator()).add(addend2.getNominator());
         Fraction result = new Fraction(nominatorsSum, addend1.getDenominator());
-        //result.reduce();
         return result;
     }
 
+    // odejmowanie ulamkow
     public static Fraction sub(Fraction minuend, Fraction subtrahend) {
     	minuend.reduce();
     	subtrahend.reduce();
@@ -84,10 +86,10 @@ public class Fraction extends Number{
 
         BigInteger nominatorsDiff = ((minuend.getNominator()).subtract(subtrahend.getNominator()));
         Fraction result = new Fraction(nominatorsDiff, minuend.getDenominator());
-        //result.reduce();
         return result;
     }
 
+    // mnozenie ulamkow
     public static Fraction mul(Fraction multiplicand, Fraction multiplier) {
         BigInteger nominator = (multiplier.getNominator()).multiply(multiplicand.getNominator());
         BigInteger denominator = (multiplier.getDenominator()).multiply(multiplicand.getDenominator());
@@ -98,14 +100,17 @@ public class Fraction extends Number{
         return product;
     }
 
+    // dzielenie ulamkow
     public static Fraction div(Fraction dividend, Fraction divisor) {
         return mul(dividend, divisor.rotate());
     }
     
+    // konwertuje int na ulamek
     public static Fraction valueOf(int value) {
     	return new Fraction(BigInteger.valueOf(value), BigInteger.ONE);
     }
     
+    // porownuje dwa ulamki
     public static int compare(Fraction num1, Fraction num2) {
     	setCommonDenominator(num1, num2);
     	return num1.getNominator().compareTo(num2.getNominator());
