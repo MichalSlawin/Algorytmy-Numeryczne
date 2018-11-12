@@ -37,7 +37,6 @@ public class MyMatrix<T extends Number> {
 				this.setCell(zero ,i ,j);
 			}
 		}
-        	
     }
 
 	public MyMatrix(Class<T> c, T[][] tab) {
@@ -181,7 +180,6 @@ public class MyMatrix<T extends Number> {
 			for (int j = 0; j < W.columns; j++)
 				for (int k = 0; k < A.columns; k++)
 					W.setCell(MyMath.add(W.matrix[i][j], MyMath.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
-
 		return W;
 }
 	
@@ -236,42 +234,39 @@ public class MyMatrix<T extends Number> {
 	}
 	
 	public MyMatrix<T> gaussG(MyMatrix<T> vector) {
-		int n = vector.rows;
 		MyMatrix<T> matrix = new MyMatrix<T>(this);
-        MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
+        MyMatrix<T> result = new MyMatrix<T>(c, vector.rows, 1);
 
-        for (int i = 0; i < n; i++) {
-        	for (int j = i + 1; j < n; j++) {
-        		T factor = MyMath.div(matrix.matrix[j][i], matrix.matrix[i][i]);
+        for (int i = 0; i < vector.rows; i++) {
+        	for (int j = i + 1; j < vector.rows; j++) {
+        		T param = MyMath.div(matrix.matrix[j][i], matrix.matrix[i][i]);
         		
-        		vector.matrix[j][0] = (T) MyMath.sub(vector.matrix[j][0], MyMath.mul(factor, vector.matrix[i][0]));
+        		vector.matrix[j][0] = (T) MyMath.sub(vector.matrix[j][0], MyMath.mul(param, vector.matrix[i][0]));
         		
-        		for (int k = i; k < n; k++) {
-        			matrix.matrix[j][k] = (T) MyMath.sub(matrix.matrix[j][k], MyMath.mul(factor, matrix.matrix[i][k]));
+        		for (int k = i; k < vector.rows; k++) {
+        			matrix.matrix[j][k] = (T) MyMath.sub(matrix.matrix[j][k], MyMath.mul(param, matrix.matrix[i][k]));
         		}
         	}
         }
 
-        for (int i = n - 1; i >= 0; i--) {
+        for (int i = vector.rows - 1; i >= 0; i--) {
         	T sum = zeroValue();
         	
-        	for (int j = i + 1; j < n; j++) {
-        		sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], resultVector.matrix[j][0]));
+        	for (int j = i + 1; j < vector.rows; j++) {
+        		sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], result.matrix[j][0]));
         	}
-        	resultVector.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
+        	result.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
         }
-        return resultVector;
+        return result;
     }
 	
 	public MyMatrix<T> gaussPG(MyMatrix<T> vector) {
-		int n = vector.rows;
         MyMatrix<T> matrix = new MyMatrix<T>(this);
-        MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
+        MyMatrix<T> result = new MyMatrix<T>(c, vector.rows, 1);
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < vector.rows; i++) {
         	int max = i;
-
-        	for (int j = i + 1; j < n; j++) {
+        	for (int j = i + 1; j < vector.rows; j++) {
         		if (MyMath.compare(MyMath.abs(matrix.matrix[j][i]), MyMath.abs(matrix.matrix[max][i])) == 1) {
         			max = j;
         		}
@@ -280,41 +275,40 @@ public class MyMatrix<T extends Number> {
         	matrix.swapRows(i, max);
         	vector.swapRows(i, max);
 
-        	for (int j = i + 1; j < n; j++) {
-        		T factor = MyMath.div(matrix.matrix[j][i], matrix.matrix[i][i]);
-        		vector.matrix[j][0] = MyMath.sub(vector.matrix[j][0], MyMath.mul(factor, vector.matrix[i][0]));
+        	for (int j = i + 1; j < vector.rows; j++) {
+        		T param = MyMath.div(matrix.matrix[j][i], matrix.matrix[i][i]);
+        		vector.matrix[j][0] = MyMath.sub(vector.matrix[j][0], MyMath.mul(param, vector.matrix[i][0]));
 
-        		for (int k = i; k < n; k++) {
-        			matrix.matrix[j][k] = MyMath.sub(matrix.matrix[j][k], MyMath.mul(factor, matrix.matrix[i][k]));
+        		for (int k = i; k < vector.rows; k++) {
+        			matrix.matrix[j][k] = MyMath.sub(matrix.matrix[j][k], MyMath.mul(param, matrix.matrix[i][k]));
         		}
         	}
         }
         
-        for (int i = n - 1; i >= 0; i--) {
+        for (int i = vector.rows - 1; i >= 0; i--) {
         	T sum = zeroValue();
         	
-        	for (int j = i + 1; j < n; j++) {
-        		sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], resultVector.matrix[j][0]));
+        	for (int j = i + 1; j < vector.rows; j++) {
+        		sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], result.matrix[j][0]));
         	}
-        	resultVector.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
+        	result.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
         }
-        return resultVector;
+        return result;
     }
 
     public MyMatrix<T> gaussFG( MyMatrix<T> vector) {
-        int n = vector.rows;
         MyMatrix<T> matrix = new MyMatrix<T>(this);
-        MyMatrix<T> resultVector = new MyMatrix<T>(c, n, 1);
-        MyMatrix<T> trueResultVector = new MyMatrix<T>(c, n, 1);
+        MyMatrix<T> result = new MyMatrix<T>(c, vector.rows, 1);
+        MyMatrix<T> originalResult = new MyMatrix<T>(c, vector.rows, 1);
 
-        int[] truePosition;
-        truePosition= new int[n];
+        int[] originalPosition;
+        originalPosition= new int[vector.rows];
 
-        for (int j = 0; j < n; j++) {
-            truePosition[j]=j;
+        for (int j = 0; j < vector.rows; j++) {
+            originalPosition[j]=j;
         }
         
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < vector.rows; i++) {
         	int maxRow = i;
         	int maxColumn = i;
 
@@ -327,35 +321,34 @@ public class MyMatrix<T extends Number> {
         		}
         	}
 
-        	int tempInt = truePosition[i];
-        	truePosition[i] = truePosition[maxColumn];
-
-        	truePosition[maxColumn] = tempInt;
+        	int tmp = originalPosition[i];
+        	originalPosition[i] = originalPosition[maxColumn];
+        	originalPosition[maxColumn] = tmp;
         	
         	matrix.swapRows(i,  maxRow);
         	matrix.swapColumns(i, maxColumn);
         	vector.swapRows(i, maxRow);
         	
-            for (int j = i + 1; j < n; j++) {
+            for (int j = i + 1; j < vector.rows; j++) {
             	T factor = MyMath.div(matrix.matrix[j][i], matrix.matrix[i][i]);
             	vector.matrix[j][0] = MyMath.sub(vector.matrix[j][0], MyMath.mul(factor, vector.matrix[i][0]));
 
-            	for (int k = i; k < n; k++) {
+            	for (int k = i; k < vector.rows; k++) {
             		matrix.matrix[j][k] = MyMath.sub(matrix.matrix[j][k], MyMath.mul(factor, matrix.matrix[i][k]));
             	}
             }
         }
 
-        for (int i = n - 1; i >= 0; i--) {
+        for (int i = vector.rows - 1; i >= 0; i--) {
         	T sum = zeroValue();
-        	for (int j = i + 1; j < n; j++) {
-        		sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], resultVector.matrix[j][0]));
+        	for (int j = i + 1; j < vector.rows; j++) {
+        		sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], result.matrix[j][0]));
         	}
-        	resultVector.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
+        	result.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
         }
-        for (int j = 0; j < n; j++) {
-        	trueResultVector.matrix[truePosition[j]][0]= resultVector.matrix[j][0];
+        for (int j = 0; j < vector.rows; j++) {
+        	originalResult.matrix[originalPosition[j]][0]= result.matrix[j][0];
         }
-        return trueResultVector;
+        return originalResult;
     }
 }
