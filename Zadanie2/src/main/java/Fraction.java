@@ -99,6 +99,22 @@ public class Fraction extends Number{
 
         return product;
     }
+    
+    public static BigInteger sqrt(BigInteger x) {
+        BigInteger div = BigInteger.ZERO.setBit(x.bitLength()/2);
+        BigInteger div2 = div;
+        for(;;) {
+            BigInteger y = div.add(x.divide(div)).shiftRight(1);
+            if (y.equals(div) || y.equals(div2))
+                return y;
+            div2 = div;
+            div = y;
+        }
+    }
+    
+    public static Fraction sqrt(Fraction fraction) {
+    	return new Fraction(sqrt(fraction.nominator), sqrt(fraction.denominator));
+    }
 
     // dzielenie ulamkow
     public static Fraction div(Fraction dividend, Fraction divisor) {

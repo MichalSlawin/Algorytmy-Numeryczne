@@ -3,7 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@SuppressWarnings({"rawtypes", "unused"})
+@SuppressWarnings({"unused"})
 public class MainTest {
 	
     public static void main(String[] args) {

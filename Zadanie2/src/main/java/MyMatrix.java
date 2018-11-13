@@ -49,7 +49,7 @@ public class MyMatrix<T extends Number> {
             	this.matrix[i][j]=tab[i][j];
         this.c = c;
 	}
-
+	
 	// konstruktor do tworzenia kopii obiektu
 	public MyMatrix(MyMatrix<T> myMatrix) {
 		this.c = myMatrix.getC();
@@ -138,6 +138,16 @@ public class MyMatrix<T extends Number> {
 		return (T) MyMath.div(sum, valueOf(this.rows * this.columns));
 	}
 	
+	// norma wektora
+	public T vectorNorm() {
+		T sum = zeroValue();
+		for(int i = 0; i < this.rows; i++)
+			for(int j = 0; j< this.columns; j++)
+				sum = MyMath.add(sum, MyMath.mul(this.getCell(i, j), this.getCell(i, j)));
+		return (T) MyMath.sqrt(sum);
+		
+	}
+	
 	// dodawanie macierzy
 	public MyMatrix<T> plus(MyMatrix<T> B) {
 		MyMatrix<T> A = this;
@@ -172,6 +182,7 @@ public class MyMatrix<T extends Number> {
 					W.setCell(MyMath.add(W.matrix[i][j], MyMath.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
 		return W;
 	}
+	
 	
 	@Override
 	public String toString() {

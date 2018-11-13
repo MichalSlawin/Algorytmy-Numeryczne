@@ -67,10 +67,9 @@ public class MyMath {
 		else if(num1 instanceof Fraction)
 			if(((Fraction) num1).isPositive()) 
 				return num1;
-			else {
+			else
 				return (T) new Fraction(((Fraction) num1).getNominator().multiply(BigInteger.valueOf(-1)),
 						((Fraction) num1).getDenominator());
-			}
 		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 	
@@ -83,6 +82,16 @@ public class MyMath {
 			return Double.compare((Double) num1, (Double)  num2);
 		else if(num1 instanceof Fraction && num2 instanceof Fraction)
 			return Fraction.compare((Fraction) num1, (Fraction)  num2);
+		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
+	}
+	
+	public static <T> T sqrt(T num1) {
+		if(num1 instanceof Float)
+			return (T) (Double) Math.sqrt((Float) num1);
+		else if(num1 instanceof Double)
+			return (T) (Double) Math.sqrt((Double) num1);
+		else if(num1 instanceof Fraction)
+			return (T) num1;
 		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
 	}
 }
