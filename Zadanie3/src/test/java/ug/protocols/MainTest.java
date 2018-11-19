@@ -1,14 +1,16 @@
 package ug.protocols;
 
 public class MainTest {
+    private static final int AGENTS_NUMBER = 6;
 
     public static void main(String [] args) {
-        Agent agent1 = new Agent(Agent.State.U);
-        Agent agent2 = new Agent(Agent.State.N);
+        simulateVotingTest();
+    }
 
-        AgentManager.setAgentsStates(agent1, agent2);
+    public static void simulateVotingTest() {
+        Agent agents[] = AgentManager.generateRandomAgents(AGENTS_NUMBER);
 
-        System.out.println(agent1 + " , " + agent2);
+        System.out.println("Voting ended in steps: " + AgentManager.simulateVoting(agents));
     }
 
 }
