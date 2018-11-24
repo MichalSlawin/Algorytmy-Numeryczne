@@ -32,9 +32,9 @@ class AgentManager {
         return agents;
     }
 
-    static int simulateVoting(Agent[] agents) {
+    static Agent.State simulateVoting(Agent[] agents) {
         Random generator = new Random();
-        int steps = 0;
+        //int steps = 0;
         int agent1Index;
         int agent2Index;
 
@@ -46,34 +46,34 @@ class AgentManager {
             System.out.print(agents[agent1Index] + " - " + agents[agent2Index] + " => ");
             setAgentsStates(agents[agent1Index], agents[agent2Index]);
             System.out.print(agents[agent1Index] + " - " + agents[agent2Index] + "\n");
-
-            steps++;
+            //steps++;
         }
         printAgentsSummary(agents);
-        return steps;
+        //return steps;
+        return agents[0].getState();
     }
 
     private static boolean isVotingFinished(Agent[] agents) {
-        int yesVotes = 0;
-        int noVotes = 0;
+        int yesVotes = howManyAgents(agents, Agent.State.Y);
+        int noVotes = howManyAgents(agents, Agent.State.N);
+        int unVotes = howManyAgents(agents, Agent.State.U);
 
-        for(Agent agent : agents) {
-            if(agent.getState() == Agent.State.Y) yesVotes++;
-            if(agent.getState() == Agent.State.N) noVotes++;
-        }
-        return (yesVotes == agents.length || noVotes == agents.length);
+        return (yesVotes == agents.length || noVotes == agents.length || unVotes == agents.length);
     }
 
     private static void printAgentsSummary(Agent[] agents) {
-        int yesVotes = 0;
-        int noVotes = 0;
-        int unVotes = 0;
+        int yesVotes = howManyAgents(agents, Agent.State.Y);
+        int noVotes = howManyAgents(agents, Agent.State.N);
+        int unVotes = howManyAgents(agents, Agent.State.U);
 
-        for(Agent agent : agents) {
-            if(agent.getState() == Agent.State.Y) yesVotes++;
-            if(agent.getState() == Agent.State.N) noVotes++;
-            if(agent.getState() == Agent.State.U) unVotes++;
-        }
         System.out.println("Summary: " + yesVotes + "Y ; " + noVotes + "N ; " + unVotes + "U");
+    }
+
+    private static int howManyAgents(Agent[] agents, Agent.State state) {
+        int counter = 0;
+        for(Agent agent : agents) {
+            if(agent.getState() == state) counter++;
+        }
+        return counter;
     }
 }

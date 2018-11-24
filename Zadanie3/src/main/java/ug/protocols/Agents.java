@@ -5,7 +5,7 @@ package ug.protocols;
 public class Agents {
     private Agent[] agents;
 
-    public Agents(int howMany) {
-        agents = new Agent[howMany];
+    public Agents(Agent[] agents) {
+        this.agents = agents;
     }
 }
