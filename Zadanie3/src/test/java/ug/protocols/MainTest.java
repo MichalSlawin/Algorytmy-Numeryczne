@@ -10,7 +10,7 @@ public class MainTest {
 
     private static double simulateVotingTest() {
         int yesVotes = 0;
-        Agent agents[];
+        Agents agents;
         Agent.State state;
 
         for(int i = 0; i < SESSIONS; i++) {

@@ -3,7 +3,7 @@ package ug.protocols;
 import java.util.Random;
 
 class AgentManager {
-    static void setAgentsStates(Agent agent1, Agent agent2) {
+    private static void setAgentsStates(Agent agent1, Agent agent2) {
         if(agent1.getState() != agent2.getState()) {
             if(agent1.getState() == Agent.State.U)
                 agent1.setState(agent2.getState());
@@ -16,64 +16,40 @@ class AgentManager {
         }
     }
 
-    static Agent[] generateRandomAgents(int howMany) {
+    static Agents generateRandomAgents(int howMany) {
         Random generator = new Random();
-        Agent[] agents = new Agent[howMany];
+        Agent[] agentsArray = new Agent[howMany];
         int randomInt;
 
         for(int i = 0; i <howMany; i++) {
             randomInt = generator.nextInt(3);
 
-            if(randomInt == 0) agents[i] = new Agent(Agent.State.Y);
-            if(randomInt == 1) agents[i] = new Agent(Agent.State.N);
-            if(randomInt == 2) agents[i] = new Agent(Agent.State.U);
+            if(randomInt == 0) agentsArray[i] = new Agent(Agent.State.Y);
+            if(randomInt == 1) agentsArray[i] = new Agent(Agent.State.N);
+            if(randomInt == 2) agentsArray[i] = new Agent(Agent.State.U);
         }
 
-        return agents;
+        return new Agents(agentsArray);
     }
 
-    static Agent.State simulateVoting(Agent[] agents) {
+    // RETURNS: wynik glosowania (Y/N/U)
+    static Agent.State simulateVoting(Agents agents) {
         Random generator = new Random();
-        //int steps = 0;
         int agent1Index;
         int agent2Index;
 
-        printAgentsSummary(agents);
-        while(!isVotingFinished(agents)) {
-            agent1Index = generator.nextInt(agents.length);
-            agent2Index = generator.nextInt(agents.length);
+        agents.printAgentsSummary();
+        while(!agents.isVotingFinished()) {
+            agent1Index = generator.nextInt(agents.getLength());
+            agent2Index = generator.nextInt(agents.getLength());
 
-            System.out.print(agents[agent1Index] + " - " + agents[agent2Index] + " => ");
-            setAgentsStates(agents[agent1Index], agents[agent2Index]);
-            System.out.print(agents[agent1Index] + " - " + agents[agent2Index] + "\n");
-            //steps++;
+            System.out.print(agents.getAgent(agent1Index) + " - " + agents.getAgent(agent2Index) + " => ");
+            setAgentsStates(agents.getAgent(agent1Index), agents.getAgent(agent2Index));
+            System.out.print(agents.getAgent(agent1Index) + " - " + agents.getAgent(agent2Index) + "\n");
         }
-        printAgentsSummary(agents);
-        //return steps;
-        return agents[0].getState();
+        agents.printAgentsSummary();
+
+        return agents.getAgent(0).getState();
     }
 
-    private static boolean isVotingFinished(Agent[] agents) {
-        int yesVotes = howManyAgents(agents, Agent.State.Y);
-        int noVotes = howManyAgents(agents, Agent.State.N);
-        int unVotes = howManyAgents(agents, Agent.State.U);
-
-        return (yesVotes == agents.length || noVotes == agents.length || unVotes == agents.length);
-    }
-
-    private static void printAgentsSummary(Agent[] agents) {
-        int yesVotes = howManyAgents(agents, Agent.State.Y);
-        int noVotes = howManyAgents(agents, Agent.State.N);
-        int unVotes = howManyAgents(agents, Agent.State.U);
-
-        System.out.println("Summary: " + yesVotes + "Y ; " + noVotes + "N ; " + unVotes + "U");
-    }
-
-    private static int howManyAgents(Agent[] agents, Agent.State state) {
-        int counter = 0;
-        for(Agent agent : agents) {
-            if(agent.getState() == state) counter++;
-        }
-        return counter;
-    }
 }
