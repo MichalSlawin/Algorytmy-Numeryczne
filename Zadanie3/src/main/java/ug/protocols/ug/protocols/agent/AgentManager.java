@@ -1,8 +1,8 @@
-package ug.protocols;
+package ug.protocols.ug.protocols.agent;
 
 import java.util.Random;
 
-class AgentManager {
+public class AgentManager {
 
     private static void setAgentsStates(Agent agent1, Agent agent2) {
         if(agent1.getState() != agent2.getState()) {
@@ -17,7 +17,7 @@ class AgentManager {
         }
     }
 
-    static Agents generateRandomAgents(int howMany) {
+    public static Agents generateRandomAgents(int howMany) {
         Random generator = new Random();
         Agent[] agentsArray = new Agent[howMany];
         int randomInt;
@@ -33,7 +33,7 @@ class AgentManager {
         return new Agents(agentsArray);
     }
 
-    static Agents generateAgents(int yes, int no, int un) {
+    public static Agents generateAgents(int yes, int no, int un) {
         Random generator = new Random();
         int howMany = yes + no + un;
         int randomInt;
@@ -64,7 +64,7 @@ class AgentManager {
     }
 
     // RETURNS: wynik glosowania (Y/N/U)
-    static Agent.State simulateVoting(Agents agents) {
+    public static Agent.State simulateVoting(Agents agents) {
         Random generator = new Random();
         int agent1Index;
         int agent2Index;

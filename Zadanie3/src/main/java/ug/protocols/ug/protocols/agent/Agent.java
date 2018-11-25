@@ -1,4 +1,4 @@
-package ug.protocols;
+package ug.protocols.ug.protocols.agent;
 
 public class Agent {
    public enum State {

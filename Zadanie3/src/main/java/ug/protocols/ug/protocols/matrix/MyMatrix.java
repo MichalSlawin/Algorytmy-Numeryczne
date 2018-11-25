@@ -1,3 +1,5 @@
+package ug.protocols.ug.protocols.matrix;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,9 +21,7 @@ public class MyMatrix<T extends Number> {
         this.c = c;
         
         T zero;
-        if(c == Fraction.class)
-			zero = (T) Fraction.valueOf(0);
-		else if(c == Float.class)
+       	if(c == Float.class)
 			zero = (T) Float.valueOf(0);
 		else if(c == Double.class)
 			zero = (T) Double.valueOf(0);
@@ -214,8 +214,6 @@ public class MyMatrix<T extends Number> {
     		zero = (T) Float.valueOf(0);
     	else if(c == Double.class)
     		zero = (T) Double.valueOf(0);
-    	else if(c == Fraction.class)
-    		zero = (T) Fraction.valueOf(0);
     	return zero;
 	}
 	
@@ -226,8 +224,6 @@ public class MyMatrix<T extends Number> {
     		sum = (T) Float.valueOf(value);
     	else if(c == Double.class)
     		sum = (T) Double.valueOf(value);
-    	else if(c == Fraction.class)
-    		sum = (T) Fraction.valueOf(value);
     	return sum;
 	}
 	

@@ -1,6 +1,6 @@
-package ug.protocols;
+package ug.protocols.ug.protocols.agent;
 
-class Agents {
+public class Agents {
 
     private Agent[] agents;
 

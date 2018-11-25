@@ -1,5 +1,9 @@
 package ug.protocols;
 
+import ug.protocols.ug.protocols.agent.Agent;
+import ug.protocols.ug.protocols.agent.AgentManager;
+import ug.protocols.ug.protocols.agent.Agents;
+
 public class MainTest {
     private static final int SESSIONS = 4;
 
