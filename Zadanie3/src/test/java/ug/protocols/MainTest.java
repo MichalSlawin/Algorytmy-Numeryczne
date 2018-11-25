@@ -1,7 +1,6 @@
 package ug.protocols;
 
 public class MainTest {
-    private static final int AGENTS_NUMBER = 6;
     private static final int SESSIONS = 4;
 
     public static void main(String [] args) {
@@ -16,7 +15,7 @@ public class MainTest {
         for(int i = 0; i < SESSIONS; i++) {
             System.out.println("\nVoting #" + i);
 
-            agents = AgentManager.generateRandomAgents(AGENTS_NUMBER);
+            agents = AgentManager.generateAgents(3,3,0);
             state = AgentManager.simulateVoting(agents);
 
             System.out.println("Voting ended with result: " + state);

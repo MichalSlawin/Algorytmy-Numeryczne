@@ -1,8 +1,7 @@
 package ug.protocols;
 
-// TODO: Nie wiem czy nie bedzie lepiej przeniesc tutaj wszystkie metody dla Agent[] i dzialac na obiektach tej klasy
-
 class Agents {
+
     private Agent[] agents;
 
     Agents(Agent[] agents) {
