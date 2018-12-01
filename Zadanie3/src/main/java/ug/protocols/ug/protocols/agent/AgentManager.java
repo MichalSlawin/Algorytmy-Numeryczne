@@ -69,16 +69,16 @@ public class AgentManager {
         int agent1Index;
         int agent2Index;
 
-        agents.printAgentsSummary();
+        //agents.printAgentsSummary();
         while(!agents.isVotingFinished()) {
             agent1Index = generator.nextInt(agents.getLength());
             agent2Index = generator.nextInt(agents.getLength());
 
-            System.out.print(agents.getAgent(agent1Index) + " - " + agents.getAgent(agent2Index) + " => ");
+            //System.out.print(agents.getAgent(agent1Index) + " - " + agents.getAgent(agent2Index) + " => ");
             setAgentsStates(agents.getAgent(agent1Index), agents.getAgent(agent2Index));
-            System.out.print(agents.getAgent(agent1Index) + " - " + agents.getAgent(agent2Index) + "\n");
+            //System.out.print(agents.getAgent(agent1Index) + " - " + agents.getAgent(agent2Index) + "\n");
         }
-        agents.printAgentsSummary();
+        //agents.printAgentsSummary();
 
         return agents.getAgent(0).getState();
     }

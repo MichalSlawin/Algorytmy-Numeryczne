@@ -5,29 +5,32 @@ import ug.protocols.ug.protocols.agent.AgentManager;
 import ug.protocols.ug.protocols.agent.Agents;
 
 public class MainTest {
-    private static final int SESSIONS = 4;
 
     public static void main(String [] args) {
-        System.out.println(simulateVotingTest());
+        System.out.println(simulateVotingTest(3,2,0,100));
     }
 
-    private static double simulateVotingTest() {
+    private static void simulateAllVotingsTest(int agentsNumber) {
+        //TODO: metoda ma uruchamiac simulateVotingTest dla wszystkich mozliwych kombinacji yes,no,un przy n = agentsNumber
+    }
+
+    private static double simulateVotingTest(int yes, int no, int un, int sessions) {
         int yesVotes = 0;
         Agents agents;
         Agent.State state;
 
-        for(int i = 0; i < SESSIONS; i++) {
-            System.out.println("\nVoting #" + i);
+        for(int i = 0; i < sessions; i++) {
+            //System.out.println("\nVoting #" + i);
 
-            agents = AgentManager.generateAgents(3,3,0);
+            agents = AgentManager.generateAgents(yes, no, un);
             state = AgentManager.simulateVoting(agents);
 
-            System.out.println("Voting ended with result: " + state);
+            //System.out.println("Voting ended with result: " + state);
             if(state == Agent.State.Y) yesVotes++;
         }
-        System.out.println("\n" + yesVotes + "/" + SESSIONS + " with result YES");
+        System.out.print("#Y=" + yes + " #N=" + no + " #U=" + un + " Py=");
 
-        return (double)yesVotes/(double)SESSIONS;
+        return (double)yesVotes/(double)sessions;
     }
 
 }
