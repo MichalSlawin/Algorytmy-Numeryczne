@@ -1,8 +1,8 @@
 package ug.protocols;
 
-import ug.protocols.ug.protocols.agent.Agent;
-import ug.protocols.ug.protocols.agent.AgentManager;
-import ug.protocols.ug.protocols.agent.Agents;
+import ug.protocols.agent.Agent;
+import ug.protocols.agent.AgentManager;
+import ug.protocols.agent.Agents;
 
 public class MainTest {
 
