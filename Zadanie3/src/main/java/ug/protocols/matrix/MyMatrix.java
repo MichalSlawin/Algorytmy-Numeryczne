@@ -1,4 +1,4 @@
-package ug.protocols.ug.protocols.matrix;
+package ug.protocols.matrix;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,50 +6,39 @@ import java.io.PrintWriter;
 import java.lang.reflect.Array;
 
 @SuppressWarnings("unchecked")
-public class MyMatrix<T extends Number> {
+public class MyMatrix {
 
-	private Class<T> c;
 	private int rows;
 	private int columns;
-	private T matrix[][];
+	private double matrix[][];
 	
 	//konstruktor do tworzenia macierzy zerowej rozmiaru rows x columns
-	public MyMatrix(Class<T> c, int rows, int columns) {
+	public MyMatrix(int rows, int columns) {
 		this.rows = rows;
 		this.columns = columns;
-        this.matrix = (T[][]) Array.newInstance(c, rows, columns);
-        this.c = c;
-        
-        T zero;
-       	if(c == Float.class)
-			zero = (T) Float.valueOf(0);
-		else if(c == Double.class)
-			zero = (T) Double.valueOf(0);
-		else throw new IllegalArgumentException("Wrong type, choose Float, Double or Fraction");
+        this.matrix = (double[][]) Array.newInstance(double.class, rows, columns);
 
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < columns; j++)
-				this.setCell(zero ,i ,j);
+				this.setCell(0.0 ,i ,j);
 		}
     }
 
 	// konstruktor do tworzenia macierzy z tablicy
-	public MyMatrix(Class<T> c, T[][] tab) {
+	public MyMatrix(double[][] tab) {
 		this.rows = tab.length;
         this.columns = tab[0].length;
-        this.matrix = (T[][]) Array.newInstance(c, rows, columns);
+        this.matrix = (double[][]) Array.newInstance(double.class, rows, columns);
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++)
             	this.matrix[i][j]=tab[i][j];
-        this.c = c;
 	}
 	
 	// konstruktor do tworzenia kopii obiektu
-	public MyMatrix(MyMatrix<T> myMatrix) {
-		this.c = myMatrix.getC();
+	public MyMatrix(MyMatrix myMatrix) {
 		this.rows = myMatrix.getRows();
 		this.columns = myMatrix.getColumns();
-		this.matrix = (T[][]) Array.newInstance(this.c, this.rows, this.columns);
+		this.matrix = (double[][]) Array.newInstance(double.class, this.rows, this.columns);
 		for(int i = 0; i < myMatrix.getRows(); i++)
 			for(int j = 0; j < myMatrix.getColumns(); j++)
 				this.matrix[i][j] = myMatrix.matrix[i][j];
@@ -71,29 +60,25 @@ public class MyMatrix<T extends Number> {
 		this.columns = columns;
 	}
 
-	public T[][] getMatrix() {
+	public double[][] getMatrix() {
 		return matrix;
 	}
 
-	public void setMatrix(T[][] matrix) {
+	public void setMatrix(double[][] matrix) {
 		this.matrix = matrix;
 	}
 	
-	public void setCell(T value, int i, int j) {
+	public void setCell(double value, int i, int j) {
 		this.matrix[i][j] = value;
 	}
 	
-	public T getCell(int row, int column) {
+	public double getCell(int row, int column) {
 		return matrix[row][column];
 	}
 
-	public Class<T> getC() { 
-		return c; 
-	}
-
 	// transpozycja macierzy
-	public MyMatrix<T> transpose() {  
-		MyMatrix<T> A = new MyMatrix<T>(this.c, columns, rows);
+	public MyMatrix transpose() {
+		MyMatrix A = new MyMatrix(columns, rows);
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < columns; j++)
 				A.matrix[j][i] = this.matrix[i][j];
@@ -102,14 +87,14 @@ public class MyMatrix<T extends Number> {
 	
 	// zamiana wierszy
 	public void swapRows(int i, int j) {
-		T[] tmp = matrix[i];
+		double[] tmp = matrix[i];
         matrix[i] = matrix[j];
         matrix[j] = tmp;
 	}
 	
 	// zamiana kolumn
 	public void swapColumns(int i, int j) {
-		T tmp;
+		double tmp;
 		for(int k = 0; k < rows; k++) {
 			tmp = matrix[k][i];
 			matrix[k][i] = matrix[k][j];
@@ -120,60 +105,60 @@ public class MyMatrix<T extends Number> {
 	// wartosc bezwzgledna wszystkich elementow w wektorze
 	public void absVector() {  
 		for (int i = 0; i < this.getRows(); i++)
-			this.setCell(MyMath.abs(this.getCell(i, 0)), i, 0);
+			this.setCell(Math.abs(this.getCell(i, 0)), i, 0);
 	}
 	
 	// liczy sredina ze wszystkich elementow macierzy
-	public T vectorAvg() {
-		T sum = zeroValue();
+	public double vectorAvg() {
+		double sum = 0.0;
 		for(int i = 0; i < this.rows; i++)
 			for(int j = 0; j< this.columns; j++)
-				sum = MyMath.add(sum, this.getCell(i, j));
-		return (T) MyMath.div(sum, valueOf(this.rows * this.columns));
+				sum = sum + this.getCell(i, j);
+		return sum / (this.rows * this.columns);
 	}
 	
 	// norma wektora
-	public T vectorNorm() {
-		T sum = zeroValue();
+	public double vectorNorm() {
+		double sum = 0.0;
 		for(int i = 0; i < this.rows; i++)
 			for(int j = 0; j< this.columns; j++)
-				sum = MyMath.add(sum, MyMath.mul(this.getCell(i, j), this.getCell(i, j)));
-		return (T) MyMath.sqrt(sum);
+				sum = sum + (this.getCell(i, j) * this.getCell(i, j));
+		return Math.sqrt(sum);
 		
 	}
 	
 	// dodawanie macierzy
-	public MyMatrix<T> plus(MyMatrix<T> B) {
-		MyMatrix<T> A = this;
+	public MyMatrix plus(MyMatrix B) {
+		MyMatrix A = this;
 		if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Wrong matrix dimensions");
-		MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
+		MyMatrix W = new MyMatrix(rows, columns);		 //macierz wynikowa
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < columns; j++)
-				W.setCell(MyMath.add(A.matrix[i][j], B.matrix[i][j]), i, j);
+				W.setCell(A.matrix[i][j] + B.matrix[i][j], i, j);
 		return W;
 	}
 	
 	// odejmowanie macierzy
-	public MyMatrix<T> minus(MyMatrix<T> B) {
-		MyMatrix<T> A = this;
+	public MyMatrix minus(MyMatrix B) {
+		MyMatrix A = this;
 		if (B.rows != A.rows || B.columns != A.columns) throw new RuntimeException("Wrong matrix dimensions");
-		MyMatrix<T> W = new MyMatrix<T>(this.c, rows, columns);		 //macierz wynikowa
+		MyMatrix W = new MyMatrix(rows, columns);		 //macierz wynikowa
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < columns; j++)
-				W.setCell(MyMath.sub(A.matrix[i][j], B.matrix[i][j]), i, j);
+				W.setCell(A.matrix[i][j] - B.matrix[i][j], i, j);
 		return W;
 	}
 
 	// mnozenie macierzy
-	public MyMatrix<T> times(MyMatrix<T> B){
-		MyMatrix<T> A = this;
+	public MyMatrix times(MyMatrix B){
+		MyMatrix A = this;
 		if (A.columns != B.rows) throw new RuntimeException("Wrong matrix dimensions");
-		MyMatrix<T> W = new MyMatrix<T>(this.c, A.rows, B.columns);
+		MyMatrix W = new MyMatrix(A.rows, B.columns);
 		
 		for (int i = 0; i < W.rows; i++)
 			for (int j = 0; j < W.columns; j++)
 				for (int k = 0; k < A.columns; k++)
-					W.setCell(MyMath.add(W.matrix[i][j], MyMath.mul(A.matrix[i][k], B.matrix[k][j])),i, j);
+					W.setCell(W.matrix[i][j] + (A.matrix[i][k] * B.matrix[k][j]),i, j);
 		return W;
 	}
 	
@@ -207,53 +192,33 @@ public class MyMatrix<T extends Number> {
 		}
 	}
 	
-	//zwraca wartosc 0 konkretnego typu
-	public T zeroValue() {
-		T zero = null;
-    	if(c == Float.class)
-    		zero = (T) Float.valueOf(0);
-    	else if(c == Double.class)
-    		zero = (T) Double.valueOf(0);
-    	return zero;
-	}
-	
-	//konwertuje int na typ uzywany przez obiekt
-	public T valueOf(int value) {
-		T sum = null;
-    	if(c == Float.class)
-    		sum = (T) Float.valueOf(value);
-    	else if(c == Double.class)
-    		sum = (T) Double.valueOf(value);
-    	return sum;
-	}
-	
 	// zapisuje wyniki eliminacji do result
-	private void gaussSetResult(MyMatrix<T> vector, MyMatrix<T> result, MyMatrix<T> matrix) {
+	private void gaussSetResult(MyMatrix vector, MyMatrix result, MyMatrix matrix) {
 		for (int i = vector.rows - 1; i >= 0; i--) {
-			T sum = zeroValue();
+			double sum = 0.0;
 
 			for (int j = i + 1; j < vector.rows; j++)
-				sum = MyMath.add(sum, MyMath.mul(matrix.matrix[i][j], result.matrix[j][0]));
+				sum = (sum + (matrix.matrix[i][j] * result.matrix[j][0]));
 			
-			result.matrix[i][0] = MyMath.div(MyMath.sub(vector.matrix[i][0], sum), matrix.matrix[i][i]);
+			result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);
 		}
 	}
 
 	
-	private void buildSteppedMatrix(MyMatrix<T> matrix, MyMatrix<T> vector, int i) {
+	private void buildSteppedMatrix(MyMatrix matrix, MyMatrix vector, int i) {
 		for (int j = i + 1; j < vector.rows; j++) {
-			T param = MyMath.div(matrix.matrix[j][i], matrix.matrix[i][i]);
-			vector.matrix[j][0] = MyMath.sub(vector.matrix[j][0], MyMath.mul(param, vector.matrix[i][0]));
+			double param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
+			vector.matrix[j][0] = (vector.matrix[j][0] - (param * vector.matrix[i][0]));
 
 			for (int k = i; k < vector.rows; k++)
-				matrix.matrix[j][k] = MyMath.sub(matrix.matrix[j][k], MyMath.mul(param, matrix.matrix[i][k]));
+				matrix.matrix[j][k] = (matrix.matrix[j][k] - (param * matrix.matrix[i][k]));
 		}
 	}
 	
 	// eliminacja gaussa bez wyboru elementu podstawowego
-	public MyMatrix<T> gaussG(MyMatrix<T> vector) {
-		MyMatrix<T> matrix = new MyMatrix<T>(this);
-        MyMatrix<T> result = new MyMatrix<T>(c, vector.rows, 1);
+	public MyMatrix gaussG(MyMatrix vector) {
+		MyMatrix matrix = new MyMatrix(this);
+        MyMatrix result = new MyMatrix(vector.rows, 1);
 
         for (int i = 0; i < vector.rows; i++)
         	buildSteppedMatrix(matrix, vector, i);
@@ -264,14 +229,14 @@ public class MyMatrix<T extends Number> {
     }
 	
 	// eliminacja gaussa z czesciowym wyborem elementu podstawowego
-	public MyMatrix<T> gaussPG(MyMatrix<T> vector) {
-        MyMatrix<T> matrix = new MyMatrix<T>(this);
-        MyMatrix<T> result = new MyMatrix<T>(c, vector.rows, 1);
+	public MyMatrix gaussPG(MyMatrix vector) {
+        MyMatrix matrix = new MyMatrix(this);
+        MyMatrix result = new MyMatrix(vector.rows, 1);
 
         for (int i = 0; i < vector.rows; i++) {
         	int max = i;
         	for (int j = i + 1; j < vector.rows; j++)
-        		if (MyMath.compare(MyMath.abs(matrix.matrix[j][i]), MyMath.abs(matrix.matrix[max][i])) == 1)
+        		if (Math.abs(matrix.matrix[j][i]) == Math.abs(matrix.matrix[max][i]))
         			max = j;
         	
         	matrix.swapRows(i, max);
@@ -286,10 +251,10 @@ public class MyMatrix<T extends Number> {
     }
 
 	// eliminacja gaussa z pelnym wyborem elemenetu podstawowego
-    public MyMatrix<T> gaussFG( MyMatrix<T> vector) {
-        MyMatrix<T> matrix = new MyMatrix<T>(this);
-        MyMatrix<T> result = new MyMatrix<T>(c, vector.rows, 1);
-        MyMatrix<T> originalResult = new MyMatrix<T>(c, vector.rows, 1);
+    public MyMatrix gaussFG( MyMatrix vector) {
+        MyMatrix matrix = new MyMatrix(this);
+        MyMatrix result = new MyMatrix(vector.rows, 1);
+        MyMatrix originalResult = new MyMatrix(vector.rows, 1);
 
         int[] originalPosition;
         originalPosition= new int[vector.rows];
@@ -304,7 +269,7 @@ public class MyMatrix<T extends Number> {
 
         	for (int j = i; j < matrix.rows; j++) {
         		for (int k = i; k < matrix.columns; k++) {
-        			if (MyMath.compare(MyMath.abs(matrix.matrix[j][k]), MyMath.abs(matrix.matrix[maxRow][maxColumn])) == 1) {
+        			if (Math.abs(matrix.matrix[j][k]) == Math.abs(matrix.matrix[maxRow][maxColumn])) {
         				maxRow = j;
         				maxColumn = k;
         			}

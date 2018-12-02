@@ -4,25 +4,30 @@ import ug.protocols.agent.Agent;
 import ug.protocols.agent.AgentManager;
 import ug.protocols.agent.Agents;
 
+import static ug.protocols.MyMatrixTest.createMatrixTest;
+
 public class MainTest {
 
-	private final static int[] r = new int[4];	//r[1] = Y ,r[2] = N , r[3] = U
+	private final static int[] R = new int[4];	//R[1] = Y ,R[2] = N , R[3] = U
 	
     public static void main(String [] args) {
        // System.out.println(simulateVotingTest(3,2,0,100));
-        simulateAllVotingsTest(0,3);
+        //System.out.println(createMatrixTest());
+
+        simulateAllVotingsTest(0,3, 1000);
+
     }
     
-    private static void simulateAllVotingsTest(int x, int agentsNumber) {
+    private static void simulateAllVotingsTest(int x, int agentsNumber, int sessions) {
 
 		if(3 == x) {
-			if(r[1]+r[2]+r[3]==agentsNumber) {
-				System.out.println(simulateVotingTest(r[1],r[2],r[3],100));
+			if(R[1]+ R[2]+ R[3]==agentsNumber) {
+				System.out.println(simulateVotingTest(R[1], R[2], R[3],sessions));
 			}
 		} else {
 			for(int i = 0; i <= agentsNumber; i++) {
-				r[x + 1] = i;
-				simulateAllVotingsTest(x + 1,agentsNumber);
+				R[x + 1] = i;
+				simulateAllVotingsTest(x + 1,agentsNumber, sessions);
 			}
 		}
 	}
