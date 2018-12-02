@@ -34,30 +34,14 @@ public class AgentManager {
     }
 
     public static Agents generateAgents(int yes, int no, int un) {
-        Random generator = new Random();
-        int howMany = yes + no + un;
-        int randomInt;
 
+        int howMany = yes + no + un;
         Agent[] agentsArray = new Agent[howMany];
 
         for(int i = 0; i < howMany; i++) {
-            randomInt = generator.nextInt(3);
-
-            if(randomInt == 0 && yes > 0) {
-                agentsArray[i] = new Agent(Agent.State.Y);
-                yes--;
-            }
-            else if(randomInt == 1 && no > 0) {
-                agentsArray[i] = new Agent(Agent.State.N);
-                no--;
-            }
-            else if(randomInt == 2 && un > 0) {
-                agentsArray[i] = new Agent(Agent.State.U);
-                un--;
-            }
-            else {
-                i--;
-            }
+            if(i < yes) agentsArray[i] = new Agent(Agent.State.Y);
+            else if(i < yes+no) agentsArray[i] = new Agent(Agent.State.N);
+            else agentsArray[i] = new Agent(Agent.State.U);
         }
 
         return new Agents(agentsArray);
