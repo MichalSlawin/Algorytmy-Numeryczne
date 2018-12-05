@@ -14,7 +14,8 @@ public class MainTest {
        // System.out.println(simulateVotingTest(3,2,0,100));
         //System.out.println(createMatrixTest());
 
-        simulateAllVotingsTest(0,3, 1000);
+        //simulateAllVotingsTest(0,3, 1000);
+    	MyMatrixTest.gaussSeidelTest();
 
     }
     

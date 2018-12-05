@@ -16,7 +16,7 @@ public class MyMatrix {
 	public MyMatrix(int rows, int columns) {
 		this.rows = rows;
 		this.columns = columns;
-        this.matrix = (double[][]) Array.newInstance(double.class, rows, columns);
+        this.matrix = new double[rows][columns];
 
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < columns; j++)
@@ -38,10 +38,8 @@ public class MyMatrix {
 	public MyMatrix(MyMatrix myMatrix) {
 		this.rows = myMatrix.getRows();
 		this.columns = myMatrix.getColumns();
-		this.matrix = (double[][]) Array.newInstance(double.class, this.rows, this.columns);
-		for(int i = 0; i < myMatrix.getRows(); i++)
-			for(int j = 0; j < myMatrix.getColumns(); j++)
-				this.matrix[i][j] = myMatrix.matrix[i][j];
+		this.matrix = new double[rows][columns];
+		this.matrix = myMatrix.getMatrix().clone();
 	}
 
 	public int getRows() {
@@ -158,10 +156,9 @@ public class MyMatrix {
 		for (int i = 0; i < W.rows; i++)
 			for (int j = 0; j < W.columns; j++)
 				for (int k = 0; k < A.columns; k++)
-					W.setCell(W.matrix[i][j] + (A.matrix[i][k] * B.matrix[k][j]),i, j);
+					W.setCell(W.matrix[i][j] + (A.matrix[i][k] * B.matrix[k][j]), i, j);
 		return W;
 	}
-	
 	
 	@Override
 	public String toString() {
@@ -203,8 +200,8 @@ public class MyMatrix {
 			result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);
 		}
 	}
-
 	
+	// budowa macierzy schodkowej
 	private void buildSteppedMatrix(MyMatrix matrix, MyMatrix vector, int i) {
 		for (int j = i + 1; j < vector.rows; j++) {
 			double param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
@@ -293,5 +290,28 @@ public class MyMatrix {
         	originalResult.matrix[originalPosition[j]][0] = result.matrix[j][0];
 
         return originalResult;
+    }
+    
+    // metoda Gaussa-Seidela
+    public MyMatrix gaussSeidel(MyMatrix vector, int iterationsNo) {
+    	int n = this.rows;
+    	MyMatrix matrix = new MyMatrix(this);
+    	MyMatrix result = new MyMatrix(n, 1);
+    	
+    	double x[] = new double[n];
+
+    	for(int iter = 0; iter < iterationsNo; iter++){
+    		for(int i=0; i<n; i++){
+    			result.setCell((vector.getCell(i, 0) / matrix.getCell(i, i)), i, 0);
+    			for(int j = 0; j < n; j++){
+    				if(j == i)
+    					continue;
+    				result.setCell(result.getCell(i, 0) - ((matrix.getCell(i, j) / matrix.getCell(i, i)) * x[j]), i, 0);
+    				x[i] = result.getCell(i, 0);
+    			}
+    			//System.out.println("x" + (i+1) + " = " + result.getCell(i,  0));
+    		}
+    	}
+    	return result;
     }
 }
