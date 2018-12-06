@@ -1,11 +1,10 @@
 package ug.protocols.equation;
 
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Equations {
-    private int[] R = new int[4];	//R[1] = Y ,R[2] = N , R[3] = U
+    private int[] statesTable = new int[4];	//statesTable[1] = Y ,statesTable[2] = N , statesTable[3] = U
     private Map<IntPair, Double> equations = new HashMap<>();
     private int agentsNumber;
 
@@ -20,12 +19,12 @@ public class Equations {
     private void generateEmptyEquationsBody(int x) {
 
         if(3 == x) {
-            if(R[1]+ R[2]+ R[3]==agentsNumber) {
-                equations.put(new IntPair(R[1], R[2]), 0.0);
+            if(statesTable[1]+ statesTable[2]+ statesTable[3]==agentsNumber) {
+                equations.put(new IntPair(statesTable[1], statesTable[2]), 0.0);
             }
         } else {
             for(int i = 0; i <= agentsNumber; i++) {
-                R[x + 1] = i;
+                statesTable[x + 1] = i;
                 generateEmptyEquationsBody(x + 1);
             }
         }
