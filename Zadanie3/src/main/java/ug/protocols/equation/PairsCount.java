@@ -2,69 +2,54 @@ package ug.protocols.equation;
 import ug.protocols.agent.*;
 
 public class PairsCount {
-	private static int intoYY = 0;
-	private static int intoNN = 0;
-	private static int intoUU = 0;
-	/*private static int yn = 0;
-	private static int yu = 0;
-	private static int nu = 0;*/
+	private static int intoY = 0;
+	private static int intoN = 0;
+	private static int intoU = 0;
+	private static double intoYchance = 0;
+	private static double intoNchance = 0;
+	private static double intoUchance = 0;
 	private static int all = 0;
 	
-	public static void countPairs(int total, int y, int n) {
-		intoYY = 0;
-		intoNN = 0;
-		intoUU = 0;
-		/*yn = 0;
-		yu = 0;
-		nu = 0;*/
-		all = 0;
+	public PairsCount(int total, int y, int n) {
 		Agents agents = AgentManager.generateAgents(y, n, total - y - n);
+		intoY = 0;
+		intoN = 0;
+		intoU = 0;
+		all = 0;
 		
 		for(int i=0; i < total - 1; i++)
 			for(int j = i + 1; j < total; j++) {
-				if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.Y)
-					intoYY++;
-				else if(agents.getTab()[i].getState() == Agent.State.N && agents.getTab()[j].getState() == Agent.State.N)
-					intoNN++;
-				else if(agents.getTab()[i].getState() == Agent.State.U && agents.getTab()[j].getState() == Agent.State.U)
-					intoUU++;
-				else if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.N)
-					intoUU++;
+				if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.N)
+					intoU++;
 				else if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.U)
-					intoYY++;
+					intoY++;
 				else if(agents.getTab()[i].getState() == Agent.State.N && agents.getTab()[j].getState() == Agent.State.U)
-					intoNN++;
+					intoN++;
+				else if(agents.getTab()[i].getState() == Agent.State.U && agents.getTab()[j].getState() == Agent.State.U)
+					intoU++;
+				else if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.Y)
+					intoY++;
+				else if(agents.getTab()[i].getState() == Agent.State.N && agents.getTab()[j].getState() == Agent.State.N)
+					intoN++;
 				all++;
 			}
+		intoYchance = (double) intoY / all;
+		intoNchance = (double) intoN / all;
+		intoUchance = (double) intoU / all;
 
-		System.out.println("YY: " + intoYY + "/" + all + " NN: " + intoNN + "/" + all + " UU: " + intoUU + "/" + all);
+		System.out.println("Y: " + intoYchance + " N: " + intoNchance + " U: " + intoUchance);
 	}
 
-	/*public static int getYY() {
-		return yy;
+	public static double getIntoYchance() {
+		return intoYchance;
 	}
 
-	public static int getNN() {
-		return nn;
+	public static double getIntoNchance() {
+		return intoNchance;
 	}
 
-	public static int getUU() {
-		return uu;
-	}
-
-	public static int getYN() {
-		return yn;
-	}
-
-	public static int getYU() {
-		return yu;
-	}
-
-	public static int getNU() {
-		return nu;
+	public static double getIntoUchance() {
+		return intoUchance;
 	}
 	
-	public static int getAll() {
-		return all;
-	}*/
 }
