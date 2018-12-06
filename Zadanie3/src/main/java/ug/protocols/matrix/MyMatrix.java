@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
 
-@SuppressWarnings("unchecked")
 public class MyMatrix {
 
 	private int rows;
@@ -28,10 +27,7 @@ public class MyMatrix {
 	public MyMatrix(double[][] tab) {
 		this.rows = tab.length;
         this.columns = tab[0].length;
-        this.matrix = (double[][]) Array.newInstance(double.class, rows, columns);
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; j < columns; j++)
-            	this.matrix[i][j]=tab[i][j];
+        this.matrix = tab.clone();
 	}
 	
 	// konstruktor do tworzenia kopii obiektu

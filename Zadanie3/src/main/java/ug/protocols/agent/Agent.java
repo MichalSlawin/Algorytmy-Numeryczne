@@ -15,7 +15,7 @@ public class Agent {
        idCounter++;
    }
 
-    State getState() {
+    public State getState() {
         return state;
     }
 
