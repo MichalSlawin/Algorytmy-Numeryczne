@@ -3,20 +3,32 @@ package ug.protocols;
 import ug.protocols.agent.Agent;
 import ug.protocols.agent.AgentManager;
 import ug.protocols.agent.Agents;
-
-import static ug.protocols.MyMatrixTest.createMatrixTest;
+import ug.protocols.equation.Equations;
 
 public class MainTest {
 
-	private final static int[] R = new int[4];	//R[1] = Y ,R[2] = N , R[3] = U
+	private static int[] R = new int[4];	//R[1] = Y ,R[2] = N , R[3] = U
 	
     public static void main(String [] args) {
        // System.out.println(simulateVotingTest(3,2,0,100));
         //System.out.println(createMatrixTest());
 
         //simulateAllVotingsTest(0,3, 1000);
-    	MyMatrixTest.gaussSeidelTest();
+    	//MyMatrixTest.gaussSeidelTest();
 
+        generateEmptyEquationsTest();
+
+    }
+
+    private static void generateEmptyEquationsTest() {
+        Equations equations = new Equations(3);
+        Equations equations2 = new Equations(4);
+
+        equations.generateEmptyEquations();
+        System.out.println(equations);
+
+        equations2.generateEmptyEquations();
+        System.out.println(equations2);
     }
     
     private static void simulateAllVotingsTest(int x, int agentsNumber, int sessions) {
