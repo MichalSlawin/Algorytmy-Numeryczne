@@ -2,45 +2,45 @@ package ug.protocols.equation;
 import ug.protocols.agent.*;
 
 public class PairsCount {
-	private static int yy = 0;
-	private static int nn = 0;
-	private static int uu = 0;
-	private static int yn = 0;
+	private static int intoYY = 0;
+	private static int intoNN = 0;
+	private static int intoUU = 0;
+	/*private static int yn = 0;
 	private static int yu = 0;
-	private static int nu = 0;
+	private static int nu = 0;*/
 	private static int all = 0;
 	
 	public static void countPairs(int total, int y, int n) {
-		yy = 0;
-		nn = 0;
-		uu = 0;
-		yn = 0;
+		intoYY = 0;
+		intoNN = 0;
+		intoUU = 0;
+		/*yn = 0;
 		yu = 0;
-		nu = 0;
+		nu = 0;*/
 		all = 0;
 		Agents agents = AgentManager.generateAgents(y, n, total - y - n);
 		
 		for(int i=0; i < total - 1; i++)
 			for(int j = i + 1; j < total; j++) {
 				if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.Y)
-					yy++;
+					intoYY++;
 				else if(agents.getTab()[i].getState() == Agent.State.N && agents.getTab()[j].getState() == Agent.State.N)
-					nn++;
+					intoNN++;
 				else if(agents.getTab()[i].getState() == Agent.State.U && agents.getTab()[j].getState() == Agent.State.U)
-					uu++;
+					intoUU++;
 				else if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.N)
-					yn++;
+					intoUU++;
 				else if(agents.getTab()[i].getState() == Agent.State.Y && agents.getTab()[j].getState() == Agent.State.U)
-					yu++;
+					intoYY++;
 				else if(agents.getTab()[i].getState() == Agent.State.N && agents.getTab()[j].getState() == Agent.State.U)
-					nu++;
+					intoNN++;
 				all++;
 			}
 
-		System.out.println("YY: " + yy + " NN: " + nn + " UU: " + uu + " YN: " + yn + " YU: " + yu + " NU: " + nu + " all: " + all);
+		System.out.println("YY: " + intoYY + "/" + all + " NN: " + intoNN + "/" + all + " UU: " + intoUU + "/" + all);
 	}
 
-	public static int getYY() {
+	/*public static int getYY() {
 		return yy;
 	}
 
@@ -66,5 +66,5 @@ public class PairsCount {
 	
 	public static int getAll() {
 		return all;
-	}
+	}*/
 }

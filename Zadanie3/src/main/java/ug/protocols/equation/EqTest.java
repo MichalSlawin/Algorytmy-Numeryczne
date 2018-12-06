@@ -5,6 +5,7 @@ public class EqTest {
 	MyMatrix m;
 	int size = 0;
 	int n;
+	
 	public EqTest(int total){
 		this.n= total;
 		for(int i = 1; i <= total+1; i++)
