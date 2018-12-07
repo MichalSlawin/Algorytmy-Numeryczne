@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class MyMatrix {
 
@@ -68,6 +69,12 @@ public class MyMatrix {
 	
 	public double getCell(int row, int column) {
 		return matrix[row][column];
+	}
+	
+	public void fillMatrix(double x) {
+		for(int i = 0; i < rows; i++)
+			for(int j = 0; j < columns; j++)
+				matrix[i][j] = x;
 	}
 
 	// transpozycja macierzy
@@ -193,14 +200,17 @@ public class MyMatrix {
 			for (int j = i + 1; j < vector.rows; j++)
 				sum = (sum + (matrix.matrix[i][j] * result.matrix[j][0]));
 			
-			result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);
+			//if(matrix.matrix[i][i] != 0)
+				result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0
 		}
 	}
 	
 	// budowa macierzy schodkowej
 	private void buildSteppedMatrix(MyMatrix matrix, MyMatrix vector, int i) {
+		double param = 0;
 		for (int j = i + 1; j < vector.rows; j++) {
-			double param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
+			//if(matrix.matrix[i][i] != 0)
+				param = (matrix.matrix[j][i] / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0 - po odkomentowaniu if'ow w wynikach 0.0
 			vector.matrix[j][0] = (vector.matrix[j][0] - (param * vector.matrix[i][0]));
 
 			for (int k = i; k < vector.rows; k++)

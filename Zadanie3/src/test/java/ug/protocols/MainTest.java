@@ -2,6 +2,7 @@ package ug.protocols;
 
 import ug.protocols.agent.*;
 import ug.protocols.equation.*;
+import ug.protocols.matrix.MyMatrix;
 
 public class MainTest {
 
@@ -11,13 +12,18 @@ public class MainTest {
        // System.out.println(simulateVotingTest(3,2,0,100));
         //System.out.println(createMatrixTest());
 
-        simulateAllVotingsTest(-1,3, 1000);
+        //simulateAllVotingsTest(-1,3, 1000);
     	//MyMatrixTest.gaussSeidelTest();
 
         //generateEmptyEquationsTest();
-//    	EqTest eq = new EqTest(3);
-//
-//    	eq.buildMatrix();
+    	EqTest eq = new EqTest(3);
+
+    	eq.buildMatrix();
+    	MyMatrix vector = new MyMatrix(10, 1);
+    	vector.fillMatrix(0);
+    	vector.setCell(-1, 9, 0);
+    	
+    	System.out.println(eq.getM().gaussPG(vector));
 
     }
 

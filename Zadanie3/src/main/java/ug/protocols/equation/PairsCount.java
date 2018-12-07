@@ -37,7 +37,7 @@ public class PairsCount {
 		intoNchance = (double) intoN / all;
 		intoUchance = (double) intoU / all;
 
-		System.out.println("Y: " + intoYchance + " N: " + intoNchance + " U: " + intoUchance);
+		//System.out.println("Y: " + intoYchance + " N: " + intoNchance + " U: " + intoUchance);
 	}
 
 	public static double getIntoYchance() {
