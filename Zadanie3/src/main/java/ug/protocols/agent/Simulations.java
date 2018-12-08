@@ -1,7 +1,5 @@
 package ug.protocols.agent;
 
-import java.awt.Point;
-
 public class Simulations {
 
     public static String simulateAllVotings(int agentsCount, int sessions) {

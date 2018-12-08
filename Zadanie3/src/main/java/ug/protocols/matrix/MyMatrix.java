@@ -240,6 +240,13 @@ public class MyMatrix {
 		}
 	}
 	
+	public void removeMinusZeros(MyMatrix m) {
+		for(int i = 0; i < m.getRows(); i++)
+			for(int j = 0; j < m.getColumns(); j++)
+				if(m.getCell(i, j) == 0.0)
+					m.setCell(Math.abs(m.getCell(i, j)), i, j);
+	}
+	
 	// zapisuje wyniki eliminacji do result
 	private void gaussSetResult(MyMatrix vector, MyMatrix result, MyMatrix matrix) {
 		for (int i = vector.rows - 1; i >= 0; i--) {
@@ -297,6 +304,7 @@ public class MyMatrix {
         }
 
         gaussSetResult(vector, result, matrix);
+        removeMinusZeros(result);
 
         return result;
     }
@@ -347,7 +355,7 @@ public class MyMatrix {
     }
     
     // metoda Gaussa-Seidela
-    public MyMatrix gaussSeidel(MyMatrix vector, int iterationsNo) {
+    /*public MyMatrix gaussSeidel(MyMatrix vector, int iterationsNo) {
     	int n = this.rows;
     	MyMatrix matrix = new MyMatrix(this);
     	MyMatrix result = new MyMatrix(n, 1);
@@ -367,9 +375,9 @@ public class MyMatrix {
     		}
     	}
     	return result;
-    }
+    }*/
 
-	public MyMatrix jacobi(MyMatrix vector, double tolerance) {
+	/*public MyMatrix jacobi(MyMatrix vector, double tolerance) {
 		MyMatrix matrix = new MyMatrix(this);
 		int rows = vector.getRows();
 		MyMatrix result_old;
@@ -389,5 +397,109 @@ public class MyMatrix {
 			error = (result.minus(result_old)).vectorNorm();
 		}
 		return result;
-	}
+	}*/
+    
+    public MyMatrix gaussSeidel(MyMatrix vector, int iterations) {
+
+    	int n = this.rows;
+    	
+        double L[][];
+        double D[][];
+        double U[][];
+        MyMatrix result = new MyMatrix(n, 1);
+
+        int i, j, k;
+
+        L = new double[n][n];
+        D = new double[n][n];
+        U = new double[n][n];
+
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++) {
+                if (i < j) {
+                    U[i][j] = this.matrix[i][j];
+                } else if (i > j) {
+                    L[i][j] = this.matrix[i][j];
+                } else {
+                    D[i][j] = this.matrix[i][j];
+                }
+            }
+
+
+        for (i = 0; i < n; i++)
+            D[i][i] = 1 / D[i][i];
+
+        for (i = 0; i < n; i++)
+            vector.matrix[i][0] *= D[i][i];
+
+
+        for (i = 0; i < n; i++)
+            for (j = 0; j < i; j++)
+                L[i][j] *= D[i][i];
+
+
+        for (i = 0; i < n; i++)
+            for (j = i + 1; j < n; j++)
+                U[i][j] *= D[i][i];
+
+
+        for (i = 0; i < n; i++)
+            result.matrix[i][0] = 0;
+
+        for (k = 0; k < iterations; k++)
+            for (i = 0; i < n; i++) {
+                result.matrix[i][0] = vector.matrix[i][0];
+                for (j = 0; j < i; j++)
+                    result.matrix[i][0] -= L[i][j] * result.matrix[j][0];
+                for (j = i + 1; j < n; j++)
+                    result.matrix[i][0] -= U[i][j] * result.matrix[j][0];
+            }
+
+//        System.out.println("Gauss-Seidel results: ");
+//        for (i = 0; i < n; i++)
+//            System.out.println("x[" + (i + 1) + "] = " + x[i]);
+
+        return result;
+    }
+    
+    public MyMatrix jacobi(MyMatrix vector, int iterations) {
+
+    	int n = this.getRows();
+        double M[][];
+        double N[];
+        MyMatrix x1 = new MyMatrix(n, 1);
+        MyMatrix x2 = new MyMatrix(n, 1);
+
+        int i, j, k;
+
+        M = new double[n][n];
+        N = new double[n];
+
+        for (i = 0; i < n; i++)
+            N[i] = 1 / this.matrix[i][i];
+
+
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++)
+                if (i == j)
+                    M[i][j] = 0;
+                else
+                    M[i][j] = -(this.matrix[i][j] * N[i]);
+
+        for (i = 0; i < n; i++)
+            x1.matrix[i][0] = 0;
+
+
+        for (k = 0; k < iterations; k++) {
+            for (i = 0; i < n; i++) {
+                x2.matrix[i][0] = N[i] * vector.matrix[i][0];
+                for (j = 0; j < n; j++)
+                    x2.matrix[i][0] += M[i][j] * x1.matrix[j][0];
+            }
+            for (i = 0; i < n; i++)
+                x1.matrix[i][0] = x2.matrix[i][0];
+        }
+
+        return x1;
+    }
 }
