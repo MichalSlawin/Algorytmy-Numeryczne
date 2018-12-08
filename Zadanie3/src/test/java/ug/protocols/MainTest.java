@@ -22,8 +22,12 @@ public class MainTest {
     	MyMatrix vector = new MyMatrix(10, 1);
     	vector.fillMatrix(0);
     	vector.setCell(-1, 9, 0);
-    	
-    	System.out.println(eq.getM().gaussPG(vector));
+
+    	System.out.println(MyMatrix.matrixDeterminant(eq.getM().getMatrix()));
+
+    	//System.out.println(eq.getM().createExpandedMatrix(vector));
+
+    	//System.out.println(eq.getM().gaussPG(vector));
 
     }
 
