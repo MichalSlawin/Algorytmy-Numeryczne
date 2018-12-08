@@ -26,7 +26,7 @@ public class EqTest {
 	public void buildMatrix() {
 		int yes = 0, no = 0;
 		for(int i = 0; i < size; i++) {
-			System.out.println("P"+yes+no);
+			//System.out.println("P"+yes+no);
 			PairsCount p = new PairsCount(n, yes, no);
 			for(int j = 0; j < size; j++) {
 				if(yes == 0) {
@@ -40,7 +40,7 @@ public class EqTest {
 					m.setCell(p.getIntoYchance(), i, positionMap.get(new Point(yes+1, no)));
 					m.setCell(p.getIntoUchance(), i, positionMap.get(new Point(yes, no)));
 				}else {
-					if(yes != n && no != n)
+					if(yes != n && no != n && yes != no)
 						m.setCell(p.getIntoUchance(), i, positionMap.get(new Point(yes-1, no-1)));
 					if(yes>no)
 						m.setCell(p.getIntoYchance(), i, positionMap.get(new Point(yes, no)));
@@ -64,8 +64,8 @@ public class EqTest {
 				} else no++;
 			}
 		}
-		System.out.println(Arrays.asList(positionMap));
-		System.out.println(m);
+		//System.out.println(Arrays.asList(positionMap));
+		//System.out.println(m);
 	}
 	
 	public void buildMap() {
@@ -80,4 +80,9 @@ public class EqTest {
 			}
 		}
 	}
+
+	public MyMatrix getM() {
+		return m;
+	}
+	
 }
