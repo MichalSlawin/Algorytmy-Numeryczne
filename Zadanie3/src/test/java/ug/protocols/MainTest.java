@@ -9,38 +9,20 @@ public class MainTest {
 	private static int[] statesTable = new int[3];	//statesTable[0] = Y ,statesTable[1] = N , statesTable[2] = U
 	
     public static void main(String [] args) {
-       // System.out.println(simulateVotingTest(3,2,0,100));
-        //System.out.println(createMatrixTest());
 
-        //simulateAllVotingsTest(-1,3, 1000);
-    	//MyMatrixTest.gaussSeidelTest();
+    	System.out.println("Z MonteCarlo:\n["+
+    	+simulateVotingTest(0, 0, 3, 100000)+" "+simulateVotingTest(0, 1, 2, 100000)+" "+simulateVotingTest(0, 2, 1, 100000)+" "+
+    	+simulateVotingTest(0, 3, 0, 100000)+" "+simulateVotingTest(1, 0, 2, 100000)+" "+simulateVotingTest(1, 1, 1, 100000)+" "+
+    	+simulateVotingTest(1, 2, 0, 100000)+" "+simulateVotingTest(2, 0, 1, 100000)+" "+simulateVotingTest(2, 1, 0, 100000)+" "+
+    	+simulateVotingTest(3, 0, 0, 100000)+"]");
 
-        //generateEmptyEquationsTest();
-    	EqTest eq = new EqTest(3);
+    	Equations e = new Equations(3);
+    	
+    	System.out.println(e.getMatrix().gaussPG(e.getVector()).transpose());
 
-    	eq.buildMatrix();
-    	MyMatrix vector = new MyMatrix(10, 1);
-    	vector.fillMatrix(0);
-    	vector.setCell(-1, 9, 0);
-
-    	System.out.println(MyMatrix.matrixDeterminant(eq.getM().getMatrix()));
-
-    	//System.out.println(eq.getM().createExpandedMatrix(vector));
-
-    	//System.out.println(eq.getM().gaussPG(vector));
-
+    	
     }
 
-    private static void generateEmptyEquationsTest() {
-        Equations equations = new Equations(3);
-        Equations equations2 = new Equations(4);
-
-        equations.generateEmptyEquations();
-        System.out.println(equations);
-
-        equations2.generateEmptyEquations();
-        System.out.println(equations2);
-    }
     
     private static void simulateAllVotingsTest(int x, int agentsNumber, int sessions) {
 
@@ -70,7 +52,7 @@ public class MainTest {
             //System.out.println("Voting ended with result: " + state);
             if(state == Agent.State.Y) yesVotes++;
         }
-        System.out.print("#Y=" + yes + " #N=" + no + " #U=" + un + " Py=");
+        //System.out.print("#Y=" + yes + " #N=" + no + " #U=" + un + " Py=");
 
         return (double)yesVotes/(double)sessions;
     }

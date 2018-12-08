@@ -1,44 +1,83 @@
 package ug.protocols.equation;
-
+import java.awt.Point;
 import java.util.HashMap;
-import java.util.Map;
+
+import ug.protocols.matrix.MyMatrix;
 
 public class Equations {
-    private int[] statesTable = new int[4];	//statesTable[1] = Y ,statesTable[2] = N , statesTable[3] = U
-    private Map<IntPair, Double> equations = new HashMap<>();
-    private int agentsNumber;
+	MyMatrix matrix;
+	MyMatrix vector;
+	HashMap<Point, Integer> positionMap;
+	private int size;
+	private int N;
+	
+	public Equations(int total) {
+		this.N = total;
+		size = 0;
+		positionMap = new HashMap<Point, Integer>();
+		
+		for(int i = 1; i <= total+1; i++)
+			size += i;
+		
+		matrix = new MyMatrix(size, size);
+		vector = new MyMatrix(size, 1);
+		buildMap();
+		buildMatrix();
+	}
+	
+	private void buildMatrix() {
+		double pairsCount = 0.0;
+        pairsCount = (N * (N - 1)) / 2;
+        int yCount = 0, nCount = 0, uCount;
+        for (int i = 0; i < size; i++) {
+            uCount = N - yCount - nCount;
 
-    public Equations(int agentsNumber) {
-        this.agentsNumber = agentsNumber;
-    }
-
-    public void generateEmptyEquations() {
-        generateEmptyEquationsBody(0);
-    }
-
-    private void generateEmptyEquationsBody(int x) {
-
-        if(3 == x) {
-            if(statesTable[1]+ statesTable[2]+ statesTable[3]==agentsNumber) {
-                equations.put(new IntPair(statesTable[1], statesTable[2]), 0.0);
+            matrix.setCell(((yCount * (yCount - 1) / 2) + (nCount * (nCount - 1) / 2) + (uCount * (uCount - 1) / 2)) / pairsCount, i, i);
+            if (yCount != 0 || nCount != 0 && nCount != N) {
+                matrix.setCell(matrix.getCell(i, i) - 1, i, i);
             }
-        } else {
-            for(int i = 0; i <= agentsNumber; i++) {
-                statesTable[x + 1] = i;
-                generateEmptyEquationsBody(x + 1);
+            if (yCount == N) {
+                matrix.setCell(1, i, i);
+                vector.setCell(1, i, 0);
             }
-        }
-    }
+            if (yCount != 0 && nCount != 0) {            // zmiejszenie tak i nie
+                matrix.setCell(yCount * nCount / pairsCount, i, positionMap.get(new Point(yCount-1, nCount-1)));
+            }
 
-    @Override
-    public String toString() {
-        StringBuilder equationsString = new StringBuilder();
-        for(Map.Entry<IntPair, Double> entry : equations.entrySet()) {
-            equationsString.append(entry.getKey());
-            equationsString.append(" : ");
-            equationsString.append(entry.getValue());
-            equationsString.append("\n");
+            if (yCount != 0 && N - yCount != nCount) {       //zwiekszenie tak
+                matrix.setCell(yCount * uCount / pairsCount, i, positionMap.get(new Point(yCount+1, nCount)));
+            }
+
+            if (nCount != 0 && N - nCount != yCount) { // zwiekszanie nie
+                matrix.setCell(nCount * uCount / pairsCount, i, positionMap.get(new Point(yCount, nCount+1)));
+            }
+            if(yCount != N) {
+				if(yCount + nCount == N) {
+					yCount++;
+					nCount = 0;
+				} else nCount++;
+			}
         }
-        return equationsString.toString();
-    }
+	}
+	
+	private void buildMap() {
+		int yCount = 0, nCount = 0;
+		for(int i = 0; i < size; i++) {
+			positionMap.put(new Point(yCount, nCount), i);
+			if(yCount != N) {
+				if(yCount + nCount == N) {
+					yCount++;
+					nCount = 0;
+				} else nCount++;
+			}
+		}
+	}
+
+	public MyMatrix getMatrix() {
+		return matrix;
+	}
+	
+	public MyMatrix getVector() {
+		return vector;
+	}
 }
