@@ -1,4 +1,4 @@
-package ug.protocols.equation;
+package ug.protocols.matrix;
 import java.awt.Point;
 import java.util.HashMap;
 
