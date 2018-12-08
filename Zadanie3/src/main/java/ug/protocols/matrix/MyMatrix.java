@@ -78,6 +78,22 @@ public class MyMatrix {
 				A.matrix[j][i] = this.matrix[i][j];
 		return A;
 	}
+
+	// stworzenie macierzy rozszerzonej o wektor
+	public MyMatrix createExpandedMatrix(MyMatrix vector) {
+		MyMatrix expandedMatrix = new MyMatrix(this.getRows(), this.getColumns()+1);
+		for(int i = 0; i < expandedMatrix.getRows(); i++) {
+			for(int j = 0; j < expandedMatrix.getColumns(); j++) {
+				if(j == expandedMatrix.getColumns()-1) {
+					expandedMatrix.setCell(vector.getCell(0, i), i, j);
+				}
+				else {
+					expandedMatrix.setCell(this.getCell(i, j), i, j);
+				}
+			}
+		}
+		return expandedMatrix;
+	}
 	
 	// zamiana wierszy
 	public void swapRows(int i, int j) {
@@ -310,4 +326,26 @@ public class MyMatrix {
     	}
     	return result;
     }
+
+	public MyMatrix jacobi(MyMatrix vector, double tolerance) {
+		MyMatrix matrix = new MyMatrix(this);
+		int rows = vector.getRows();
+		MyMatrix result_old;
+		MyMatrix result = new MyMatrix(rows, 1);
+		double error = tolerance*10;
+		while(error > tolerance) {
+			result_old = new MyMatrix(result);
+			for(int i = 0; i < rows; i++) {
+				double sum = 0.0;
+				for(int j = 0; j < rows; j++) {
+					if(i != j){
+						sum += matrix.getCell(i, j)*result_old.getCell(j, 0);
+					}
+				}
+				result.setCell((vector.getCell(i, 0)-sum)/matrix.getCell(i, i), i, 0);
+			}
+			error = (result.minus(result_old)).vectorNorm();
+		}
+		return result;
+	}
 }
