@@ -26,8 +26,7 @@ public class Equations {
 	}
 	
 	private void buildMatrix() {
-		double pairsCount = 0.0;
-        pairsCount = (N * (N - 1)) / 2;
+        double pairsCount = (N * (N - 1)) / 2;
         int yCount = 0, nCount = 0, uCount;
         for (int i = 0; i < size; i++) {
             uCount = N - yCount - nCount;
