@@ -18,7 +18,8 @@ public class MainTest {
 	
     public static void main(String [] args) {
     	//agentsCountVsTime();
-		methodsVsMonteCarlo();
+		//methodsVsMonteCarlo();
+		methodsVsAccuracy();
     }
     
     private static void toFile(String fileName, String content) {
@@ -148,6 +149,29 @@ public class MainTest {
 		
 		toFile("testResults/normsWithMC.csv", (mcResults.vectorNorm() - gResults.vectorNorm()) + "," + (mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
 				+ (mcResults.vectorNorm() - jResults.vectorNorm()) + "," + (mcResults.vectorNorm() - gsResults.vectorNorm()));
+	}
+
+	private static void methodsVsAccuracy() {
+    	double[] accuracies = {1e-6, 1e-10, 1e-14};
+		long millisActualTime;
+		long executionTime;
+		Equations e;
+
+    	for(double accuracy : accuracies) {
+			e = new Equations(AGENTS_COUNT);
+			millisActualTime = System.currentTimeMillis();
+			e.getMatrix().gaussSeidel(e.getVector(), accuracy);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			System.out.println("GaussSeidel for " + accuracy +"  done");
+			toFile("testResults/gaussSeidelAccuracyTimes.csv", accuracy + "," + executionTime);
+
+			e = new Equations(AGENTS_COUNT);
+			millisActualTime = System.currentTimeMillis();
+			e.getMatrix().jacobi(e.getVector(), accuracy);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			System.out.println("Jacobi for " + accuracy +"  done");
+			toFile("testResults/jacobiAccuracyTimes.csv", accuracy + "," + executionTime);
+		}
 	}
 
 }
