@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class MyMatrix {
 
+	private final int MAX_ITERATIONS = 1000;
 	private int rows;
 	private int columns;
 	private double matrix[][];
@@ -20,7 +21,7 @@ public class MyMatrix {
 
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < columns; j++)
-				this.setCell(0.0 ,i ,j);
+				matrix[i][j] = 0.0;
 		}
     }
 
@@ -30,6 +31,15 @@ public class MyMatrix {
         this.columns = tab[0].length;
         this.matrix = tab.clone();
 	}
+	
+	// konstruktor do tworzenia wektora z tablicy
+		public MyMatrix(double[] tab) {
+			this.rows = tab.length;
+	        this.columns = 1;
+	        this.matrix = new double[rows][columns];
+	        for(int i = 0; i < rows; i++)
+	        	this.matrix[i][0] = tab[i];
+		}
 	
 	// konstruktor do tworzenia kopii obiektu
 	public MyMatrix(MyMatrix myMatrix) {
@@ -385,88 +395,72 @@ public class MyMatrix {
 
         return originalResult;
     }
-    
-    public MyMatrix gaussSeidel(MyMatrix vector, int iterations) {
+   
+    //metoda Jacobiego
+   	public MyMatrix jacobi(MyMatrix vector, double eps){
+   		int iterations = 0;
+   		int n = this.rows;
+   		double[] result = new double[n];
+   		double[] previous = new double[n];
+   		
+   		Arrays.fill(result, 0);
+   		Arrays.fill(previous, 0);
 
-    	int n = this.rows;
-    	int i, j, k;
-        double L[][] = new double[n][n];
-        double D[][] = new double[n][n];
-        double U[][] = new double[n][n];
-        MyMatrix result = new MyMatrix(n, 1);
+   		while (true) {
+   			for (int i = 0; i < n; i++) {
+   				double sum = vector.matrix[i][0];
 
-        for (i = 0; i < n; i++)
-            for (j = 0; j < n; j++) {
-                if (i < j) {
-                    U[i][j] = this.matrix[i][j];
-                } else if (i > j) {
-                    L[i][j] = this.matrix[i][j];
-                } else {
-                    D[i][j] = this.matrix[i][j];
-                }
-            }
+   				for (int j = 0; j < n; j++)
+   					if (j != i)
+   						sum -= this.matrix[i][j] * previous[j];
 
-        for (i = 0; i < n; i++)
-            D[i][i] = 1 / D[i][i];
+   				result[i] = 1/this.matrix[i][i] * sum;
+   			}
+   			iterations++;
 
-        for (i = 0; i < n; i++)
-            vector.matrix[i][0] *= D[i][i];
+   			boolean stop = true;
+   			for (int i = 0; i < n && stop; i++)
+   				if (Math.abs(result[i] - previous[i]) > eps)
+   					stop = false;
 
-        for (i = 0; i < n; i++)
-            for (j = 0; j < i; j++)
-                L[i][j] *= D[i][i];
+   			if (stop || iterations == MAX_ITERATIONS) break;
+   			previous = (double[])result.clone();
+   		}
+   		MyMatrix res = new MyMatrix(result);
+   		removeMinusZeros(res);
+   		return res;
+   	}
+   	
+   	// metoda Gaussa - Seidela
+   	public MyMatrix gaussSeidel(MyMatrix vector, double eps){
+   		int iterations = 0;
+   		int n = this.rows;
+   		double[] result = new double[n];
+   		double[] previous = new double[n];
+   		Arrays.fill(result, 0);
 
-        for (i = 0; i < n; i++)
-            for (j = i + 1; j < n; j++)
-                U[i][j] *= D[i][i];
+   		while (true) {
+   		    for (int i = 0; i < n; i++) {
+   		        double sum = vector.matrix[i][0];
 
-        for (i = 0; i < n; i++)
-            result.matrix[i][0] = 0;
+   		        for (int j = 0; j < n; j++)
+   		            if (j != i)
+   		                sum -= this.matrix[i][j] * result[j];
 
-        for (k = 0; k < iterations; k++)
-            for (i = 0; i < n; i++) {
-                result.matrix[i][0] = vector.matrix[i][0];
-                for (j = 0; j < i; j++)
-                    result.matrix[i][0] -= L[i][j] * result.matrix[j][0];
-                for (j = i + 1; j < n; j++)
-                    result.matrix[i][0] -= U[i][j] * result.matrix[j][0];
-            }
+   		        result[i] = 1/this.matrix[i][i] * sum;   
+   		    }
+   			iterations++;
 
-        return result;
-    }
-    
-    public MyMatrix jacobi(MyMatrix vector, int iterations) {
+   			boolean stop = true;
+   			for (int i = 0; i < n && stop; i++)
+   				if (Math.abs(result[i] - previous[i]) > eps)
+   					stop = false;
 
-    	int n = this.getRows();
-    	int i, j, k;
-        double M[][] = new double[n][n];
-        double N[] = new double[n];
-        MyMatrix x1 = new MyMatrix(n, 1);
-        MyMatrix x2 = new MyMatrix(n, 1);
-
-        for (i = 0; i < n; i++)
-            N[i] = 1 / this.matrix[i][i];
-
-
-        for (i = 0; i < n; i++)
-            for (j = 0; j < n; j++)
-                if (i == j)
-                    M[i][j] = 0;
-                else
-                    M[i][j] = -(this.matrix[i][j] * N[i]);
-
-        for (i = 0; i < n; i++)
-            x1.matrix[i][0] = 0;
-
-        for (k = 0; k < iterations; k++) {
-            for (i = 0; i < n; i++) {
-                x2.matrix[i][0] = N[i] * vector.matrix[i][0];
-                for (j = 0; j < n; j++)
-                    x2.matrix[i][0] += M[i][j] * x1.matrix[j][0];
-            }
-            for (i = 0; i < n; i++)
-                x1.matrix[i][0] = x2.matrix[i][0];
-        }
-        return x1;
-    }
+   			if (stop || iterations == MAX_ITERATIONS) break;
+   			previous = (double[])result.clone();
+   		}
+   		MyMatrix res = new MyMatrix(result);
+   		removeMinusZeros(res);
+   		return res;
+   	}
 }
