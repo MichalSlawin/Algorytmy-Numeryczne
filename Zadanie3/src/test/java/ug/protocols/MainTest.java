@@ -9,9 +9,10 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 public class MainTest {
 	
     public static void main(String [] args) {
-    	//timesTest();
+    	timesTest();
 
-		System.out.println("jacobiNorm - seidelNorm = " + compareJacobiSeidel(30,1000000));
+		//System.out.println("jacobiNorm - seidelNorm = " + compareJacobiSeidel(30,1000000));
+    	//System.out.println("GaussPg - GaussPgOpt = " + compareGausses(30));
     }
 
     public static void timesTest() {
@@ -23,6 +24,11 @@ public class MainTest {
 		System.out.println(e.getMatrix().gaussPG(e.getVector()).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas Gaussa: " + executionTime);
+		
+		millisActualTime = System.currentTimeMillis();
+		System.out.println(e.getMatrix().gaussPG_Opt(e.getVector()).transpose());
+		executionTime = System.currentTimeMillis() - millisActualTime;
+		System.out.println("Czas Gaussa Opt: " + executionTime);
 		
 		millisActualTime = System.currentTimeMillis();
 		System.out.println(e.getMatrix().gaussSeidel(e.getVector(), 1000).transpose());
@@ -47,6 +53,20 @@ public class MainTest {
 		double seidelNorm = seidelResult.vectorNorm();
 
 		return jacobiNorm-seidelNorm;
+	}
+	
+	public static double compareGausses(int agentsCount) {
+		Equations e = new Equations(agentsCount);
+
+		MyMatrix gaussPgResult = e.getMatrix().gaussPG(e.getVector());
+		System.out.println("GaussPg:\n" + gaussPgResult.transpose());
+		double guassPgNorm = gaussPgResult.vectorNorm();
+
+		MyMatrix gaussPgOptResult = e.getMatrix().gaussPG_Opt(e.getVector());
+		System.out.println("GaussPg zoptymalizowany:\n" + gaussPgOptResult.transpose());
+		double guassPgOptNorm  = gaussPgOptResult.vectorNorm();
+
+		return guassPgNorm-guassPgOptNorm;
 	}
 
 }

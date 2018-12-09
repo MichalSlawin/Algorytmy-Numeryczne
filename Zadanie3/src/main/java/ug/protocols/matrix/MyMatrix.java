@@ -308,6 +308,43 @@ public class MyMatrix {
 
         return result;
     }
+	
+//----------------------------------------------------------------------------------------	
+	// Opt budowa macierzy schodkowej 
+		private void buildSteppedMatrix_Opt(MyMatrix matrix, MyMatrix vector, int i) {
+			double param = 0;
+			for (int j = i + 1; j < vector.rows; j++) {
+				if(matrix.matrix[j][i] != 0) {
+					param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
+				vector.matrix[j][0] = (vector.matrix[j][0] - (param * vector.matrix[i][0]));
+					
+				for (int k = i; k < vector.rows; k++)
+					matrix.matrix[j][k] = (matrix.matrix[j][k] - (param * matrix.matrix[i][k]));
+			}
+			}
+		}
+	// Opt eliminacja gaussa z czesciowym wyborem elementu podstawowego 
+		public MyMatrix gaussPG_Opt(MyMatrix vector) {
+	        MyMatrix matrix = new MyMatrix(this);
+	        MyMatrix result = new MyMatrix(vector.rows, 1);
+
+	        for (int i = 0; i < vector.rows; i++) {
+	        	int max = i;
+	        	for (int j = i + 1; j < vector.rows; j++)
+	        		if (Math.abs(matrix.matrix[j][i]) > Math.abs(matrix.matrix[max][i]))
+	        			max = j;
+	        	
+	        	matrix.swapRows(i, max);
+	        	vector.swapRows(i, max);
+	        	
+	        	buildSteppedMatrix_Opt(matrix, vector, i);
+	        }
+	        gaussSetResult(vector, result, matrix);
+
+	        return result;
+	    }		
+//-------------------------------------------------------------------------------
+
 
 	// eliminacja gaussa z pelnym wyborem elemenetu podstawowego
     public MyMatrix gaussFG( MyMatrix vector) {
