@@ -1,6 +1,5 @@
 package ug.protocols.matrix;
 
-import java.math.BigInteger;
 import java.util.Random;
 
 public class RandomGenerator {

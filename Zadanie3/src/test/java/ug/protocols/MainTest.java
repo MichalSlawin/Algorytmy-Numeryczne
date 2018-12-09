@@ -8,7 +8,7 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 public class MainTest {
 
 	private static final int AGENTS_COUNT = 4;
-	private static final int ITERATIONS_NO = 1000;
+	private static final double EPSILON = 1e-12;
 	private static final int SESSIONS = 10000;
 	
     public static void main(String [] args) {
@@ -35,12 +35,12 @@ public class MainTest {
 		System.out.println("Czas Gaussa Opt: " + executionTime);
 		
 		millisActualTime = System.currentTimeMillis();
-		System.out.println(e.getMatrix().gaussSeidel(e.getVector(), ITERATIONS_NO).transpose());
+		System.out.println(e.getMatrix().gaussSeidel(e.getVector(), EPSILON).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas Gaussa-Seidela: " + executionTime);
 		
 		millisActualTime = System.currentTimeMillis();
-    	System.out.println(e.getMatrix().jacobi(e.getVector(), ITERATIONS_NO).transpose());
+    	System.out.println(e.getMatrix().jacobi(e.getVector(), EPSILON).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas Jacobiego: " + executionTime);
     }
@@ -48,11 +48,11 @@ public class MainTest {
 	private static double compareJacobiSeidel() {
 		Equations e = new Equations(AGENTS_COUNT);
 
-		MyMatrix jacobiResult = e.getMatrix().jacobi(e.getVector(), ITERATIONS_NO);
+		MyMatrix jacobiResult = e.getMatrix().jacobi(e.getVector(), EPSILON);
 		//System.out.println("Z jacobiego:\n" + jacobiResult.transpose());
 		double jacobiNorm = jacobiResult.vectorNorm();
 
-		MyMatrix seidelResult = e.getMatrix().gaussSeidel(e.getVector(), ITERATIONS_NO);
+		MyMatrix seidelResult = e.getMatrix().gaussSeidel(e.getVector(), EPSILON);
 		//System.out.println("Z seidela:\n" + seidelResult.transpose());
 		double seidelNorm = seidelResult.vectorNorm();
 

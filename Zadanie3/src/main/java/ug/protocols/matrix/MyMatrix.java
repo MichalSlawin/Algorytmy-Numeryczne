@@ -3,12 +3,11 @@ package ug.protocols.matrix;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class MyMatrix {
 
-	private final int MAX_ITERATIONS = 1000;
+	private static final int MAX_ITERATIONS = 1000;
 	private int rows;
 	private int columns;
 	private double matrix[][];
