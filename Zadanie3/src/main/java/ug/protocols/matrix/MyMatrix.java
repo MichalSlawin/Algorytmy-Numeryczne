@@ -295,22 +295,21 @@ public class MyMatrix {
 	
 	// eliminacja gaussa z czesciowym wyborem elementu podstawowego
 	public MyMatrix gaussPG(MyMatrix vector) {
-        MyMatrix matrix = new MyMatrix(this);
         MyMatrix result = new MyMatrix(vector.rows, 1);
 
         for (int i = 0; i < vector.rows; i++) {
         	int max = i;
         	for (int j = i + 1; j < vector.rows; j++)
-        		if (Math.abs(matrix.matrix[j][i]) == Math.abs(matrix.matrix[max][i]))
+        		if (Math.abs(this.matrix[j][i]) == Math.abs(this.matrix[max][i]))
         			max = j;
         	
-        	matrix.swapRows(i, max);
+        	this.swapRows(i, max);
         	vector.swapRows(i, max);
 
-        	buildSteppedMatrix(matrix, vector, i);
+        	buildSteppedMatrix(this, vector, i);
         }
 
-        gaussSetResult(vector, result, matrix);
+        gaussSetResult(vector, result, this);
 
         return result;
     }
@@ -331,28 +330,26 @@ public class MyMatrix {
 
 	// Opt eliminacja gaussa z czesciowym wyborem elementu podstawowego 
 	public MyMatrix gaussPGOpt(MyMatrix vector) {
-		MyMatrix matrix = new MyMatrix(this);
 		MyMatrix result = new MyMatrix(vector.rows, 1);
 
 		for (int i = 0; i < vector.rows; i++) {
 			int max = i;
 			for (int j = i + 1; j < vector.rows; j++)
-				if (Math.abs(matrix.matrix[j][i]) > Math.abs(matrix.matrix[max][i]))
+				if (Math.abs(this.matrix[j][i]) > Math.abs(this.matrix[max][i]))
 					max = j;
 	        	
-			matrix.swapRows(i, max);
+			this.swapRows(i, max);
 			vector.swapRows(i, max);
 	        	
-			buildSteppedMatrixOpt(matrix, vector, i);
+			buildSteppedMatrixOpt(this, vector, i);
 		}
-		gaussSetResult(vector, result, matrix);
+		gaussSetResult(vector, result, this);
 
 		return result;
 	}		
 
 	// eliminacja gaussa z pelnym wyborem elemenetu podstawowego
     public MyMatrix gaussFG( MyMatrix vector) {
-        MyMatrix matrix = new MyMatrix(this);
         MyMatrix result = new MyMatrix(vector.rows, 1);
         MyMatrix originalResult = new MyMatrix(vector.rows, 1);
 
@@ -367,9 +364,9 @@ public class MyMatrix {
         	int maxRow = i;
         	int maxColumn = i;
 
-        	for (int j = i; j < matrix.rows; j++) {
-        		for (int k = i; k < matrix.columns; k++) {
-        			if (Math.abs(matrix.matrix[j][k]) == Math.abs(matrix.matrix[maxRow][maxColumn])) {
+        	for (int j = i; j < this.rows; j++) {
+        		for (int k = i; k < this.columns; k++) {
+        			if (Math.abs(this.matrix[j][k]) == Math.abs(this.matrix[maxRow][maxColumn])) {
         				maxRow = j;
         				maxColumn = k;
         			}
@@ -380,14 +377,14 @@ public class MyMatrix {
         	originalPosition[i] = originalPosition[maxColumn];
         	originalPosition[maxColumn] = tmp;
         	
-        	matrix.swapRows(i,  maxRow);
-        	matrix.swapColumns(i, maxColumn);
+        	this.swapRows(i,  maxRow);
+        	this.swapColumns(i, maxColumn);
         	vector.swapRows(i, maxRow);
 
-        	buildSteppedMatrix(matrix, vector, i);
+        	buildSteppedMatrix(this, vector, i);
         }
 
-        gaussSetResult(vector, result, matrix);
+        gaussSetResult(vector, result, this);
 
         for (int j = 0; j < vector.rows; j++)
         	originalResult.matrix[originalPosition[j]][0] = result.matrix[j][0];
