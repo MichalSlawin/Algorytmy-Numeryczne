@@ -392,8 +392,8 @@ public class MyMatrix {
         return originalResult;
     }
    
-    //metoda Jacobiego
-   	public MyMatrix jacobi(MyMatrix vector, double eps){
+    //metoda Jacobiego (gdy seidel = false) i Gaussa-Seidela (gdy seidel = true)
+   	public MyMatrix jacobiSeidel(MyMatrix vector, double eps, boolean seidel){
    		int iterations = 0;
    		int n = this.rows;
    		double[] result = new double[n];
@@ -407,44 +407,13 @@ public class MyMatrix {
    				double sum = vector.matrix[i][0];
 
    				for (int j = 0; j < n; j++)
-   					if (j != i)
-   						sum -= this.matrix[i][j] * previous[j];
-
+   					if (j != i )
+   						if(!seidel)
+   							sum -= this.matrix[i][j] * previous[j];
+   						else
+   							sum -= this.matrix[i][j] * result[j];
    				result[i] = 1/this.matrix[i][i] * sum;
    			}
-   			iterations++;
-
-   			boolean stop = true;
-   			for (int i = 0; i < n && stop; i++)
-   				if (Math.abs(result[i] - previous[i]) > eps)
-   					stop = false;
-
-   			if (stop || iterations == MAX_ITERATIONS) break;
-   			previous = (double[])result.clone();
-   		}
-   		MyMatrix res = new MyMatrix(result);
-   		removeMinusZeros(res);
-   		return res;
-   	}
-   	
-   	// metoda Gaussa - Seidela
-   	public MyMatrix gaussSeidel(MyMatrix vector, double eps){
-   		int iterations = 0;
-   		int n = this.rows;
-   		double[] result = new double[n];
-   		double[] previous = new double[n];
-   		Arrays.fill(result, 0);
-
-   		while (true) {
-   		    for (int i = 0; i < n; i++) {
-   		        double sum = vector.matrix[i][0];
-
-   		        for (int j = 0; j < n; j++)
-   		            if (j != i)
-   		                sum -= this.matrix[i][j] * result[j];
-
-   		        result[i] = 1/this.matrix[i][i] * sum;   
-   		    }
    			iterations++;
 
    			boolean stop = true;

@@ -2,13 +2,12 @@ package ug.protocols;
 
 import ug.protocols.matrix.Equations;
 import ug.protocols.matrix.MyMatrix;
-
-import static ug.protocols.agent.Simulations.simulateAllVotings;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import static ug.protocols.agent.Simulations.simulateAllVotings;
 
 public class MainTest {
 
@@ -17,10 +16,10 @@ public class MainTest {
 	private static final int SESSIONS = 100000;
 	
     public static void main(String [] args) {
-    	//agentsCountVsTime();
+    	agentsCountVsTime();
 		//methodsVsMonteCarlo();
-		mcPrecisionAndTimes();
-		methodsVsAccuracy();
+		//mcPrecisionAndTimes();
+		//methodsVsAccuracy();
     }
     
     private static void toFile(String fileName, String content) {
@@ -59,14 +58,14 @@ public class MainTest {
 			
 			e = new Equations(aCount);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().gaussSeidel(e.getVector(), EPSILON);
+			e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("GaussSeidel for " + aCount +" agents done");
 			toFile("testResults/gaussSeidelTimes.csv", aCount + "," + executionTime);
 			
 			e = new Equations(aCount);
 			millisActualTime = System.currentTimeMillis();
-	    	e.getMatrix().jacobi(e.getVector(), EPSILON);
+	    	e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, false);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("Jacobi for " + aCount +" agents done");
 			toFile("testResults/jacobiTimes.csv", aCount + "," + executionTime);
@@ -87,10 +86,10 @@ public class MainTest {
 		MyMatrix goResults = e.getMatrix().gaussPGOpt(e.getVector());
 		
 		e = new Equations(AGENTS_COUNT);
-		MyMatrix gsResults = e.getMatrix().gaussSeidel(e.getVector(), EPSILON);
+		MyMatrix gsResults = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
 		
 		e = new Equations(AGENTS_COUNT);
-		MyMatrix jResults = e.getMatrix().jacobi(e.getVector(), EPSILON);
+		MyMatrix jResults = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, false);
 		
 		toFile("testResults/normsWithMC.csv", Math.abs(mcResults.vectorNorm() - gResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
 				+ Math.abs(mcResults.vectorNorm() - jResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - gsResults.vectorNorm()));
@@ -124,14 +123,14 @@ public class MainTest {
     	for(double accuracy : accuracies) {
 			e = new Equations(AGENTS_COUNT);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().gaussSeidel(e.getVector(), accuracy);
+			e.getMatrix().jacobiSeidel(e.getVector(), accuracy, true);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("GaussSeidel for " + accuracy +"  done");
 			toFile("testResults/gaussSeidelAccuracyTimes.csv", accuracy + "," + executionTime);
 
 			e = new Equations(AGENTS_COUNT);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().jacobi(e.getVector(), accuracy);
+			e.getMatrix().jacobiSeidel(e.getVector(), accuracy, false);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("Jacobi for " + accuracy +"  done");
 			toFile("testResults/jacobiAccuracyTimes.csv", accuracy + "," + executionTime);
