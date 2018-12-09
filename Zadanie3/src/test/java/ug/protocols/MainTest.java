@@ -9,13 +9,10 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 public class MainTest {
 	
     public static void main(String [] args) {
-    	//timesTest();
+    	timesTest();
 
 		//System.out.println("jacobiNorm - seidelNorm = " + compareJacobiSeidel(30,1000000));
-    	
-    	System.out.println("GaussPg - GaussPgOpt = " + compareGausses(30));
-    	
-    	
+    	//System.out.println("GaussPg - GaussPgOpt = " + compareGausses(30));
     }
 
     public static void timesTest() {
@@ -71,5 +68,5 @@ public class MainTest {
 
 		return guassPgNorm-guassPgOptNorm;
 	}
-	
+
 }
