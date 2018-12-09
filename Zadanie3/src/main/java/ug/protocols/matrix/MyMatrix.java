@@ -301,26 +301,12 @@ public class MyMatrix {
         return result;
     }
 //----------------------------------------------------------------------------------------	
-	
-	// zapisuje wyniki eliminacji do result
-		private void gaussSetResult_Opt(MyMatrix vector, MyMatrix result, MyMatrix matrix) {
-			for (int i = vector.rows - 1; i >= 0; i--) {
-				double sum = 0.0;
-
-				for (int j = i + 1; j < vector.rows; j++)
-					sum = (sum + (matrix.matrix[i][j] * result.matrix[j][0]));
-				
-				//if(matrix.matrix[i][i] != 0)
-					result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0
-			}
-		}
-		
 	// Opt budowa macierzy schodkowej 
 		private void buildSteppedMatrix_Opt(MyMatrix matrix, MyMatrix vector, int i) {
 			double param = 0;
 			for (int j = i + 1; j < vector.rows; j++) {
 				if(matrix.matrix[j][i] != 0) {
-					param = (matrix.matrix[j][i] / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0 - po odkomentowaniu if'ow w wynikach 0.0
+					param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
 				vector.matrix[j][0] = (vector.matrix[j][0] - (param * vector.matrix[i][0]));
 					
 				for (int k = i; k < vector.rows; k++)
@@ -328,7 +314,7 @@ public class MyMatrix {
 			}
 			}
 		}
-	
+
 	// Opt eliminacja gaussa z czesciowym wyborem elementu podstawowego 
 		public MyMatrix gaussPG_Opt(MyMatrix vector) {
 	        MyMatrix matrix = new MyMatrix(this);
@@ -345,12 +331,10 @@ public class MyMatrix {
 	        	
 	        	buildSteppedMatrix_Opt(matrix, vector, i);
 	        }
-
-	        gaussSetResult_Opt(vector, result, matrix);
+	        gaussSetResult(vector, result, matrix);
 
 	        return result;
-	    }
-		
+	    }		
 //-------------------------------------------------------------------------------
 
 	// eliminacja gaussa z pelnym wyborem elemenetu podstawowego
