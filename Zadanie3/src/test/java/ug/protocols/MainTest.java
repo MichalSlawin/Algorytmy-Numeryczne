@@ -12,25 +12,13 @@ import java.io.PrintWriter;
 
 public class MainTest {
 
-<<<<<<< HEAD
-	private static final int AGENTS_COUNT = 200;
-=======
-	private static final int AGENTS_COUNT = 10;
->>>>>>> bead34ac6f2f53acda5dbb2030d0a6e25bd5a62d
+	private static final int AGENTS_COUNT = 20;
 	private static final double EPSILON = 1e-12;
-	private static final int SESSIONS = 10000;
+	private static final int SESSIONS = 100000;
 	
     public static void main(String [] args) {
-<<<<<<< HEAD
-    	agentsCountVsTime();
-=======
-		double monteCarloNorm = simulateAllVotings(AGENTS_COUNT, SESSIONS).vectorNorm();
-//    	timesTest();
-
-		System.out.println("jacobiNorm - seidelNorm = " + compareJacobiSeidel(monteCarloNorm));
-    	System.out.println("GaussPg - GaussPgOpt = " + compareGausses(monteCarloNorm));
-    	//System.out.println(simulateAllVotings(AGENTS_COUNT, SESSIONS));
->>>>>>> bead34ac6f2f53acda5dbb2030d0a6e25bd5a62d
+    	//agentsCountVsTime();
+		methodsVsMonteCarlo();
     }
     
     private static void toFile(String fileName, String content) {
@@ -54,7 +42,7 @@ public class MainTest {
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas Gaussa: " + executionTime);
 		
-		/*millisActualTime = System.currentTimeMillis();
+		millisActualTime = System.currentTimeMillis();
 		System.out.println(e.getMatrix().gaussPGOpt(e.getVector()).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas Gaussa Opt: " + executionTime);
@@ -67,7 +55,7 @@ public class MainTest {
 		millisActualTime = System.currentTimeMillis();
     	System.out.println(e.getMatrix().jacobi(e.getVector(), EPSILON).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
-		System.out.println("Czas Jacobiego: " + executionTime);*/
+		System.out.println("Czas Jacobiego: " + executionTime);
     }
 
 	private static double compareJacobiSeidel(double monteCarloNorm) {
@@ -138,6 +126,28 @@ public class MainTest {
 			toFile("testResults/jacobiTimes.csv", aCount + "," + executionTime);
 			System.out.println();
 		}
+	}
+	
+	private static void methodsVsMonteCarlo() {
+		//w pliku w kolejnosci MC - Gauss, MC - GaussOpt, MC - Jacobi, MC - GaussSeidel
+		
+		Equations e;
+		MyMatrix mcResults = simulateAllVotings(AGENTS_COUNT, SESSIONS);
+		
+		e = new Equations(AGENTS_COUNT);
+		MyMatrix gResults = e.getMatrix().gaussPG(e.getVector());
+		
+		e = new Equations(AGENTS_COUNT);
+		MyMatrix goResults = e.getMatrix().gaussPGOpt(e.getVector());
+		
+		e = new Equations(AGENTS_COUNT);
+		MyMatrix gsResults = e.getMatrix().gaussSeidel(e.getVector(), EPSILON);
+		
+		e = new Equations(AGENTS_COUNT);
+		MyMatrix jResults = e.getMatrix().jacobi(e.getVector(), EPSILON);
+		
+		toFile("testResults/normsWithMC.csv", (mcResults.vectorNorm() - gResults.vectorNorm()) + "," + (mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
+				+ (mcResults.vectorNorm() - jResults.vectorNorm()) + "," + (mcResults.vectorNorm() - gsResults.vectorNorm()));
 	}
 
 }
