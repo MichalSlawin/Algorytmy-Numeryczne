@@ -29,7 +29,7 @@ public class MainTest {
 		System.out.println("Czas Gaussa: " + executionTime);
 		
 		millisActualTime = System.currentTimeMillis();
-		System.out.println(e.getMatrix().gaussPG_Opt(e.getVector()).transpose());
+		System.out.println(e.getMatrix().gaussPGOpt(e.getVector()).transpose());
 		executionTime = System.currentTimeMillis() - millisActualTime;
 		System.out.println("Czas Gaussa Opt: " + executionTime);
 		
@@ -65,7 +65,7 @@ public class MainTest {
 		System.out.println("GaussPg:\n" + gaussPgResult.transpose());
 		double guassPgNorm = gaussPgResult.vectorNorm();
 
-		MyMatrix gaussPgOptResult = e.getMatrix().gaussPG_Opt(e.getVector());
+		MyMatrix gaussPgOptResult = e.getMatrix().gaussPGOpt(e.getVector());
 		System.out.println("GaussPg zoptymalizowany:\n" + gaussPgOptResult.transpose());
 		double guassPgOptNorm  = gaussPgOptResult.vectorNorm();
 

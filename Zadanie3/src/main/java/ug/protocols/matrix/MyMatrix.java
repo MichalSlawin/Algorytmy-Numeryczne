@@ -257,8 +257,7 @@ public class MyMatrix {
 	private void buildSteppedMatrix(MyMatrix matrix, MyMatrix vector, int i) {
 		double param = 0;
 		for (int j = i + 1; j < vector.rows; j++) {
-			//if(matrix.matrix[i][i] != 0)
-				param = (matrix.matrix[j][i] / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0 - po odkomentowaniu if'ow w wynikach 0.0
+			param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
 			vector.matrix[j][0] = (vector.matrix[j][0] - (param * vector.matrix[i][0]));
 				
 			for (int k = i; k < vector.rows; k++)
@@ -300,42 +299,41 @@ public class MyMatrix {
 
         return result;
     }
-//----------------------------------------------------------------------------------------	
+
 	// Opt budowa macierzy schodkowej 
-		private void buildSteppedMatrix_Opt(MyMatrix matrix, MyMatrix vector, int i) {
-			double param = 0;
-			for (int j = i + 1; j < vector.rows; j++) {
-				if(matrix.matrix[j][i] != 0) {
-					param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
+	private void buildSteppedMatrixOpt(MyMatrix matrix, MyMatrix vector, int i) {
+		double param = 0;
+		for (int j = i + 1; j < vector.rows; j++) {
+			if(matrix.matrix[j][i] != 0) {
+				param = (matrix.matrix[j][i] / matrix.matrix[i][i]);
 				vector.matrix[j][0] = (vector.matrix[j][0] - (param * vector.matrix[i][0]));
 					
 				for (int k = i; k < vector.rows; k++)
 					matrix.matrix[j][k] = (matrix.matrix[j][k] - (param * matrix.matrix[i][k]));
 			}
-			}
 		}
+	}
 
 	// Opt eliminacja gaussa z czesciowym wyborem elementu podstawowego 
-		public MyMatrix gaussPG_Opt(MyMatrix vector) {
-	        MyMatrix matrix = new MyMatrix(this);
-	        MyMatrix result = new MyMatrix(vector.rows, 1);
+	public MyMatrix gaussPGOpt(MyMatrix vector) {
+		MyMatrix matrix = new MyMatrix(this);
+		MyMatrix result = new MyMatrix(vector.rows, 1);
 
-	        for (int i = 0; i < vector.rows; i++) {
-	        	int max = i;
-	        	for (int j = i + 1; j < vector.rows; j++)
-	        		if (Math.abs(matrix.matrix[j][i]) > Math.abs(matrix.matrix[max][i]))
-	        			max = j;
+		for (int i = 0; i < vector.rows; i++) {
+			int max = i;
+			for (int j = i + 1; j < vector.rows; j++)
+				if (Math.abs(matrix.matrix[j][i]) > Math.abs(matrix.matrix[max][i]))
+					max = j;
 	        	
-	        	matrix.swapRows(i, max);
-	        	vector.swapRows(i, max);
+			matrix.swapRows(i, max);
+			vector.swapRows(i, max);
 	        	
-	        	buildSteppedMatrix_Opt(matrix, vector, i);
-	        }
-	        gaussSetResult(vector, result, matrix);
+			buildSteppedMatrixOpt(matrix, vector, i);
+		}
+		gaussSetResult(vector, result, matrix);
 
-	        return result;
-	    }		
-//-------------------------------------------------------------------------------
+		return result;
+	}		
 
 	// eliminacja gaussa z pelnym wyborem elemenetu podstawowego
     public MyMatrix gaussFG( MyMatrix vector) {
@@ -382,48 +380,87 @@ public class MyMatrix {
         return originalResult;
     }
     
-    // metoda Gaussa-Seidela
-    public MyMatrix gaussSeidel(MyMatrix vector, int iterationsNo) {
+    public MyMatrix gaussSeidel(MyMatrix vector, int iterations) {
+
     	int n = this.rows;
-    	MyMatrix matrix = new MyMatrix(this);
-    	MyMatrix result = new MyMatrix(n, 1);
-    	
-    	double x[] = new double[n];
+    	int i, j, k;
+        double L[][] = new double[n][n];
+        double D[][] = new double[n][n];
+        double U[][] = new double[n][n];
+        MyMatrix result = new MyMatrix(n, 1);
 
-    	for(int iter = 0; iter < iterationsNo; iter++){
-    		for(int i=0; i<n; i++){
-    			result.setCell((vector.getCell(i, 0) / matrix.getCell(i, i)), i, 0);
-    			for(int j = 0; j < n; j++){
-    				if(j == i)
-    					continue;
-    				result.setCell(result.getCell(i, 0) - ((matrix.getCell(i, j) / matrix.getCell(i, i)) * x[j]), i, 0);
-    				x[i] = result.getCell(i, 0);
-    			}
-    			//System.out.println("x" + (i+1) + " = " + result.getCell(i,  0));
-    		}
-    	}
-    	return result;
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++) {
+                if (i < j) {
+                    U[i][j] = this.matrix[i][j];
+                } else if (i > j) {
+                    L[i][j] = this.matrix[i][j];
+                } else {
+                    D[i][j] = this.matrix[i][j];
+                }
+            }
+
+        for (i = 0; i < n; i++)
+            D[i][i] = 1 / D[i][i];
+
+        for (i = 0; i < n; i++)
+            vector.matrix[i][0] *= D[i][i];
+
+        for (i = 0; i < n; i++)
+            for (j = 0; j < i; j++)
+                L[i][j] *= D[i][i];
+
+        for (i = 0; i < n; i++)
+            for (j = i + 1; j < n; j++)
+                U[i][j] *= D[i][i];
+
+        for (i = 0; i < n; i++)
+            result.matrix[i][0] = 0;
+
+        for (k = 0; k < iterations; k++)
+            for (i = 0; i < n; i++) {
+                result.matrix[i][0] = vector.matrix[i][0];
+                for (j = 0; j < i; j++)
+                    result.matrix[i][0] -= L[i][j] * result.matrix[j][0];
+                for (j = i + 1; j < n; j++)
+                    result.matrix[i][0] -= U[i][j] * result.matrix[j][0];
+            }
+
+        return result;
     }
+    
+    public MyMatrix jacobi(MyMatrix vector, int iterations) {
 
-	public MyMatrix jacobi(MyMatrix vector, double tolerance) {
-		MyMatrix matrix = new MyMatrix(this);
-		int rows = vector.getRows();
-		MyMatrix result_old;
-		MyMatrix result = new MyMatrix(rows, 1);
-		double error = tolerance*10;
-		while(error > tolerance) {
-			result_old = new MyMatrix(result);
-			for(int i = 0; i < rows; i++) {
-				double sum = 0.0;
-				for(int j = 0; j < rows; j++) {
-					if(i != j){
-						sum += matrix.getCell(i, j)*result_old.getCell(j, 0);
-					}
-				}
-				result.setCell((vector.getCell(i, 0)-sum)/matrix.getCell(i, i), i, 0);
-			}
-			error = (result.minus(result_old)).vectorNorm();
-		}
-		return result;
-	}
+    	int n = this.getRows();
+    	int i, j, k;
+        double M[][] = new double[n][n];
+        double N[] = new double[n];
+        MyMatrix x1 = new MyMatrix(n, 1);
+        MyMatrix x2 = new MyMatrix(n, 1);
+
+        for (i = 0; i < n; i++)
+            N[i] = 1 / this.matrix[i][i];
+
+
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++)
+                if (i == j)
+                    M[i][j] = 0;
+                else
+                    M[i][j] = -(this.matrix[i][j] * N[i]);
+
+        for (i = 0; i < n; i++)
+            x1.matrix[i][0] = 0;
+
+        for (k = 0; k < iterations; k++) {
+            for (i = 0; i < n; i++) {
+                x2.matrix[i][0] = N[i] * vector.matrix[i][0];
+                for (j = 0; j < n; j++)
+                    x2.matrix[i][0] += M[i][j] * x1.matrix[j][0];
+            }
+            for (i = 0; i < n; i++)
+                x1.matrix[i][0] = x2.matrix[i][0];
+        }
+        return x1;
+    }
 }
