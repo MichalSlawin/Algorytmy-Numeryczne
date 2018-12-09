@@ -19,6 +19,7 @@ public class MainTest {
     public static void main(String [] args) {
     	//agentsCountVsTime();
 		//methodsVsMonteCarlo();
+		mcPrecisionAndTimes();
 		methodsVsAccuracy();
     }
     
@@ -32,66 +33,10 @@ public class MainTest {
 			e.printStackTrace();
 		}
 	}
-
-    private static void timesTest() {
-    	long millisActualTime;
-		long executionTime;
-		Equations e = new Equations(AGENTS_COUNT);
-		
-		millisActualTime = System.currentTimeMillis();
-		System.out.println(e.getMatrix().gaussPG(e.getVector()).transpose());
-		executionTime = System.currentTimeMillis() - millisActualTime;
-		System.out.println("Czas Gaussa: " + executionTime);
-		
-		millisActualTime = System.currentTimeMillis();
-		System.out.println(e.getMatrix().gaussPGOpt(e.getVector()).transpose());
-		executionTime = System.currentTimeMillis() - millisActualTime;
-		System.out.println("Czas Gaussa Opt: " + executionTime);
-		
-		millisActualTime = System.currentTimeMillis();
-		System.out.println(e.getMatrix().gaussSeidel(e.getVector(), EPSILON).transpose());
-		executionTime = System.currentTimeMillis() - millisActualTime;
-		System.out.println("Czas Gaussa-Seidela: " + executionTime);
-		
-		millisActualTime = System.currentTimeMillis();
-    	System.out.println(e.getMatrix().jacobi(e.getVector(), EPSILON).transpose());
-		executionTime = System.currentTimeMillis() - millisActualTime;
-		System.out.println("Czas Jacobiego: " + executionTime);
-    }
-
-	private static double compareJacobiSeidel(double monteCarloNorm) {
-		Equations e = new Equations(AGENTS_COUNT);
-
-		MyMatrix jacobiResult = e.getMatrix().jacobi(e.getVector(), EPSILON);
-		//System.out.println("Z jacobiego:\n" + jacobiResult.transpose());
-		double jacobiNorm = jacobiResult.vectorNorm();
-		System.out.println("|monteCarloNorm - jacobiNorm| = " + Math.abs(monteCarloNorm - jacobiNorm));
-
-		MyMatrix seidelResult = e.getMatrix().gaussSeidel(e.getVector(), EPSILON);
-		//System.out.println("Z seidela:\n" + seidelResult.transpose());
-		double seidelNorm = seidelResult.vectorNorm();
-		System.out.println("|monteCarloNorm - seidelNorm| = " + Math.abs(seidelNorm - jacobiNorm));
-
-		return jacobiNorm-seidelNorm;
-	}
-	
-	private static double compareGausses(double monteCarloNorm) {
-		Equations e = new Equations(AGENTS_COUNT);
-
-		MyMatrix gaussPgResult = e.getMatrix().gaussPG(e.getVector());
-		//System.out.println("GaussPg:\n" + gaussPgResult.transpose());
-		double gaussPgNorm = gaussPgResult.vectorNorm();
-		System.out.println("|monteCarloNorm - gaussPgNorm| = " + Math.abs(monteCarloNorm - gaussPgNorm));
-
-		MyMatrix gaussPgOptResult = e.getMatrix().gaussPGOpt(e.getVector());
-		//System.out.println("GaussPg zoptymalizowany:\n" + gaussPgOptResult.transpose());
-		double gaussPgOptNorm  = gaussPgOptResult.vectorNorm();
-		System.out.println("|monteCarloNorm - gaussPgOptNorm| = " + Math.abs(monteCarloNorm - gaussPgOptNorm));
-
-		return gaussPgNorm-gaussPgOptNorm;
-	}
 	
 	private static void agentsCountVsTime() {
+		// w plikach w kolejnosci: ilosc agentow, czas wywolania
+
 		int[] agents = {5, 10, 20, 50, 100, 150, 200};
 		long millisActualTime;
 		long executionTime;
@@ -130,7 +75,7 @@ public class MainTest {
 	}
 	
 	private static void methodsVsMonteCarlo() {
-		//w pliku w kolejnosci MC - Gauss, MC - GaussOpt, MC - Jacobi, MC - GaussSeidel
+		//w pliku w kolejnosci: MC - Gauss, MC - GaussOpt, MC - Jacobi, MC - GaussSeidel
 		
 		Equations e;
 		MyMatrix mcResults = simulateAllVotings(AGENTS_COUNT, SESSIONS);
@@ -147,8 +92,27 @@ public class MainTest {
 		e = new Equations(AGENTS_COUNT);
 		MyMatrix jResults = e.getMatrix().jacobi(e.getVector(), EPSILON);
 		
-		toFile("testResults/normsWithMC.csv", (mcResults.vectorNorm() - gResults.vectorNorm()) + "," + (mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
-				+ (mcResults.vectorNorm() - jResults.vectorNorm()) + "," + (mcResults.vectorNorm() - gsResults.vectorNorm()));
+		toFile("testResults/normsWithMC.csv", Math.abs(mcResults.vectorNorm() - gResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
+				+ Math.abs(mcResults.vectorNorm() - jResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - gsResults.vectorNorm()));
+	}
+
+	private static void mcPrecisionAndTimes() {
+		//w pliku w kolejnosci: liczba sesji, roznica norm z gaussOpt, czas wywolania
+
+		int[] sessions = {500, 1000, 5000, 10000, 50000, 100000};
+		long millisActualTime;
+		long executionTime;
+		Equations e = new Equations(AGENTS_COUNT);
+		MyMatrix gResults = e.getMatrix().gaussPGOpt(e.getVector());
+		MyMatrix mcResults;
+
+		for(int s : sessions) {
+			millisActualTime = System.currentTimeMillis();
+			mcResults = simulateAllVotings(AGENTS_COUNT, s);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/mcPrecAndTimes.csv", s + "," + Math.abs(mcResults.vectorNorm() - gResults.vectorNorm()) + "," + executionTime);
+			System.out.println("Monte Carlo for " + s + " sessions and " + AGENTS_COUNT + " agents done");
+		}
 	}
 
 	private static void methodsVsAccuracy() {
