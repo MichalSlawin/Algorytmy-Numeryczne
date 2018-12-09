@@ -240,6 +240,13 @@ public class MyMatrix {
 		}
 	}
 	
+	public void removeMinusZeros(MyMatrix m) {
+		for(int i = 0; i < m.getRows(); i++)
+			for(int j = 0; j < m.getColumns(); j++)
+				if(m.getCell(i, j) == -0.0)
+					m.matrix[i][j] = Math.abs(m.matrix[i][j]);
+	}
+	
 	// zapisuje wyniki eliminacji do result
 	private void gaussSetResult(MyMatrix vector, MyMatrix result, MyMatrix matrix) {
 		for (int i = vector.rows - 1; i >= 0; i--) {
@@ -247,9 +254,8 @@ public class MyMatrix {
 
 			for (int j = i + 1; j < vector.rows; j++)
 				sum = (sum + (matrix.matrix[i][j] * result.matrix[j][0]));
-			
-			//if(matrix.matrix[i][i] != 0)
-				result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0
+			removeMinusZeros(result);
+			result.matrix[i][0] = ((vector.matrix[i][0] - sum) / matrix.matrix[i][i]);  // POWODUJE DZIELENIE PRZEZ 0
 		}
 	}
 	
