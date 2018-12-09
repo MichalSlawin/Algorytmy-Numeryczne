@@ -1,20 +1,18 @@
 package ug.protocols.agent;
 
+import ug.protocols.matrix.MyMatrix;
+
 public class Simulations {
 
-    public static String simulateAllVotings(int agentsCount, int sessions) {
-    	StringBuffer s = new StringBuffer();
-    	s.append("[");
+    public static MyMatrix simulateAllVotings(int agentsCount, int sessions) {
     	int size = 0;
     	for(int i = 1; i <= agentsCount+1; i++)
 			size += i;
-    	
+		MyMatrix vector = new MyMatrix(size,1);
+
     	int yCount = 0, nCount = 0;
     	for(int i = 0; i < size; i++) {
-    		s.append(simulateVoting(yCount, nCount, agentsCount - yCount - nCount, sessions));
-    		if(i != size - 1)
-    			s.append(" ");
-    		else s.append("]");
+    		vector.setCell(simulateVoting(yCount, nCount, agentsCount - yCount - nCount, sessions), i, 0);
     		if(yCount != agentsCount) {
     			if(yCount + nCount == agentsCount) {
     				yCount++;
@@ -22,7 +20,7 @@ public class Simulations {
     			} else nCount++;
     		}
     	}		
-    	return s.toString();
+    	return vector;
     }
 
     public static double simulateVoting(int yes, int no, int un, int sessions) {
