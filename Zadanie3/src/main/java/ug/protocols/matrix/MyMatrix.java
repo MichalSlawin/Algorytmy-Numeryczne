@@ -4,10 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import ug.protocols.test.MainTest;
 
 public class MyMatrix {
 
-	private static final int MAX_ITERATIONS = 1000;
+	private static final int MAX_ITERATIONS = 5000;
 	private int rows;
 	private int columns;
 	private double matrix[][];
@@ -395,6 +396,7 @@ public class MyMatrix {
     //metoda Jacobiego (gdy seidel = false) i Gaussa-Seidela (gdy seidel = true)
    	public MyMatrix jacobiSeidel(MyMatrix vector, double eps, boolean seidel){
    		int iterations = 0;
+   		int counter = 20;
    		int n = this.rows;
    		double[] result = new double[n];
    		double[] previous = new double[n];
@@ -421,7 +423,13 @@ public class MyMatrix {
    				if (Math.abs(result[i] - previous[i]) > eps)
    					stop = false;
 
-   			if (stop || iterations == MAX_ITERATIONS) break;
+   			if (stop || iterations == MAX_ITERATIONS) { 
+   				if(seidel)
+   					MainTest.toFile("testResults/seidelIter.csv", Integer.toString(iterations));
+   				else 
+   					MainTest.toFile("testResults/jacobiIter.csv", Integer.toString(iterations));
+   				break;
+   			}
    			previous = (double[])result.clone();
    		}
    		MyMatrix res = new MyMatrix(result);

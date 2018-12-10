@@ -1,4 +1,4 @@
-package ug.protocols;
+package ug.protocols.test;
 
 import ug.protocols.matrix.MyMatrix;
 
@@ -21,14 +21,14 @@ class MyMatrixTest {
         System.out.println(randomMatrix.gaussPG(randomVector));
     }
     
-    static void gaussSeidelTest() {
+    static void gaussSeidelTest(double eps) {
     	double[][] matrixTab = {{1.3,0,4.6},{-2.5, 6.624, 8},{-5, 22, 654}};
     	double[][] vectorTab = {{1}, {2}, {3}};
 
     	MyMatrix matrix = new MyMatrix(matrixTab);
     	MyMatrix vector = new MyMatrix(vectorTab);
 
-    	System.out.println(matrix.gaussSeidel(vector, 20).minus(matrix.gaussPG(vector)));
+    	System.out.println(matrix.jacobiSeidel(vector, eps, true).minus(matrix.gaussPGOpt(vector)));
 
     	MyMatrix randomMatrix = generateMatrix(3, 3);
     	MyMatrix randomVector = generateMatrix(3, 1);
@@ -36,17 +36,17 @@ class MyMatrixTest {
     	System.out.println(randomMatrix);
         System.out.println(randomVector);
 
-        System.out.println(randomMatrix.gaussSeidel(randomVector, 20).minus(randomMatrix.gaussPG(randomVector)));
+        System.out.println(randomMatrix.jacobiSeidel(randomVector, 1e-12, true).minus(randomMatrix.gaussPGOpt(randomVector)));
     }
 
-    static void jacobiTest(int iterations) {
+    static void jacobiTest(double eps) {
         double[][] matrixTab = {{1.3,0,4.6},{-2.5, 6.624, 8},{-5, 22, 654}};
         double[][] vectorTab = {{1}, {2}, {3}};
 
         MyMatrix matrix = new MyMatrix(matrixTab);
         MyMatrix vector = new MyMatrix(vectorTab);
 
-        System.out.println(matrix.jacobi(vector, iterations).minus(matrix.gaussPG(vector)));
+        System.out.println(matrix.jacobiSeidel(vector, eps, false).minus(matrix.gaussPGOpt(vector)));
 
         MyMatrix randomMatrix = generateMatrix(3, 3);
         MyMatrix randomVector = generateMatrix(3, 1);
@@ -54,6 +54,6 @@ class MyMatrixTest {
         System.out.println(randomMatrix);
         System.out.println(randomVector);
 
-        System.out.println(randomMatrix.jacobi(randomVector, iterations).minus(randomMatrix.gaussPG(randomVector)));
+        System.out.println(randomMatrix.jacobiSeidel(randomVector, eps, false).minus(randomMatrix.gaussPGOpt(randomVector)));
     }
 }

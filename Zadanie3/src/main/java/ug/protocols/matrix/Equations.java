@@ -79,4 +79,8 @@ public class Equations {
 	public MyMatrix getVector() {
 		return vector;
 	}
+	
+	public HashMap<Point, Integer> getMap() {
+		return positionMap;
+	}
 }

@@ -1,7 +1,9 @@
-package ug.protocols;
+package ug.protocols.test;
 
 import ug.protocols.matrix.Equations;
 import ug.protocols.matrix.MyMatrix;
+
+import java.awt.Point;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,18 +13,18 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 
 public class MainTest {
 
-	private static final int AGENTS_COUNT = 20;
-	private static final double EPSILON = 1e-12;
+	private static final int AGENTS_COUNT = 40;
+	private static final double EPSILON = 1e-16;
 	private static final int SESSIONS = 100000;
 	
     public static void main(String [] args) {
-    	agentsCountVsTime();
-		//methodsVsMonteCarlo();
+		methodsVsMonteCarlo();
 		//mcPrecisionAndTimes();
 		//methodsVsAccuracy();
+	//	agentsCountVsTimeAndAccuracy();
     }
     
-    private static void toFile(String fileName, String content) {
+    public static void toFile(String fileName, String content) {
 		try(FileWriter fw = new FileWriter(fileName, true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter out = new PrintWriter(bw))
@@ -33,43 +35,50 @@ public class MainTest {
 		}
 	}
 	
-	private static void agentsCountVsTime() {
-		// w plikach w kolejnosci: ilosc agentow, czas wywolania
-
-		int[] agents = {5, 10, 20, 50, 100, 150, 200};
+	private static void agentsCountVsTimeAndAccuracy() {
+		// w plikach xTimes.csv w kolejnosci: ilosc agentow, czas wywolania
+		//w pliku methodsErrorsVsAgentsCount w kolejnosci: ilosc agentow, blad gaussa, blad gaussaOpt, blad jacobiego, blad seidela
+		MyMatrix result;
 		long millisActualTime;
 		long executionTime;
 		Equations e;
+		double gError, goError, gsError, jError;
 		
-		for(int aCount : agents) {
+		for(int aCount = 20; aCount < 200; aCount += 20) {
 			e = new Equations(aCount);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().gaussPG(e.getVector());
+			result = e.getMatrix().gaussPG(e.getVector());
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("Gauss for " + aCount +" agents done");
 			toFile("testResults/gaussTimes.csv", aCount + "," + executionTime);
+			gError =  Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
 			
 			e = new Equations(aCount);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().gaussPGOpt(e.getVector());
+			result = e.getMatrix().gaussPGOpt(e.getVector());
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("GaussOpt for " + aCount +" agents done");
 			toFile("testResults/gaussOptTimes.csv", aCount + "," + executionTime);
+			goError =  Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
 			
 			e = new Equations(aCount);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
+			result = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("GaussSeidel for " + aCount +" agents done");
 			toFile("testResults/gaussSeidelTimes.csv", aCount + "," + executionTime);
+			gsError = Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
 			
 			e = new Equations(aCount);
 			millisActualTime = System.currentTimeMillis();
-	    	e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, false);
+			result = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, false);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("Jacobi for " + aCount +" agents done");
 			toFile("testResults/jacobiTimes.csv", aCount + "," + executionTime);
+			jError = Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
 			System.out.println();
+			
+			toFile("testResults/methodsErrorsVsAgentsCount.csv", aCount + "," + gError + "," + goError + "," + jError + "," + gsError);
 		}
 	}
 	
@@ -93,6 +102,7 @@ public class MainTest {
 		
 		toFile("testResults/normsWithMC.csv", Math.abs(mcResults.vectorNorm() - gResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
 				+ Math.abs(mcResults.vectorNorm() - jResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - gsResults.vectorNorm()));
+		System.out.println("Methods vs Monte Carlo done");
 	}
 
 	private static void mcPrecisionAndTimes() {
@@ -109,7 +119,7 @@ public class MainTest {
 			millisActualTime = System.currentTimeMillis();
 			mcResults = simulateAllVotings(AGENTS_COUNT, s);
 			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/mcPrecAndTimes.csv", s + "," + Math.abs(mcResults.vectorNorm() - gResults.vectorNorm()) + "," + executionTime);
+			toFile("testResults/mcPrecAndTimes.csv", s + "," + Math.abs(mcResults.getCell(e.getMap().get(new Point(AGENTS_COUNT/2, AGENTS_COUNT/2)), 0) - 0.5) + "," + executionTime);
 			System.out.println("Monte Carlo for " + s + " sessions and " + AGENTS_COUNT + " agents done");
 		}
 	}
