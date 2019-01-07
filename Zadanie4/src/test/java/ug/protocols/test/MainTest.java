@@ -14,14 +14,11 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 public class MainTest {
 
 	private static final int AGENTS_COUNT = 10;
-	private static final double EPSILON = 1e-16;
+	private static final double EPSILON = 1e-10;
 	private static final int SESSIONS = 1000;
 	
     public static void main(String [] args) {
-		methodsVsMonteCarlo();
-		//mcPrecisionAndTimes();
-		//methodsVsAccuracy();
-	//	agentsCountVsTimeAndAccuracy();
+		timesTest();
     }
     
     public static void toFile(String fileName, String content) {
@@ -32,6 +29,41 @@ public class MainTest {
 			out.println(content);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private static void timesTest() {
+		Equations e;
+		long millisActualTime;
+		long executionTime;
+
+		for(int aCount = 4; aCount <= 64; aCount += 4) { // dla 64 agentow liczba rownan wynosi 2145
+			millisActualTime = System.currentTimeMillis();
+			e = new Equations(aCount);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
+			millisActualTime = System.currentTimeMillis();
+			e.getMatrix().gaussPG(e.getVector());
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/gaussTimes.csv", aCount + "," + executionTime);
+
+			millisActualTime = System.currentTimeMillis();
+			e = new Equations(aCount);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
+			millisActualTime = System.currentTimeMillis();
+			e.getMatrix().gaussPGOpt(e.getVector());
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/gaussOptTimes.csv", aCount + "," + executionTime);
+
+			millisActualTime = System.currentTimeMillis();
+			e = new Equations(aCount);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
+			millisActualTime = System.currentTimeMillis();
+			e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
+			executionTime = System.currentTimeMillis() - millisActualTime;
+			toFile("testResults/gaussSeidelTimes.csv", aCount + "," + executionTime);
 		}
 	}
 	
