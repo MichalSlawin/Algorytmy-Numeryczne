@@ -1,13 +1,14 @@
 package ug.protocols.test;
 
+import ug.protocols.approximation.ApproximationFunction;
+import ug.protocols.approximation.Approximator;
 import ug.protocols.matrix.Equations;
 import ug.protocols.matrix.MyMatrix;
 
 import java.awt.Point;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static ug.protocols.agent.Simulations.simulateAllVotings;
 
@@ -16,55 +17,45 @@ public class MainTest {
 	private static final int AGENTS_COUNT = 10;
 	private static final double EPSILON = 1e-10;
 	private static final int SESSIONS = 1000;
+	private enum Algorithm {
+		GAUSS_PG,
+		GAUSS_PG_OPT,
+		GAUSS_SEIDEL
+	}
 	
     public static void main(String [] args) {
-		timesTest();
-    }
-    
-    public static void toFile(String fileName, String content) {
-		try(FileWriter fw = new FileWriter(fileName, true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			PrintWriter out = new PrintWriter(bw))
-		{
-			out.println(content);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+		deleteAllFiles();
 
-	private static void timesTest() {
+		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
+		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
+		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
+}
+
+	private static void approximationTest(Algorithm algorithm, int degree, String filename) throws IllegalArgumentException {
 		Equations e;
 		long millisActualTime;
 		long executionTime;
+		double arguments[] = new double[16];
+		double values[] = new double[16];
+		ApproximationFunction approximationFunction;
 
 		for(int aCount = 4; aCount <= 64; aCount += 4) { // dla 64 agentow liczba rownan wynosi 2145
-			millisActualTime = System.currentTimeMillis();
 			e = new Equations(aCount);
+			millisActualTime = System.currentTimeMillis();
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
 			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().gaussPG(e.getVector());
+			if(algorithm == Algorithm.GAUSS_PG) e.getMatrix().gaussPG(e.getVector());
+			else if(algorithm == Algorithm.GAUSS_PG_OPT) e.getMatrix().gaussPGOpt(e.getVector());
+			else if(algorithm == Algorithm.GAUSS_SEIDEL) e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
+			else throw new IllegalArgumentException("Nie ma takiego algorytmu");
 			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/gaussTimes.csv", aCount + "," + executionTime);
-
-			millisActualTime = System.currentTimeMillis();
-			e = new Equations(aCount);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
-			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().gaussPGOpt(e.getVector());
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/gaussOptTimes.csv", aCount + "," + executionTime);
-
-			millisActualTime = System.currentTimeMillis();
-			e = new Equations(aCount);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
-			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/gaussSeidelTimes.csv", aCount + "," + executionTime);
+			toFile(filename, aCount + "," + executionTime);
+			arguments[(aCount/4)-1] = aCount;
+			values[(aCount/4)-1] = executionTime;
 		}
+		approximationFunction = Approximator.GetApproximation(degree, arguments, values);
+		System.out.println(approximationFunction.GetFunctionString());
 	}
 	
 	private static void agentsCountVsTimeAndAccuracy() {
@@ -176,6 +167,35 @@ public class MainTest {
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			System.out.println("Jacobi for " + accuracy +"  done");
 			toFile("testResults/jacobiAccuracyTimes.csv", accuracy + "," + executionTime);
+		}
+	}
+
+	private static void deleteFile(String filename) {
+		File file = new File(filename);
+		try {
+			Files.deleteIfExists(file.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void deleteAllFiles() {
+		deleteFile("testResults/gaussTimes.csv");
+		deleteFile("testResults/gaussOptTimes.csv");
+		deleteFile("testResults/gaussSeidelTimes.csv");
+		deleteFile("testResults/buildTimes.csv");
+		deleteFile("testResults/seidelIter.csv");
+		deleteFile("testResults/jacobiIter.csv");
+	}
+
+	public static void toFile(String fileName, String content) {
+		try(FileWriter fw = new FileWriter(fileName, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter out = new PrintWriter(bw))
+		{
+			out.println(content);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
