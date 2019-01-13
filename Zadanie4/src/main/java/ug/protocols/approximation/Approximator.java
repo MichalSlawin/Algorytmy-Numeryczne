@@ -47,9 +47,14 @@ public class Approximator {
             offset += 1;
         }
 
-//        MyMatrix matrix = new MyMatrix(rMatrix);
-//        MyMatrix vector = new MyMatrix(rVector);
-//        matrix.gaussPGOpt(vector);
-        return new ApproximationFunction(rVector);
+        MyMatrix matrix = new MyMatrix(rMatrix);
+        MyMatrix vector = new MyMatrix(rVector);
+        MyMatrix resultVectorMatrix = matrix.gaussPGOpt(vector);
+        double resultVector[] = new double[resultVectorMatrix.getRows()];
+        for(int i = 0; i < resultVectorMatrix.getRows(); i++) {
+            resultVector[i] = resultVectorMatrix.getCell(i, 0);
+        }
+
+        return new ApproximationFunction(resultVector);
     }
 }

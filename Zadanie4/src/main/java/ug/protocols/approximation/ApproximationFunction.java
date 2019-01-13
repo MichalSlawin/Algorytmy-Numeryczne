@@ -1,19 +1,19 @@
 package ug.protocols.approximation;
 
 public class ApproximationFunction {
-    double[] Polynomial;
+    double[] polynomial;
 
     public ApproximationFunction(double[] polynomial)
     {
-        Polynomial = polynomial;
+        this.polynomial = polynomial;
     }
 
     public double GetResult(double argument)
     {
         double result = 0.0;
-        for (int i = 0; i < Polynomial.length; i++)
+        for (int i = 0; i < polynomial.length; i++)
         {
-            result += Polynomial[i] * Math.pow(argument, i);
+            result += polynomial[i] * Math.pow(argument, i);
         }
 
         return result;
@@ -23,9 +23,9 @@ public class ApproximationFunction {
     {
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < Polynomial.length; i++)
+        for (int i = 0; i < polynomial.length; i++)
         {
-            stringBuilder.append(Polynomial[i]);
+            stringBuilder.append(polynomial[i]);
             stringBuilder.append("*x^");
             stringBuilder.append(i);
             stringBuilder.append(" + ");

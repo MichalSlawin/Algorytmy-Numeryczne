@@ -8,7 +8,6 @@ import ug.protocols.matrix.MyMatrix;
 import java.awt.Point;
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static ug.protocols.agent.Simulations.simulateAllVotings;
 
@@ -29,7 +28,17 @@ public class MainTest {
 		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
 		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
 		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
+		approximationCheckTest();
 }
+
+	private static void approximationCheckTest() {
+		// str 35 wykladu z aproksymacji
+		double arguments[] = {0.00, 0.25, 0.50, 0.75, 1.00};
+		double values[] = {1.0000, 1.2840, 1.6487, 2.1170, 2.7183};
+
+		ApproximationFunction approximationFunction = Approximator.GetApproximation(2, arguments, values);
+		System.out.println(approximationFunction.GetFunctionString());
+	}
 
 	private static void approximationTest(Algorithm algorithm, int degree, String filename) throws IllegalArgumentException {
 		Equations e;
