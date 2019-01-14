@@ -3,7 +3,7 @@ package ug.protocols.approximation;
 import ug.protocols.matrix.MyMatrix;
 
 public class Approximator {
-    public static ApproximationFunction GetApproximation(int polynomialDegree, double[] arguments, double[] values)
+    public static ApproximationFunction getApproximation(int polynomialDegree, double[] arguments, double[] values)
     {
         int sUnknowns = polynomialDegree * 2 + 1;
         double sMatrix[][] = new double[arguments.length][sUnknowns];

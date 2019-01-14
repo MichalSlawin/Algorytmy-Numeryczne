@@ -8,7 +8,7 @@ public class ApproximationFunction {
         this.polynomial = polynomial;
     }
 
-    public double GetResult(double argument)
+    public double getResult(double argument)
     {
         double result = 0.0;
         for (int i = 0; i < polynomial.length; i++)
@@ -19,7 +19,7 @@ public class ApproximationFunction {
         return result;
     }
 
-    public String GetFunctionString()
+    public String getFunctionString()
     {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -28,7 +28,7 @@ public class ApproximationFunction {
             stringBuilder.append(polynomial[i]);
             stringBuilder.append("*x^");
             stringBuilder.append(i);
-            stringBuilder.append(" + ");
+            if(i != polynomial.length-1) stringBuilder.append(" + ");
         }
 
         return stringBuilder.toString();

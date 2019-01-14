@@ -14,6 +14,7 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 public class MainTest {
 
 	private static final int AGENTS_COUNT = 10;
+	private static final double AGENTS = 200.0; // dla 450- 101 926 rownan
 	private static final double EPSILON = 1e-10;
 	private static final int SESSIONS = 1000;
 	private enum Algorithm {
@@ -25,34 +26,49 @@ public class MainTest {
     public static void main(String [] args) {
 		deleteAllFiles();
 
-		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
+//		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
 		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
-		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
-		approximationCheckTest();
-}
+//		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
+//		approximationCheckTest();
+		timeTest();
+	}
+
+	private static void timeTest() {
+		long millisActualTime;
+		long executionTime;
+		Equations e;
+		e = new Equations((int)AGENTS);
+		millisActualTime = System.currentTimeMillis();
+		e.getMatrix().gaussPGOpt(e.getVector());
+		executionTime = System.currentTimeMillis() - millisActualTime;
+		System.out.println("Sprawdzenie czasu gaussOpt dla agentow:" + AGENTS + " = " + executionTime);
+	}
 
 	private static void approximationCheckTest() {
 		// str 35 wykladu z aproksymacji
 		double arguments[] = {0.00, 0.25, 0.50, 0.75, 1.00};
 		double values[] = {1.0000, 1.2840, 1.6487, 2.1170, 2.7183};
 
-		ApproximationFunction approximationFunction = Approximator.GetApproximation(2, arguments, values);
-		System.out.println(approximationFunction.GetFunctionString());
+		ApproximationFunction approximationFunction = Approximator.getApproximation(2, arguments, values);
+		System.out.println(approximationFunction.getFunctionString());
 	}
 
 	private static void approximationTest(Algorithm algorithm, int degree, String filename) throws IllegalArgumentException {
 		Equations e;
+		int index = 0;
+		int arraySize = 54;
 		long millisActualTime;
 		long executionTime;
-		double arguments[] = new double[16];
-		double values[] = new double[16];
+		double arguments[] = new double[arraySize];
+		double values[] = new double[arraySize];
 		ApproximationFunction approximationFunction;
 
-		for(int aCount = 4; aCount <= 64; aCount += 4) { // dla 64 agentow liczba rownan wynosi 2145
-			e = new Equations(aCount);
+		for(int aCount = 22; aCount <= 128; aCount += 2) { // dla 64 agentow liczba rownan wynosi 2145
 			millisActualTime = System.currentTimeMillis();
+			e = new Equations(aCount);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
+
 			millisActualTime = System.currentTimeMillis();
 			if(algorithm == Algorithm.GAUSS_PG) e.getMatrix().gaussPG(e.getVector());
 			else if(algorithm == Algorithm.GAUSS_PG_OPT) e.getMatrix().gaussPGOpt(e.getVector());
@@ -60,11 +76,24 @@ public class MainTest {
 			else throw new IllegalArgumentException("Nie ma takiego algorytmu");
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			toFile(filename, aCount + "," + executionTime);
-			arguments[(aCount/4)-1] = aCount;
-			values[(aCount/4)-1] = executionTime;
+
+			arguments[index] = aCount;
+			values[index] = executionTime;
+			index++;
 		}
-		approximationFunction = Approximator.GetApproximation(degree, arguments, values);
-		System.out.println(approximationFunction.GetFunctionString());
+		System.out.print(algorithm + "\nArgs: ");
+		for(int i = 0; i < arraySize; i++) {
+			System.out.print(arguments[i] + " ");
+		}
+		System.out.println();
+		System.out.print("Val: ");
+		for(int i = 0; i < arraySize; i++) {
+			System.out.print(values[i] + " ");
+		}
+		System.out.println();
+		approximationFunction = Approximator.getApproximation(degree, arguments, values);
+		System.out.println("Function: " + approximationFunction.getFunctionString());
+		System.out.println("Function(" + AGENTS + ")= " + approximationFunction.getResult(AGENTS));
 	}
 	
 	private static void agentsCountVsTimeAndAccuracy() {
