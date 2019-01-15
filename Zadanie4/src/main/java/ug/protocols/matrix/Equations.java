@@ -83,4 +83,12 @@ public class Equations {
 	public HashMap<Point, Integer> getMap() {
 		return positionMap;
 	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
 }

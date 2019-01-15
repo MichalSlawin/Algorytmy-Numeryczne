@@ -15,6 +15,7 @@ public class MainTest {
 
 	private static final int AGENTS_COUNT = 10;
 	private static final double AGENTS = 200.0; // dla 450- 101 926 rownan
+	private static final double AGENTS_EQUATIONS = 20301.0;
 	private static final double EPSILON = 1e-10;
 	private static final int SESSIONS = 1000;
 	private enum Algorithm {
@@ -28,20 +29,27 @@ public class MainTest {
 
 //		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
 		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
+		timeTest(Algorithm.GAUSS_PG_OPT);
 //		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
 //		approximationCheckTest();
-		timeTest();
 	}
 
-	private static void timeTest() {
+	private static void timeTest(Algorithm algorithm) {
 		long millisActualTime;
 		long executionTime;
 		Equations e;
 		e = new Equations((int)AGENTS);
 		millisActualTime = System.currentTimeMillis();
-		e.getMatrix().gaussPGOpt(e.getVector());
+		chooseAlgorithm(algorithm, e);
 		executionTime = System.currentTimeMillis() - millisActualTime;
-		System.out.println("Sprawdzenie czasu gaussOpt dla agentow:" + AGENTS + " = " + executionTime);
+		System.out.println("Czas symulacji " + algorithm + " dla : " + AGENTS + " agentow(" + e.getSize() + " rownan) = " + executionTime);
+	}
+
+	private static void chooseAlgorithm(Algorithm algorithm, Equations e) {
+		if(algorithm == Algorithm.GAUSS_PG) e.getMatrix().gaussPG(e.getVector());
+		else if(algorithm == Algorithm.GAUSS_PG_OPT) e.getMatrix().gaussPGOpt(e.getVector());
+		else if(algorithm == Algorithm.GAUSS_SEIDEL) e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
+		else throw new IllegalArgumentException("Nie ma takiego algorytmu");
 	}
 
 	private static void approximationCheckTest() {
@@ -56,28 +64,29 @@ public class MainTest {
 	private static void approximationTest(Algorithm algorithm, int degree, String filename) throws IllegalArgumentException {
 		Equations e;
 		int index = 0;
-		int arraySize = 54;
+		int arraySize = 18;
 		long millisActualTime;
 		long executionTime;
 		double arguments[] = new double[arraySize];
 		double values[] = new double[arraySize];
 		ApproximationFunction approximationFunction;
 
-		for(int aCount = 22; aCount <= 128; aCount += 2) { // dla 64 agentow liczba rownan wynosi 2145
+		// rozgrzewka dla maszyny wirtualnej
+		e = new Equations(32);
+		e.getMatrix().gaussPGOpt(e.getVector());
+
+		for(int aCount = 32; aCount <= 168; aCount += 8) { // dla 64 agentow liczba rownan wynosi 2145
 			millisActualTime = System.currentTimeMillis();
 			e = new Equations(aCount);
 			executionTime = System.currentTimeMillis() - millisActualTime;
 			toFile("testResults/buildTimes.csv", aCount + "," + executionTime);
 
 			millisActualTime = System.currentTimeMillis();
-			if(algorithm == Algorithm.GAUSS_PG) e.getMatrix().gaussPG(e.getVector());
-			else if(algorithm == Algorithm.GAUSS_PG_OPT) e.getMatrix().gaussPGOpt(e.getVector());
-			else if(algorithm == Algorithm.GAUSS_SEIDEL) e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
-			else throw new IllegalArgumentException("Nie ma takiego algorytmu");
+			chooseAlgorithm(algorithm, e);
 			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile(filename, aCount + "," + executionTime);
+			toFile(filename, e.getSize() + "," + executionTime);
 
-			arguments[index] = aCount;
+			arguments[index] = e.getSize();
 			values[index] = executionTime;
 			index++;
 		}
@@ -93,7 +102,8 @@ public class MainTest {
 		System.out.println();
 		approximationFunction = Approximator.getApproximation(degree, arguments, values);
 		System.out.println("Function: " + approximationFunction.getFunctionString());
-		System.out.println("Function(" + AGENTS + ")= " + approximationFunction.getResult(AGENTS));
+		System.out.println("Function(" + AGENTS_EQUATIONS + ")= " + approximationFunction.getResult(AGENTS_EQUATIONS));
+		System.out.println("Function(101926)= " + approximationFunction.getResult(101926.0));
 	}
 	
 	private static void agentsCountVsTimeAndAccuracy() {
