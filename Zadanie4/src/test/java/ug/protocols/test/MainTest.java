@@ -14,7 +14,7 @@ import static ug.protocols.agent.Simulations.simulateAllVotings;
 public class MainTest {
 
 	private static final int AGENTS_COUNT = 10;
-	private static final double AGENTS = 200.0; // dla 450- 101 926 rownan
+	private static final double AGENTS = 200.0; // dla 447- 100 128 rownan
 	private static final double AGENTS_EQUATIONS = 20301.0;
 	private static final double EPSILON = 1e-10;
 	private static final int SESSIONS = 1000;
@@ -28,10 +28,11 @@ public class MainTest {
 		deleteAllFiles();
 
 //		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
-		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
+//		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
 		timeTest(Algorithm.GAUSS_PG_OPT);
 //		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
 //		approximationCheckTest();
+
 	}
 
 	private static void timeTest(Algorithm algorithm) {
@@ -73,9 +74,9 @@ public class MainTest {
 
 		// rozgrzewka dla maszyny wirtualnej
 		e = new Equations(32);
-		e.getMatrix().gaussPGOpt(e.getVector());
+		chooseAlgorithm(algorithm, e);
 
-		for(int aCount = 32; aCount <= 168; aCount += 8) { // dla 64 agentow liczba rownan wynosi 2145
+		for(int aCount = 32; aCount <= 168; aCount += 8) { // dla 64 agentow liczba rownan wynosi 2145, dla 168- 14365
 			millisActualTime = System.currentTimeMillis();
 			e = new Equations(aCount);
 			executionTime = System.currentTimeMillis() - millisActualTime;
@@ -103,7 +104,7 @@ public class MainTest {
 		approximationFunction = Approximator.getApproximation(degree, arguments, values);
 		System.out.println("Function: " + approximationFunction.getFunctionString());
 		System.out.println("Function(" + AGENTS_EQUATIONS + ")= " + approximationFunction.getResult(AGENTS_EQUATIONS));
-		System.out.println("Function(101926)= " + approximationFunction.getResult(101926.0));
+		System.out.println("Function(100 128)= " + approximationFunction.getResult(100128.0));
 	}
 	
 	private static void agentsCountVsTimeAndAccuracy() {

@@ -3,24 +3,24 @@ package ug.protocols.approximation;
 import ug.protocols.matrix.MyMatrix;
 
 public class Approximator {
-    public static ApproximationFunction getApproximation(int polynomialDegree, double[] arguments, double[] values)
+    public static ApproximationFunction getApproximation(int degree, double[] arguments, double[] values)
     {
-        int sUnknowns = polynomialDegree * 2 + 1;
-        double sMatrix[][] = new double[arguments.length][sUnknowns];
-        double sVector[] = new double[sUnknowns];
+        int unknownsNumber = degree * 2 + 1;
+        double sMatrix[][] = new double[arguments.length][unknownsNumber];
+        double sVector[] = new double[unknownsNumber];
 
         for (int i = 0; i < arguments.length; i++)
         {
-            for (int j = 0; j < sUnknowns; j++)
+            for (int j = 0; j < unknownsNumber; j++)
             {
                 sMatrix[i][j] = Math.pow(arguments[i], j);
                 sVector[j] += sMatrix[i][j];
             }
         }
 
-        int tUnknowns = polynomialDegree + 1;
-        double tMatrix[][] = new double[arguments.length][sUnknowns];
-        double tVector[] = new double[sUnknowns];
+        int tUnknowns = degree + 1;
+        double tMatrix[][] = new double[arguments.length][unknownsNumber];
+        double tVector[] = new double[unknownsNumber];
 
         for (int i = 0; i < arguments.length; i++)
         {
@@ -47,9 +47,9 @@ public class Approximator {
             offset += 1;
         }
 
-        MyMatrix matrix = new MyMatrix(rMatrix);
-        MyMatrix vector = new MyMatrix(rVector);
-        MyMatrix resultVectorMatrix = matrix.gaussPGOpt(vector);
+        MyMatrix matrixObj = new MyMatrix(rMatrix);
+        MyMatrix vectorObj = new MyMatrix(rVector);
+        MyMatrix resultVectorMatrix = matrixObj.gaussPGOpt(vectorObj);
         double resultVector[] = new double[resultVectorMatrix.getRows()];
         for(int i = 0; i < resultVectorMatrix.getRows(); i++) {
             resultVector[i] = resultVectorMatrix.getCell(i, 0);
