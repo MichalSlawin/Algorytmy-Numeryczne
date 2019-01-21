@@ -1,7 +1,7 @@
 package ug.protocols.test;
 
-import ug.protocols.approximation.ApproximationFunction;
-import ug.protocols.approximation.Approximator;
+import ug.protocols.approximation.ApproximationManager;
+import ug.protocols.approximation.ApproximationBuilder;
 import ug.protocols.matrix.Equations;
 import ug.protocols.matrix.MyMatrix;
 
@@ -29,9 +29,9 @@ public class MainTest {
 
 //		approximationTest(Algorithm.GAUSS_PG, 3, "testResults/gaussTimes.csv");
 //		approximationTest(Algorithm.GAUSS_PG_OPT, 2, "testResults/gaussOptTimes.csv");
-		timeTest(Algorithm.GAUSS_PG_OPT);
+//		timeTest(Algorithm.GAUSS_PG_OPT);
 //		approximationTest(Algorithm.GAUSS_SEIDEL, 2, "testResults/gaussSeidelTimes.csv");
-//		approximationCheckTest();
+		approximationCheckTest();
 
 	}
 
@@ -58,8 +58,8 @@ public class MainTest {
 		double arguments[] = {0.00, 0.25, 0.50, 0.75, 1.00};
 		double values[] = {1.0000, 1.2840, 1.6487, 2.1170, 2.7183};
 
-		ApproximationFunction approximationFunction = Approximator.getApproximation(2, arguments, values);
-		System.out.println(approximationFunction.getFunctionString());
+		ApproximationManager approximationManager = ApproximationBuilder.getApproximation(2, arguments, values);
+		System.out.println(approximationManager.getFunctionString());
 	}
 
 	private static void approximationTest(Algorithm algorithm, int degree, String filename) throws IllegalArgumentException {
@@ -70,7 +70,7 @@ public class MainTest {
 		long executionTime;
 		double arguments[] = new double[arraySize];
 		double values[] = new double[arraySize];
-		ApproximationFunction approximationFunction;
+		ApproximationManager approximationManager;
 
 		// rozgrzewka dla maszyny wirtualnej
 		e = new Equations(32);
@@ -101,122 +101,10 @@ public class MainTest {
 			System.out.print(values[i] + " ");
 		}
 		System.out.println();
-		approximationFunction = Approximator.getApproximation(degree, arguments, values);
-		System.out.println("Function: " + approximationFunction.getFunctionString());
-		System.out.println("Function(" + AGENTS_EQUATIONS + ")= " + approximationFunction.getResult(AGENTS_EQUATIONS));
-		System.out.println("Function(100 128)= " + approximationFunction.getResult(100128.0));
-	}
-	
-	private static void agentsCountVsTimeAndAccuracy() {
-		// w plikach xTimes.csv w kolejnosci: ilosc agentow, czas wywolania
-		//w pliku methodsErrorsVsAgentsCount w kolejnosci: ilosc agentow, blad gaussa, blad gaussaOpt, blad jacobiego, blad seidela
-		MyMatrix result;
-		long millisActualTime;
-		long executionTime;
-		Equations e;
-		double gError, goError, gsError, jError;
-		
-		for(int aCount = 20; aCount < 200; aCount += 20) {
-			e = new Equations(aCount);
-			millisActualTime = System.currentTimeMillis();
-			result = e.getMatrix().gaussPG(e.getVector());
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			System.out.println("Gauss for " + aCount +" agents done");
-			toFile("testResults/gaussTimes.csv", aCount + "," + executionTime);
-			gError =  Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
-			
-			e = new Equations(aCount);
-			millisActualTime = System.currentTimeMillis();
-			result = e.getMatrix().gaussPGOpt(e.getVector());
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			System.out.println("GaussOpt for " + aCount +" agents done");
-			toFile("testResults/gaussOptTimes.csv", aCount + "," + executionTime);
-			goError =  Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
-			
-			e = new Equations(aCount);
-			millisActualTime = System.currentTimeMillis();
-			result = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			System.out.println("GaussSeidel for " + aCount +" agents done");
-			toFile("testResults/gaussSeidelTimes.csv", aCount + "," + executionTime);
-			gsError = Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
-			
-			e = new Equations(aCount);
-			millisActualTime = System.currentTimeMillis();
-			result = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, false);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			System.out.println("Jacobi for " + aCount +" agents done");
-			toFile("testResults/jacobiTimes.csv", aCount + "," + executionTime);
-			jError = Math.abs(0.5 - result.getCell(e.getMap().get(new Point(aCount/2, aCount/2)), 0));
-			System.out.println();
-			
-			toFile("testResults/methodsErrorsVsAgentsCount.csv", aCount + "," + gError + "," + goError + "," + jError + "," + gsError);
-		}
-	}
-	
-	private static void methodsVsMonteCarlo() {
-		//w pliku w kolejnosci: MC - Gauss, MC - GaussOpt, MC - Jacobi, MC - GaussSeidel
-		
-		Equations e;
-		MyMatrix mcResults = simulateAllVotings(AGENTS_COUNT, SESSIONS);
-		
-		e = new Equations(AGENTS_COUNT);
-		MyMatrix gResults = e.getMatrix().gaussPG(e.getVector());
-		
-		e = new Equations(AGENTS_COUNT);
-		MyMatrix goResults = e.getMatrix().gaussPGOpt(e.getVector());
-		
-		e = new Equations(AGENTS_COUNT);
-		MyMatrix gsResults = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, true);
-		
-		e = new Equations(AGENTS_COUNT);
-		MyMatrix jResults = e.getMatrix().jacobiSeidel(e.getVector(), EPSILON, false);
-		
-		toFile("testResults/normsWithMC.csv", Math.abs(mcResults.vectorNorm() - gResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - goResults.vectorNorm()) + "," +
-				+ Math.abs(mcResults.vectorNorm() - jResults.vectorNorm()) + "," + Math.abs(mcResults.vectorNorm() - gsResults.vectorNorm()));
-		System.out.println("Methods vs Monte Carlo done");
-	}
-
-	private static void mcPrecisionAndTimes() {
-		//w pliku w kolejnosci: liczba sesji, roznica norm z gaussOpt, czas wywolania
-
-		int[] sessions = {500, 1000, 5000, 10000, 50000, 100000};
-		long millisActualTime;
-		long executionTime;
-		Equations e = new Equations(AGENTS_COUNT);
-		MyMatrix gResults = e.getMatrix().gaussPGOpt(e.getVector());
-		MyMatrix mcResults;
-
-		for(int s : sessions) {
-			millisActualTime = System.currentTimeMillis();
-			mcResults = simulateAllVotings(AGENTS_COUNT, s);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			toFile("testResults/mcPrecAndTimes.csv", s + "," + Math.abs(mcResults.getCell(e.getMap().get(new Point(AGENTS_COUNT/2, AGENTS_COUNT/2)), 0) - 0.5) + "," + executionTime);
-			System.out.println("Monte Carlo for " + s + " sessions and " + AGENTS_COUNT + " agents done");
-		}
-	}
-
-	private static void methodsVsAccuracy() {
-    	double[] accuracies = {1e-6, 1e-10, 1e-14};
-		long millisActualTime;
-		long executionTime;
-		Equations e;
-
-    	for(double accuracy : accuracies) {
-			e = new Equations(AGENTS_COUNT);
-			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().jacobiSeidel(e.getVector(), accuracy, true);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			System.out.println("GaussSeidel for " + accuracy +"  done");
-			toFile("testResults/gaussSeidelAccuracyTimes.csv", accuracy + "," + executionTime);
-
-			e = new Equations(AGENTS_COUNT);
-			millisActualTime = System.currentTimeMillis();
-			e.getMatrix().jacobiSeidel(e.getVector(), accuracy, false);
-			executionTime = System.currentTimeMillis() - millisActualTime;
-			System.out.println("Jacobi for " + accuracy +"  done");
-			toFile("testResults/jacobiAccuracyTimes.csv", accuracy + "," + executionTime);
-		}
+		approximationManager = ApproximationBuilder.getApproximation(degree, arguments, values);
+		System.out.println("Function: " + approximationManager.getFunctionString());
+		System.out.println("Function(" + AGENTS_EQUATIONS + ")= " + approximationManager.getResult(AGENTS_EQUATIONS));
+		System.out.println("Function(100 128)= " + approximationManager.getResult(100128.0));
 	}
 
 	private static void deleteFile(String filename) {

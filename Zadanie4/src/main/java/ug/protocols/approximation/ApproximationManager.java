@@ -1,10 +1,10 @@
 package ug.protocols.approximation;
 
-public class ApproximationFunction {
+public class ApproximationManager {
 
     private double[] function;
 
-    ApproximationFunction(double[] function)
+    ApproximationManager(double[] function)
     {
         this.function = function;
     }
